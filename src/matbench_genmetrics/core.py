@@ -100,7 +100,7 @@ class GenMetrics(object):
 
     @property
     def duplicity_counts(self):
-        return self.match_counts > 1
+        return np.clip(self.match_counts - 1, 0, None)
 
     @property
     def duplicity_count(self):
