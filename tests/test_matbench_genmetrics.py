@@ -33,7 +33,7 @@ expected = [
 ]
 
 
-@pytest.parametrize(params, expected)
+@pytest.mark.parametrize(params, expected)
 def test_numerical_attributes(
     dummy_gen_metrics: Callable, attr: str, expected: np.ndarray
 ):
