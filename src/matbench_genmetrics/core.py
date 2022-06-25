@@ -59,50 +59,56 @@ def fib(n):
         a, b = b, a + b
     return a
 
+
 sm = StructureMatcher(stol=0.5, ltol=0.3, angle_tol=10.0)
 
 
-class Match(object):
+class GenMetrics(object):
     def __init__(self, test_structures, gen_structures) -> None:
         self.test_structures = test_structures
         self.gen_structures = gen_structures
         self.num_test = len(test_structures)
         self.num_gen = len(gen_structures)
 
-        self.match_counts = None
+        self._match_matrix = None
 
-    def get_match_matrix(self):
+    @property
+    def match_matrix(self):
+        if self._match_matrix is not None:
+            return self._match_matrix
+
         match_matrix = np.zeros((self.num_test, self.num_gen))
         for i, ts in enumerate(tqdm(self.test_structures)):
             for j, gs in enumerate(tqdm(self.gen_structures)):
                 match_matrix[i, j] = sm.fit(ts, gs)
 
+        self._match_matrix = match_matrix
+
         return match_matrix
 
-    def get_match_counts(self):
-        if self.match_counts is not None:
-            return self.match_counts
-        self.match_matrix = self.get_match_matrix(
-            self.test_structures, self.gen_structures
-        )
-        self.match_counts = np.sum(self.match_matrix, axis=0)
-        return self.match_counts
+    @property
+    def match_counts(self):
+        return np.sum(self.match_matrix, axis=0)
 
-    def get_match_rate(self):
-        self.match_counts = self.get_match_counts(
-            self.test_structures, self.gen_structures
-        )
-        self.match_count = np.sum(self.match_counts > 0)
-        self.match_rate = self.match_count / self.num_test
-        return self.match_rate
+    @property
+    def match_count(self):
+        return np.sum(self.match_counts > 0)
 
-    def get_match_duplicity_rate(self):
-        self.match_counts = self.get_match_counts(
-            self.test_structures, self.gen_structures
-        )
-        self.match_duplicity = np.sum(self.match_counts > 1)
-        self.match_duplicity_rate = self.match_duplicity / self.num_test
-        return self.match_duplicity
+    @property
+    def match_rate(self):
+        return self.match_count / self.num_test
+
+    @property
+    def duplicity_counts(self):
+        return self.match_counts > 1
+
+    @property
+    def duplicity_count(self):
+        return np.sum(self.duplicity_counts)
+
+    @property
+    def duplicity_rate(self):
+        return self.duplicity_count / self.num_test
 
 
 # def get_rms_dist(gen_structures, test_structures):
