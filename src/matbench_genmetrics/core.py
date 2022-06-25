@@ -24,6 +24,10 @@ import argparse
 import logging
 import sys
 
+import numpy as np
+from pymatgen.analysis.structure_matcher import StructureMatcher
+from tqdm import tqdm
+
 from matbench_genmetrics import __version__
 
 __author__ = "sgbaird"
@@ -55,6 +59,60 @@ def fib(n):
         a, b = b, a + b
     return a
 
+
+sm = StructureMatcher(stol=0.5, ltol=0.3, angle_tol=10.0)
+
+
+class Match(object):
+    def __init__(self, test_structures, gen_structures) -> None:
+        self.test_structures = test_structures
+        self.gen_structures = gen_structures
+        self.num_test = len(test_structures)
+        self.num_gen = len(gen_structures)
+
+        self.match_counts = None
+
+    def get_match_matrix(self):
+        match_matrix = np.zeros((self.num_test, self.num_gen))
+        for i, ts in enumerate(tqdm(self.test_structures)):
+            for j, gs in enumerate(tqdm(self.gen_structures)):
+                match_matrix[i, j] = sm.fit(ts, gs)
+
+        return match_matrix
+
+    def get_match_counts(self):
+        if self.match_counts is not None:
+            return self.match_counts
+        self.match_matrix = self.get_match_matrix(
+            self.test_structures, self.gen_structures
+        )
+        self.match_counts = np.sum(self.match_matrix, axis=0)
+        return self.match_counts
+
+    def get_match_rate(self):
+        self.match_counts = self.get_match_counts(
+            self.test_structures, self.gen_structures
+        )
+        self.match_count = np.sum(self.match_counts > 0)
+        self.match_rate = self.match_count / self.num_test
+        return self.match_rate
+
+    def get_match_duplicity_rate(self):
+        self.match_counts = self.get_match_counts(
+            self.test_structures, self.gen_structures
+        )
+        self.match_duplicity = np.sum(self.match_counts > 1)
+        self.match_duplicity_rate = self.match_duplicity / self.num_test
+        return self.match_duplicity
+
+
+# def get_rms_dist(gen_structures, test_structures):
+#     rms_dist = np.zeros((len(gen_structures), len(test_structures)))
+#     for i, gs in enumerate(tqdm(gen_structures)):
+#         for j, ts in enumerate(tqdm(test_structures)):
+#             rms_dist[i, j] = sm.get_rms_dist(gs, ts)[0]
+
+#     return rms_dist
 
 # ---- CLI ----
 # The functions defined in this section are wrappers around the main Python
@@ -147,3 +205,35 @@ if __name__ == "__main__":
     #     python -m matbench_genmetrics.skeleton 42
     #
     run()
+
+# %% Code Graveyard
+# def get_match_rate(gen_structures, test_structures):
+#     match_rate = np.zeros(len(gen_structures), self.num_test)
+#     for i, gs in enumerate(tqdm(gen_structures)):
+#         for j, ts in enumerate(tqdm(test_structures)):
+#             if i > j:
+#                 match_rate[i, j] = sm.fit(gs, ts)
+#             elif i == j:
+#                 match_rate[i, j] = True
+
+#     # add transpose https://stackoverflow.com/a/58806735/13697228
+#     match_rate = (match_rate + match_rate.T) / 2 - np.diag(np.diag(match_rate))
+
+#     return match_rate
+
+
+# def get_match_rate(gen_structures, test_structures):
+#     sm = StructureMatcher(stol=0.5, ltol=0.3, angle_tol=10.0)
+
+#     match_rate = np.zeros(len(gen_structures), self.num_test)
+#     for i, gs in enumerate(tqdm(gen_structures)):
+#         for j, ts in enumerate(tqdm(test_structures)):
+#             if i > j:
+#                 match_rate[i, j] = sm.fit(gs, ts)
+#             elif i == j:
+#                 match_rate[i, j] = True
+
+#     # add transpose https://stackoverflow.com/a/58806735/13697228
+#     match_rate = (match_rate + match_rate.T) / 2 - np.diag(np.diag(match_rate))
+
+#     return match_rate
