@@ -1,9 +1,12 @@
+from typing import Callable
+
 import numpy as np
+import pytest
 from numpy.testing import assert_array_equal
 from pymatgen.core.lattice import Lattice
 from pymatgen.core.structure import Structure
 
-from matbench_genmetrics.core import get_match_counts, get_match_matrix, get_match_rate
+from matbench_genmetrics.core import GenMetrics
 
 coords = [[0, 0, 0], [0.75, 0.5, 0.75]]
 lattice = Lattice.from_parameters(a=3.84, b=3.84, c=3.84, alpha=120, beta=90, gamma=60)
@@ -13,43 +16,80 @@ dummy_structures = [
 ]
 
 
-def test_get_match_matrix():
-    match_matrix = get_match_matrix(dummy_structures, dummy_structures)
-    match_matrix_check = np.array([[1.0, 0.0], [0.0, 1.0]])
-    assert_array_equal(match_matrix, match_matrix_check)
-    return match_matrix
+@pytest.fixture
+def dummy_gen_metrics():
+    return GenMetrics(dummy_structures, dummy_structures)
 
 
-def test_get_match_counts():
-    match_counts = get_match_counts(dummy_structures, dummy_structures)
-    assert_array_equal(match_counts, np.array([1.0, 1.0]))
-    return match_counts
+params = ["attr", "expected"]
+
+expected = [
+    ["match_matrix", np.array([[1.0, 0.0], [0.0, 1.0]])],
+    ["match_counts", np.array([1.0, 1.0])],
+    ["match_count", np.array([[1, 0], [0, 1]])],
+    ["match_rate", np.array([1.0])],
+    ["duplicity_count", np.array([0.0])],
+    ["duplicity_rate", np.array([0.0])],
+]
 
 
-def test_get_match_rate():
-    match_rate = get_match_rate(dummy_structures, dummy_structures)
-    assert_array_equal(np.array(match_rate), np.array([1.0]))
-    return match_rate
+@pytest.parameterize(params, expected)
+def test_numerical_attributes(
+    dummy_gen_metrics: Callable, attr: str, expected: np.ndarray
+):
+    """Verify that numerical attributes match the expected values.
+
+    Note that scalars are converted to numpy arrays before comparison.
+
+    Parameters
+    ----------
+    dummy_gen_metrics : Callable
+        a pytest fixture that returns a GenMetrics object
+    attr : str
+        the attribute to test, e.g. "match_matrix"
+    expected : np.ndarray
+        the expected value of the attribute checked via ``assert_array_equal``
+
+    Examples
+    --------
+    >>> test_numerical_attributes(dummy_gen_metrics, "match_count", expected)
+    OUTPUT
+    """
+    value = getattr(dummy_gen_metrics, attr)
+    value = np.array(value) if not isinstance(value, np.ndarray) else value
+    assert_array_equal(
+        value,
+        expected,
+        err_msg=f"bad value for {dummy_gen_metrics.__name__}.{attr}",
+    )
 
 
-# def test_get_rms_dist():
-#     rms_dist = get_rms_dist(dummy_structures, dummy_structures)
-#     return rms_dist
+def test_instantiation(dummy_gen_metrics):
+    gm = dummy_gen_metrics
+    return gm
 
 
-if __name__ == "__main__":
-    test_get_match_rate()
-    test_get_match_counts()
-    test_get_match_matrix()
-    # test_get_rms_dist()
-    1 + 1
-
-# # compare the metrics of the structures against themselves
-# def test_metrics_against_self():
-#     for structure in dummy_structures:
-#         assert get_metrics(structure) == get_metrics(structure)
+# def test_instantiation(dummy_gen_metrics):
+#     gm = dummy_gen_metrics
+#     return gm
 
 
-# # compare the metrics of one set of structures against another
-# def test_metrics_against_others():
-#     assert get_metrics(dummy_structures[0]) != get_metrics(dummy_structures[1])
+# def test_match_matrix(dummy_gen_metrics):
+#     match_matrix_check = np.array([[1.0, 0.0], [0.0, 1.0]])
+#     assert_array_equal(dummy_gen_metrics.match_matrix, match_matrix_check)
+
+
+# def test_match_counts(dummy_gen_metrics):
+#     assert_array_equal(dummy_gen_metrics.match_counts, np.array([1.0, 1.0]))
+
+
+# def test_match_count(dummy_gen_metrics):
+#     assert_array_equal(np.array(dummy_gen_metrics.match_count), np.array([2.0]))
+
+
+# def test_match_rate(dummy_gen_metrics):
+#     assert_array_equal(np.array(dummy_gen_metrics.match_rate), np.array([1.0]))
+
+
+# def test_duplicity_count(dummy_gen_metrics):
+#     assert_array_equal(np.array(dummy_gen_metrics.duplicity_count), np.array([0.0]))
