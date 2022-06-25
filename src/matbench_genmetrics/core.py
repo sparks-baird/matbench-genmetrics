@@ -4,7 +4,7 @@ console script. To run this script uncomment the following lines in the
 ``[options.entry_points]`` section in ``setup.cfg``::
 
     console_scripts =
-         fibonacci = ${package}.skeleton:run
+         fibonacci = matbench_genmetrics.skeleton:run
 
 Then run ``pip install .`` (or ``pip install -e .`` for editable mode)
 which will install the command ``fibonacci`` inside your current environment.
@@ -58,7 +58,6 @@ def fib(n):
     for _i in range(n - 1):
         a, b = b, a + b
     return a
-
 
 sm = StructureMatcher(stol=0.5, ltol=0.3, angle_tol=10.0)
 
