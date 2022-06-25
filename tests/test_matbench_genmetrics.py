@@ -18,6 +18,7 @@ dummy_structures = [
 
 @pytest.fixture
 def dummy_gen_metrics():
+    """Get GenMetrics instance with dummy_structures as both test and gen structures."""
     return GenMetrics(dummy_structures, dummy_structures)
 
 
