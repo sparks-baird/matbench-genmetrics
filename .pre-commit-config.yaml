@@ -17,16 +17,16 @@ repos:
   - id: mixed-line-ending
     args: ['--fix=auto']  # replace 'auto' with 'lf' to enforce Linux/Mac line endings or 'crlf' for Windows
 
-## If you want to avoid flake8 errors due to unused vars or imports:
-# - repo: https://github.com/myint/autoflake
-#   rev: v1.4
-#   hooks:
-#   - id: autoflake
-#     args: [
-#       --in-place,
-#       --remove-all-unused-imports,
-#       --remove-unused-variables,
-#     ]
+# If you want to avoid flake8 errors due to unused vars or imports:
+- repo: https://github.com/myint/autoflake
+  rev: v1.4
+  hooks:
+  - id: autoflake
+    args: [
+      --in-place,
+      --remove-all-unused-imports,
+      # --remove-unused-variables,
+    ]
 
 - repo: https://github.com/pycqa/isort
   rev: 5.10.1
@@ -39,12 +39,19 @@ repos:
   - id: black
     language_version: python3
 
-## If like to embrace black styles even in the docs:
-# - repo: https://github.com/asottile/blacken-docs
-#   rev: v1.12.0
-#   hooks:
-#   - id: blacken-docs
-#     additional_dependencies: [black]
+# If like to embrace black styles even in the docs:
+- repo: https://github.com/asottile/blacken-docs
+  rev: v1.12.1
+  hooks:
+  - id: blacken-docs
+    name: blacken-docs
+    description: Run `black` on python code blocks in documentation files
+    additional_dependencies: [black]
+    entry: blacken-docs
+    language: python
+    language_version: python3
+    files: '\.(rst|md|markdown|py|tex)$'
+    args: ["--skip-errors"]
 
 - repo: https://github.com/PyCQA/flake8
   rev: 4.0.1
