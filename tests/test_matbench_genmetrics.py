@@ -24,12 +24,13 @@ def dummy_gen_metrics():
 params = ["attr", "expected"]
 
 expected = [
-    ["match_matrix", np.array([[1.0, 0.0], [0.0, 1.0]])],
-    ["match_counts", np.array([1.0, 1.0])],
-    ["match_count", np.array([[1, 0], [0, 1]])],
-    ["match_rate", np.array([1.0])],
-    ["duplicity_count", np.array([0.0])],
-    ["duplicity_rate", np.array([0.0])],
+    ["match_matrix", [[1.0, 0.0], [0.0, 1.0]]],
+    ["match_counts", [1.0, 1.0]],
+    ["match_count", [2.0]],
+    ["match_rate", [1.0]],
+    ["duplicity_counts", [0.0, 0.0]],
+    ["duplicity_count", [0.0]],
+    ["duplicity_rate", [0.0]],
 ]
 
 
@@ -53,17 +54,12 @@ def test_numerical_attributes(
     Examples
     --------
     >>> test_numerical_attributes(dummy_gen_metrics, "match_count", expected)
-    OUTPUT
     """
     value = getattr(dummy_gen_metrics, attr)
     value = np.array(value) if not isinstance(value, np.ndarray) else value
+
     assert_array_equal(
         value,
-        expected,
-        err_msg=f"bad value for {dummy_gen_metrics.__name__}.{attr}",
+        np.array(expected),
+        err_msg=f"bad value for {dummy_gen_metrics.__class__.__name__}.{attr}",
     )
-
-
-def test_instantiation(dummy_gen_metrics):
-    gm = dummy_gen_metrics
-    return gm
