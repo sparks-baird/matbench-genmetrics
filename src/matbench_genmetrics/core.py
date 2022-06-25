@@ -114,7 +114,6 @@ class Match(object):
 
 #     return rms_dist
 
-
 # ---- CLI ----
 # The functions defined in this section are wrappers around the main Python
 # API allowing them to be called directly from the terminal as a CLI
