@@ -33,7 +33,7 @@ expected = [
 ]
 
 
-@pytest.parameterize(params, expected)
+@pytest.parametrize(params, expected)
 def test_numerical_attributes(
     dummy_gen_metrics: Callable, attr: str, expected: np.ndarray
 ):
@@ -67,29 +67,3 @@ def test_numerical_attributes(
 def test_instantiation(dummy_gen_metrics):
     gm = dummy_gen_metrics
     return gm
-
-
-# def test_instantiation(dummy_gen_metrics):
-#     gm = dummy_gen_metrics
-#     return gm
-
-
-# def test_match_matrix(dummy_gen_metrics):
-#     match_matrix_check = np.array([[1.0, 0.0], [0.0, 1.0]])
-#     assert_array_equal(dummy_gen_metrics.match_matrix, match_matrix_check)
-
-
-# def test_match_counts(dummy_gen_metrics):
-#     assert_array_equal(dummy_gen_metrics.match_counts, np.array([1.0, 1.0]))
-
-
-# def test_match_count(dummy_gen_metrics):
-#     assert_array_equal(np.array(dummy_gen_metrics.match_count), np.array([2.0]))
-
-
-# def test_match_rate(dummy_gen_metrics):
-#     assert_array_equal(np.array(dummy_gen_metrics.match_rate), np.array([1.0]))
-
-
-# def test_duplicity_count(dummy_gen_metrics):
-#     assert_array_equal(np.array(dummy_gen_metrics.duplicity_count), np.array([0.0]))
