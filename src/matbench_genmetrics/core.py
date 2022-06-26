@@ -25,7 +25,9 @@ import logging
 import sys
 
 import numpy as np
+from mp_time_split.core import MPTimeSplit
 from pymatgen.analysis.structure_matcher import StructureMatcher
+from scipy.stats import wasserstein_distance
 from tqdm import tqdm
 
 from matbench_genmetrics import __version__
@@ -65,65 +67,6 @@ def fib(n):
 
 
 sm = StructureMatcher(stol=0.5, ltol=0.3, angle_tol=10.0)
-
-
-class GenMetrics(object):
-    def __init__(
-        self,
-        train_structures,
-        test_structures,
-        gen_structures,
-        test_pred_structures,
-    ):
-        self.train_structures = train_structures
-        self.test_structures = test_structures
-        self.gen_structures = gen_structures
-        self.test_pred_structures = test_pred_structures
-        self._cdvae_metrics = None
-        self._mpts_metrics = None
-
-    # @property
-    # def cdvae_metrics(self):
-    #     # FIXME: update with CDVAE structures and handle 3 dataset types
-    #     if self._cdvae_metrics is not None:
-    #         return self._cdvae_metrics
-
-    #     rec_eval = RecEval(self.test_pred_structures, self.test_structures)
-    #     reconstruction_metrics = rec_eval.get_metrics()
-
-    #     gen_eval = GenEval(self.gen_structures, self.test_structures)
-    #     generation_metrics = gen_eval.get_metrics()
-
-    #     opt_eval = OptEval(self.gen_structures, self.test_structures)
-    #     optimization_metrics = opt_eval.get_metrics()
-
-    #     self._cdvae_metrics = (
-    #         reconstruction_metrics,
-    #         generation_metrics,
-    #         optimization_metrics,
-    #     )
-
-    #     return self._cdvae_metrics
-
-    @property
-    def validity(self):
-        return GenMatcher(self.test_structures, self.gen_structures).match_rate
-
-    @property
-    def novelty(self):
-        GenMatcher(self.train_structures, self.gen_structures).match_rate
-
-    @property
-    def uniqueness(self):
-        return GenMatcher(self.gen_structures, self.gen_structures).duplicity_rate
-
-    @property
-    def guacamat_metrics(self):
-        return {
-            "validity": self.validity,
-            "novelty": self.novelty,
-            "uniqueness": self.uniqueness,
-        }
 
 
 class GenMatcher(object):
@@ -172,6 +115,87 @@ class GenMatcher(object):
     @property
     def duplicity_rate(self):
         return self.duplicity_count / self.num_test
+
+
+class GenMetrics(object):
+    def __init__(
+        self,
+        train_structures,
+        test_structures,
+        gen_structures,
+        test_pred_structures,
+    ):
+        self.train_structures = train_structures
+        self.test_structures = test_structures
+        self.gen_structures = gen_structures
+        self.test_pred_structures = test_pred_structures
+        self._cdvae_metrics = None
+        self._mpts_metrics = None
+
+    # @property
+    # def cdvae_metrics(self):
+    #     # FIXME: update with CDVAE structures and handle 3 dataset types
+    #     if self._cdvae_metrics is not None:
+    #         return self._cdvae_metrics
+
+    #     rec_eval = RecEval(self.test_pred_structures, self.test_structures)
+    #     reconstruction_metrics = rec_eval.get_metrics()
+
+    #     gen_eval = GenEval(self.gen_structures, self.test_structures)
+    #     generation_metrics = gen_eval.get_metrics()
+
+    #     opt_eval = OptEval(self.gen_structures, self.test_structures)
+    #     optimization_metrics = opt_eval.get_metrics()
+
+    #     self._cdvae_metrics = (
+    #         reconstruction_metrics,
+    #         generation_metrics,
+    #         optimization_metrics,
+    #     )
+
+    #     return self._cdvae_metrics
+
+    @property
+    def validity(self):
+        train_test_structures = self.train_structures + self.test_structures
+        train_test_spg = [ts.get_space_group_info()[1] for ts in train_test_structures]
+        gen_spg = [ts.get_space_group_info()[1] for ts in self.gen_structures]
+        dummy_case = wasserstein_distance(train_test_spg, [1])
+        return 1 - wasserstein_distance(train_test_spg, gen_spg) / dummy_case
+
+    @property
+    def coverage(self):
+        return GenMatcher(self.test_structures, self.gen_structures).match_rate
+
+    @property
+    def novelty(self):
+        return 1.0 - GenMatcher(self.train_structures, self.gen_structures).match_rate
+
+    @property
+    def uniqueness(self):
+        return 1.0 - GenMatcher(self.gen_structures, self.gen_structures).duplicity_rate
+
+    @property
+    def metrics(self):
+        return {
+            "validity": self.validity,
+            "coverage": self.coverage,
+            "novelty": self.novelty,
+            "uniqueness": self.uniqueness,
+        }
+
+
+class MPTSMetrics(GenMetrics):
+    def __init__(self, gen_structures, test_pred_structures, dummy=False):
+        mpt = MPTimeSplit(target="energy_above_hull")
+        mpt.load(dummy=dummy)
+        train_inputs, val_inputs, _, _ = mpt.get_train_and_val_data(0)
+        super().__init__(
+            train_inputs.tolist(),
+            val_inputs.tolist(),
+            gen_structures,
+            test_pred_structures,
+        )
 
 
 # def get_rms_dist(gen_structures, test_structures):
