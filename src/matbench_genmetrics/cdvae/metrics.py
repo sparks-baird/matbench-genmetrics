@@ -285,12 +285,11 @@ def structure_validity(crystal, cutoff=0.5):
 
 
 class Crystal(object):
-    def __init__(self, crys_array_dict):
-        self.frac_coords = crys_array_dict["frac_coords"]
-        self.atom_types = crys_array_dict["atom_types"]
-        self.lengths = crys_array_dict["lengths"]
-        self.angles = crys_array_dict["angles"]
-        self.dict = crys_array_dict
+    def __init__(self, structures):
+        self.frac_coords = structures["frac_coords"]
+        self.atom_types = structures["atom_types"]
+        self.lengths = structures["lengths"]
+        self.angles = structures["angles"]
 
         self.get_structure()
         self.get_composition()
@@ -360,8 +359,8 @@ class RecEval(object):
     def __init__(self, pred_crys, gt_crys, stol=0.5, angle_tol=10, ltol=0.3):
         assert len(pred_crys) == len(gt_crys)
         self.matcher = StructureMatcher(stol=stol, angle_tol=angle_tol, ltol=ltol)
-        self.preds = pred_crys
-        self.gts = gt_crys
+        self.preds = [Crystal(pc) for pc in pred_crys]
+        self.gts = [Crystal(gtc) for gtc in gt_crys]
 
     def get_match_rate_and_rms(self):
         def process_one(pred, gt, is_valid):
@@ -397,8 +396,8 @@ class GenEval(object):
         gt_props,
         eval_model_name=None,
     ):
-        self.crys = pred_crys
-        self.gt_crys = gt_crys
+        self.crys = [Crystal(pc) for pc in pred_crys]
+        self.gt_crys = [Crystal(gtc) for gtc in gt_crys]
         self.pred_props = pred_props
         self.gt_props = gt_props
         n_samples = len(pred_props)
@@ -482,7 +481,7 @@ class OptEval(object):
         default to minimize the property.
         """
         step_opt = int(len(crys) / num_opt)
-        self.crys = crys
+        self.crys = [Crystal(c) for c in crys]
         self.pred_props = pred_props
         self.step_opt = step_opt
         self.num_opt = num_opt
