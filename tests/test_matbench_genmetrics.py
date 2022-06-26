@@ -3,12 +3,15 @@ from typing import Callable, List, Tuple
 
 import numpy as np
 import numpy.typing as npt
+import pytest
 from numpy.testing import assert_array_equal
 from pymatgen.core.lattice import Lattice
 from pymatgen.core.structure import Structure
-from pytest_cases import fixture, parametrize, parametrize_with_cases
 
-from matbench_genmetrics.core import GenMatcher, GenMetrics
+from matbench_genmetrics.core import GenMatcher, GenMetrics, MPTSMetrics
+
+# from pytest_cases import fixture, parametrize, parametrize_with_cases
+
 
 coords = [[0, 0, 0], [0.75, 0.5, 0.75]]
 lattice = Lattice.from_parameters(a=3.84, b=3.84, c=3.84, alpha=120, beta=90, gamma=60)
@@ -18,40 +21,88 @@ dummy_structures = [
 ]
 
 
-@fixture
+# @fixture
 def dummy_gen_matcher():
     """Get GenMatcher instance with dummy_structures as both test and gen structures."""
     return GenMatcher(dummy_structures, dummy_structures)
 
 
-@fixture
+# @fixture
 def dummy_gen_metrics():
     """Get GenMetrics instance with dummy_structures as train/test/gen structures."""
-    return GenMetrics(dummy_structures, dummy_structures)
+    return GenMetrics(
+        dummy_structures, dummy_structures, dummy_structures, dummy_structures
+    )
+
+
+# @fixture
+def dummy_mpts_metrics():
+    """Get MPTSMetrics() with dummy MPTS as train/test, dummy_structures as pred/gen."""
+    return MPTSMetrics(dummy_structures, dummy_structures, dummy=True)
 
 
 dummy_matcher_expected = {
     "match_matrix": [[1.0, 0.0], [0.0, 1.0]],
     "match_counts": [1.0, 1.0],
-    "match_count": [2.0],
-    "match_rate": [1.0],
+    "match_count": 2.0,
+    "match_rate": 1.0,
     "duplicity_counts": [0.0, 0.0],
-    "duplicity_count": [0.0],
-    "duplicity_rate": [0.0],
+    "duplicity_count": 0.0,
+    "duplicity_rate": 0.0,
 }
 
-dummy_metrics_expected = {"validity": [0.5], "novelty": [0.5], "uniqueness": [0.5]}
+dummy_metrics_expected = {
+    "validity": 1.0,
+    "coverage": 1.0,
+    "novelty": 0.0,
+    "uniqueness": 1.0,
+}
 
-fixtures = [dummy_gen_matcher, dummy_gen_metrics]
+dummy_mpts_expected = {
+    "validity": 0.9866071428571429,
+    "coverage": 0.0,
+    "novelty": 1.0,
+    "uniqueness": 1.0,
+}
+
+fixtures = [dummy_gen_matcher(), dummy_gen_metrics(), dummy_mpts_metrics()]
 checkitems: List[List] = [
     list(dummy_matcher_expected.items()),
     list(dummy_metrics_expected.items()),
+    list(dummy_mpts_expected.items()),
 ]
 
 combs: List[Tuple[Callable, Tuple[str, npt.ArrayLike]]] = []
 for f, ci in zip(fixtures, checkitems):
     combs = combs + list(product([f], ci))
 
+
+@pytest.mark.parametrize("fixture,checkitem", combs)
+def test_numerical_attributes(fixture: object, checkitem: Tuple[str, npt.ArrayLike]):
+    """Verify that numerical attributes match the expected values.
+
+    Parameters
+    ----------
+    fixture : Callable
+        a pytest fixture that returns an instantiated class operable with getattr
+    checkitem : Tuple[str, npt.ArrayLike]
+        A tuple of the attribute name to test and the expected ArrayLike value.
+
+    Examples
+    --------
+    >>> test_numerical_attributes(SomeClass(), ("class_attr", [1, 2, 3]))
+    """
+    attr, checkvalue = checkitem
+    value = getattr(fixture, attr)
+
+    assert_array_equal(
+        np.asarray(value),
+        np.asarray(checkvalue),
+        err_msg=f"bad value for {fixture.__class__.__name__}.{attr}",
+    )
+
+
+# %% Code Graveyard
 # def flatten_params(
 #     fixtures: List[Callable], expecteds: List[dict]
 # ) -> List[Tuple[Callable, str, npt.ArrayLike]]:
@@ -107,45 +158,3 @@ for f, ci in zip(fixtures, checkitems):
 
 
 # combinations = flatten_params(fixtures, expecteds)
-
-
-@parametrize(fixture_checkitem=combs)
-def test_numerical_attributes(
-    fixture_checkitem: Tuple[Callable, Tuple[str, npt.ArrayLike]]
-):
-    """Verify that numerical attributes match the expected values.
-
-    Note that scalars are converted to numpy arrays before comparison.
-
-    Parameters
-    ----------
-    fixture : Callable
-        a pytest fixture that returns an instantiated class operable with getattr
-    attr : str
-        the attribute to test, e.g. "match_matrix"
-    check_value : np.ndarray
-        the expected value of the attribute checked via ``assert_array_equal``
-
-    Examples
-    --------
-    >>> test_numerical_attributes(dummy_gen_metrics, "match_count", expected)
-    """
-    fixture, checkitem = fixture_checkitem
-    attr, checkvalue = checkitem
-    value = getattr(fixture, attr)
-
-    assert_array_equal(
-        np.asarray(value),
-        np.asarray(checkvalue),
-        err_msg=f"bad value for {dummy_gen_matcher.__class__.__name__}.{attr}",
-    )
-
-
-@fixture
-@parametrize_with_cases("a,b")
-def c(a, b):
-    return a + b
-
-
-def test_foo(c):
-    assert isinstance(c, int)
