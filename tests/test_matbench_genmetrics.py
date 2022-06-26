@@ -1,12 +1,17 @@
-from typing import Callable
+from itertools import product
+from typing import Callable, List, Tuple
 
 import numpy as np
+import numpy.typing as npt
 import pytest
 from numpy.testing import assert_array_equal
 from pymatgen.core.lattice import Lattice
 from pymatgen.core.structure import Structure
 
-from matbench_genmetrics.core import GenMetrics
+from matbench_genmetrics.core import GenMatcher, GenMetrics, MPTSMetrics
+
+# from pytest_cases import fixture, parametrize, parametrize_with_cases
+
 
 coords = [[0, 0, 0], [0.75, 0.5, 0.75]]
 lattice = Lattice.from_parameters(a=3.84, b=3.84, c=3.84, alpha=120, beta=90, gamma=60)
@@ -16,51 +21,140 @@ dummy_structures = [
 ]
 
 
-@pytest.fixture
+# @fixture
+def dummy_gen_matcher():
+    """Get GenMatcher instance with dummy_structures as both test and gen structures."""
+    return GenMatcher(dummy_structures, dummy_structures)
+
+
+# @fixture
 def dummy_gen_metrics():
-    """Get GenMetrics instance with dummy_structures as both test and gen structures."""
-    return GenMetrics(dummy_structures, dummy_structures)
+    """Get GenMetrics instance with dummy_structures as train/test/gen structures."""
+    return GenMetrics(
+        dummy_structures, dummy_structures, dummy_structures, dummy_structures
+    )
 
 
-params = ["attr", "expected"]
+# @fixture
+def dummy_mpts_metrics():
+    """Get MPTSMetrics() with dummy MPTS as train/test, dummy_structures as pred/gen."""
+    return MPTSMetrics(dummy_structures, dummy_structures, dummy=True)
 
-expected = [
-    ["match_matrix", [[1.0, 0.0], [0.0, 1.0]]],
-    ["match_counts", [1.0, 1.0]],
-    ["match_count", [2.0]],
-    ["match_rate", [1.0]],
-    ["duplicity_counts", [0.0, 0.0]],
-    ["duplicity_count", [0.0]],
-    ["duplicity_rate", [0.0]],
+
+dummy_matcher_expected = {
+    "match_matrix": [[1.0, 0.0], [0.0, 1.0]],
+    "match_counts": [1.0, 1.0],
+    "match_count": 2.0,
+    "match_rate": 1.0,
+    "duplicity_counts": [0.0, 0.0],
+    "duplicity_count": 0.0,
+    "duplicity_rate": 0.0,
+}
+
+dummy_metrics_expected = {
+    "validity": 1.0,
+    "coverage": 1.0,
+    "novelty": 0.0,
+    "uniqueness": 1.0,
+}
+
+dummy_mpts_expected = {
+    "validity": 0.9866071428571429,
+    "coverage": 0.0,
+    "novelty": 1.0,
+    "uniqueness": 1.0,
+}
+
+fixtures = [dummy_gen_matcher(), dummy_gen_metrics(), dummy_mpts_metrics()]
+checkitems: List[List] = [
+    list(dummy_matcher_expected.items()),
+    list(dummy_metrics_expected.items()),
+    list(dummy_mpts_expected.items()),
 ]
 
+combs: List[Tuple[Callable, Tuple[str, npt.ArrayLike]]] = []
+for f, ci in zip(fixtures, checkitems):
+    combs = combs + list(product([f], ci))
 
-@pytest.mark.parametrize(params, expected)
-def test_numerical_attributes(
-    dummy_gen_metrics: Callable, attr: str, expected: np.ndarray
-):
+
+@pytest.mark.parametrize("fixture,checkitem", combs)
+def test_numerical_attributes(fixture: object, checkitem: Tuple[str, npt.ArrayLike]):
     """Verify that numerical attributes match the expected values.
-
-    Note that scalars are converted to numpy arrays before comparison.
 
     Parameters
     ----------
-    dummy_gen_metrics : Callable
-        a pytest fixture that returns a GenMetrics object
-    attr : str
-        the attribute to test, e.g. "match_matrix"
-    expected : np.ndarray
-        the expected value of the attribute checked via ``assert_array_equal``
+    fixture : Callable
+        a pytest fixture that returns an instantiated class operable with getattr
+    checkitem : Tuple[str, npt.ArrayLike]
+        A tuple of the attribute name to test and the expected ArrayLike value.
 
     Examples
     --------
-    >>> test_numerical_attributes(dummy_gen_metrics, "match_count", expected)
+    >>> test_numerical_attributes(SomeClass(), ("class_attr", [1, 2, 3]))
     """
-    value = getattr(dummy_gen_metrics, attr)
-    value = np.array(value) if not isinstance(value, np.ndarray) else value
+    attr, checkvalue = checkitem
+    value = getattr(fixture, attr)
 
     assert_array_equal(
-        value,
-        np.array(expected),
-        err_msg=f"bad value for {dummy_gen_metrics.__class__.__name__}.{attr}",
+        np.asarray(value),
+        np.asarray(checkvalue),
+        err_msg=f"bad value for {fixture.__class__.__name__}.{attr}",
     )
+
+
+# %% Code Graveyard
+# def flatten_params(
+#     fixtures: List[Callable], expecteds: List[dict]
+# ) -> List[Tuple[Callable, str, npt.ArrayLike]]:
+#     """Match list of fixtures to list of dicts element-wise; create flat combinations.
+
+#     Based on `pytest nested function parametrization
+#     <https://stackoverflow.com/a/62033116/13697228>`_
+
+#     Parameters
+#     ----------
+#     fixtures : List[Callable]
+#         List of fixture functions.
+#     expecteds : List[dict]
+#         List of dictionaries mapping class variable names to expected values.
+
+#     Returns
+#     -------
+#         flat_fixtures : List[Callable]
+#             List of paired (repeated) fixture functions.
+#         flat_attributes : List[str]
+#             List of flattened class variable names.
+#         flat_values : List[Sequence]
+#             List of flattened expected values.
+
+#     Examples
+#     --------
+#     >>> @fixture
+#     >>> def dummy_gen_matcher():
+#     >>>    return GenMatcher(dummy_structures, dummy_structures)
+
+#     >>> @fixture
+#     >>> def dummy_gen_metrics():
+#     >>>    return GenMetrics(dummy_structures, dummy_structures)
+
+#     >>> fixtures = [dummy_gen_matcher, dummy_gen_metrics]
+#     >>> expecteds = [{"match_rate": [1.0]}, {"validity": [0.5], "novelty": [0.5], "uniqueness": [0.5]}] # noqa: E501
+#     >>> flatten_params(fixtures, expecteds)
+#     [(<function dummy_gen_matcher at 0x000001E1A89CED30>, 'match_rate', [1.0]),
+#     (<function dummy_gen_metrics at 0x000001E1A89CEF70>, 'validity', [0.5]),
+#     (<function dummy_gen_metrics at 0x000001E1A89CEF70>, 'novelty', [0.5]), (<function
+#     dummy_gen_metrics at 0x000001E1A89CEF70>, 'uniqueness', [0.5])]
+
+#     See also
+#     --------
+#     https://stackoverflow.com/a/42400786/13697228
+#     """
+#     combinations = zip(fixtures, expecteds)
+#     combinations: List[Tuple[Callable, str, npt.ArrayLike]] = []
+#     for fix, expected in zip(fixtures, expecteds):
+#         for attribute, value in expected.items():
+#             combinations.append((fix, attribute, value))
+#     return combinations
+
+
+# combinations = flatten_params(fixtures, expecteds)
