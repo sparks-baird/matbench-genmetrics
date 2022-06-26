@@ -30,6 +30,10 @@ from tqdm import tqdm
 
 from matbench_genmetrics import __version__
 
+# causes pytest to fail (tests not found, DLL load error)
+# from matbench_genmetrics.cdvae.metrics import RecEval, GenEval, OptEval
+
+
 __author__ = "sgbaird"
 __copyright__ = "sgbaird"
 __license__ = "MIT"
@@ -64,6 +68,65 @@ sm = StructureMatcher(stol=0.5, ltol=0.3, angle_tol=10.0)
 
 
 class GenMetrics(object):
+    def __init__(
+        self,
+        train_structures,
+        test_structures,
+        gen_structures,
+        test_pred_structures,
+    ):
+        self.train_structures = train_structures
+        self.test_structures = test_structures
+        self.gen_structures = gen_structures
+        self.test_pred_structures = test_pred_structures
+        self._cdvae_metrics = None
+        self._mpts_metrics = None
+
+    # @property
+    # def cdvae_metrics(self):
+    #     # FIXME: update with CDVAE structures and handle 3 dataset types
+    #     if self._cdvae_metrics is not None:
+    #         return self._cdvae_metrics
+
+    #     rec_eval = RecEval(self.test_pred_structures, self.test_structures)
+    #     reconstruction_metrics = rec_eval.get_metrics()
+
+    #     gen_eval = GenEval(self.gen_structures, self.test_structures)
+    #     generation_metrics = gen_eval.get_metrics()
+
+    #     opt_eval = OptEval(self.gen_structures, self.test_structures)
+    #     optimization_metrics = opt_eval.get_metrics()
+
+    #     self._cdvae_metrics = (
+    #         reconstruction_metrics,
+    #         generation_metrics,
+    #         optimization_metrics,
+    #     )
+
+    #     return self._cdvae_metrics
+
+    @property
+    def validity(self):
+        return GenMatcher(self.test_structures, self.gen_structures).match_rate
+
+    @property
+    def novelty(self):
+        GenMatcher(self.train_structures, self.gen_structures).match_rate
+
+    @property
+    def uniqueness(self):
+        return GenMatcher(self.gen_structures, self.gen_structures).duplicity_rate
+
+    @property
+    def guacamat_metrics(self):
+        return {
+            "validity": self.validity,
+            "novelty": self.novelty,
+            "uniqueness": self.uniqueness,
+        }
+
+
+class GenMatcher(object):
     def __init__(self, test_structures, gen_structures) -> None:
         self.test_structures = test_structures
         self.gen_structures = gen_structures
