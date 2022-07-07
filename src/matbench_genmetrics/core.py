@@ -123,7 +123,7 @@ class GenMetrics(object):
         train_structures,
         test_structures,
         gen_structures,
-        test_pred_structures,
+        test_pred_structures=None,
     ):
         self.train_structures = train_structures
         self.test_structures = test_structures
@@ -186,16 +186,36 @@ class GenMetrics(object):
 
 
 class MPTSMetrics(GenMetrics):
-    def __init__(self, gen_structures, test_pred_structures, dummy=False):
-        mpt = MPTimeSplit(target="energy_above_hull")
-        mpt.load(dummy=dummy)
-        train_inputs, val_inputs, _, _ = mpt.get_train_and_val_data(0)
-        super().__init__(
-            train_inputs.tolist(),
-            val_inputs.tolist(),
+    def __init__(self, dummy=False):
+        self.dummy = dummy
+        self.mpt = MPTimeSplit(target="energy_above_hull")
+        self.folds = self.mpt.folds
+        self.recorded_metrics = [None] * len(self.folds)
+
+    def get_train_and_val_data(self, fold, include_val=False):
+        self.mpt.load(dummy=self.dummy)
+        (
+            self.train_inputs,
+            self.val_inputs,
+            self.train_outputs,
+            self.val_outputs,
+        ) = self.mpt.get_train_and_val_data(fold)
+
+        if include_val:
+            return self.train_inputs, self.val_inputs
+
+        return self.train_inputs
+
+    def record(self, fold, gen_structures, test_pred_structures=None):
+        GenMetrics.__init__(
+            self,
+            self.train_inputs.tolist(),
+            self.val_inputs.tolist(),
             gen_structures,
-            test_pred_structures,
+            test_pred_structures=test_pred_structures,
         )
+
+        self.recorded_metrics[fold] = self.metrics
 
 
 # def get_rms_dist(gen_structures, test_structures):
