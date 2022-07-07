@@ -13,9 +13,49 @@
 
 > Generative materials benchmarking metrics, inspired by CDVAE.
 
-A longer description of your project goes here...
+This repository provides standardized benchmarks for benchmarking generative models for
+crystal structure. Each benchmark has a fixed dataset, a predefined split, and a notion
+of best (i.e. metric) associated with it.
 
-## Installation
+## Getting Started
+
+### Installation
+
+Create a conda environment with the `matbench-genmetrics` package installed from the
+`conda-forge` channel. Then activate the environment.
+
+```bash
+conda create --name matbench-genmetrics --channel conda-forge python==3.9.* matbench-genmetrics
+conda activate matbench-genmetrics
+```
+
+> NOTE: It doesn't have to be Python 3.9; you can remove `python==3.9.*` altogether or
+change this to e.g. `python==3.8.*`. See [Advanced Installation](##Advanced-Installation)
+
+### Basic Usage
+
+```python
+from mp_time_split.utils.gen import DummyGenerator
+from matbench_genmetrics.core import MPTSMetrics
+
+mptm = MPTSMetrics(dummy=False)
+for fold in mptm.folds:
+    train_val_inputs = mptm.get_train_and_val_data(fold)
+
+    dg = DummyGenerator()
+    dg.fit(train_val_inputs)
+    gen_structures = dg.gen(n=10000)
+
+    mptm.record(fold, gen_structures)
+
+print(mptm.recorded_metrics)
+```
+
+> ```python
+>
+> ```
+
+## Advanced Installation
 
 In order to set up the necessary environment:
 
