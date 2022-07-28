@@ -157,6 +157,7 @@ class GenMetrics(object):
 
     @property
     def validity(self):
+        """Scaled Wasserstein distance between real (train/test) and gen structures."""
         train_test_structures = self.train_structures + self.test_structures
         train_test_spg = [ts.get_space_group_info()[1] for ts in train_test_structures]
         gen_spg = [ts.get_space_group_info()[1] for ts in self.gen_structures]
@@ -165,18 +166,22 @@ class GenMetrics(object):
 
     @property
     def coverage(self):
+        """Match rate between test structures and generated structures."""
         return GenMatcher(self.test_structures, self.gen_structures).match_rate
 
     @property
     def novelty(self):
+        """One minus match rate between train structures and generated structures."""
         return 1.0 - GenMatcher(self.train_structures, self.gen_structures).match_rate
 
     @property
     def uniqueness(self):
+        """One minus duplicity rate within generated structures."""
         return 1.0 - GenMatcher(self.gen_structures, self.gen_structures).duplicity_rate
 
     @property
     def metrics(self):
+        """Return validity, coverage, novelty, and uniqueness metrics as a dict."""
         return {
             "validity": self.validity,
             "coverage": self.coverage,
