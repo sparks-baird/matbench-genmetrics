@@ -47,6 +47,9 @@ def dummy_mpts_metrics():
     return mptm
 
 
+# TODO: test duplicity for non-zero case
+
+
 dummy_matcher_expected = {
     "match_matrix": [[1.0, 0.0], [0.0, 1.0]],
     "match_counts": [1.0, 1.0],
