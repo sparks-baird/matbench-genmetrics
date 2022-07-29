@@ -128,7 +128,7 @@ class GenMatcher(object):
         if self.num_test != self.num_gen:
             raise ValueError("Test and gen sets should be identical.")
         # TODO: assert that test and gen sets are identical
-        return np.clip(self.match_counts - 1, 0, None) / 2
+        return np.clip(self.match_counts - 1, 0, None)
 
     @property
     def duplicity_count(self):
@@ -136,7 +136,8 @@ class GenMatcher(object):
 
     @property
     def duplicity_rate(self):
-        return self.duplicity_count / self.num_test
+        num_possible = self.num_test**2 - self.num_test
+        return self.duplicity_count / num_possible
 
 
 class GenMetrics(object):
