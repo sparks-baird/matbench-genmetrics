@@ -104,7 +104,7 @@ class GenMatcher(object):
 
         match_matrix = np.zeros((self.num_test, self.num_gen))
         for i, ts in enumerate(self.tqdm(self.test_structures, **self.tqdm_kwargs)):
-            for j, gs in enumerate(self.tqdm(self.gen_structures, **self.tqdm_kwargs)):
+            for j, gs in enumerate(self.gen_structures):
                 match_matrix[i, j] = sm.fit(ts, gs)
 
         self._match_matrix = match_matrix
