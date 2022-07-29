@@ -86,6 +86,7 @@ class GenMatcher(object):
         self.verbose = verbose
 
         if self.verbose:
+            # https://stackoverflow.com/a/58102605/13697228
             is_notebook = hasattr(__builtins__, "__IPYTHON__")
             self.tqdm = ipython_tqdm if is_notebook else tqdm
             self.tqdm = tqdm
