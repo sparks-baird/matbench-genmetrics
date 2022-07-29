@@ -29,6 +29,7 @@ from mp_time_split.core import MPTimeSplit
 from pymatgen.analysis.structure_matcher import StructureMatcher
 from scipy.stats import wasserstein_distance
 from tqdm import tqdm
+from tqdm.notebook import tqdm as ipython_tqdm
 
 from matbench_genmetrics import __version__
 
@@ -85,6 +86,8 @@ class GenMatcher(object):
         self.verbose = verbose
 
         if self.verbose:
+            is_notebook = hasattr(__builtins__, "__IPYTHON__")
+            self.tqdm = ipython_tqdm if is_notebook else tqdm
             self.tqdm = tqdm
             self.tqdm_kwargs = dict(position=0, leave=True) if IN_COLAB else {}
         else:
