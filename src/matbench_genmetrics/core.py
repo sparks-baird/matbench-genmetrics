@@ -225,7 +225,7 @@ class MPTSMetrics(GenMetrics):
         self.verbose = verbose
         self.mpt = MPTimeSplit(target="energy_above_hull")
         self.folds = self.mpt.folds
-        self.recorded_metrics = [None] * len(self.folds)
+        self.recorded_metrics = {}
 
     def get_train_and_val_data(self, fold, include_val=False):
         self.mpt.load(dummy=self.dummy)
