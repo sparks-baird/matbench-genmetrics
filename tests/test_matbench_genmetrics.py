@@ -42,7 +42,7 @@ def dummy_mpts_metrics():
 
     fold = 0
     mptm.get_train_and_val_data(fold)
-    mptm.record(fold, dummy_structures)
+    mptm.evaluate_and_record(fold, dummy_structures)
 
     return mptm
 
@@ -118,7 +118,7 @@ def test_mpts_metrics():
         dg.fit(train_val_inputs)
         gen_structures = dg.gen(n=100)
 
-        mptm.record(fold, gen_structures)
+        mptm.evaluate_and_record(fold, gen_structures)
 
     print(mptm.recorded_metrics)
 
