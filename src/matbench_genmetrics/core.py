@@ -121,6 +121,8 @@ class GenMatcher(object):
 
     @property
     def duplicity_counts(self):
+        if self.num_test != self.num_gen:
+            raise ValueError("Test and gen sets should be identical.")
         return np.clip(self.match_counts - 1, 0, None)
 
     @property
