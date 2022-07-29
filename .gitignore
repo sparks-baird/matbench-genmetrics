@@ -53,3 +53,4 @@ MANIFEST
 .conda*/
 .python-version
 src/matbench_genmetrics/cdvae/utils.py
+matbench-genmetrics/meta.yaml
