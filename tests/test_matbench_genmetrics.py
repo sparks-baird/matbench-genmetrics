@@ -112,14 +112,14 @@ def test_numerical_attributes(fixture: object, checkitem: Tuple[str, npt.ArrayLi
 
 
 def test_mpts_metrics():
-    mptm = MPTSMetrics(dummy=True)
+    mptm = MPTSMetrics(dummy=True, verbose=False)
     for fold in mptm.folds:
         train_val_inputs = mptm.get_train_and_val_data(fold)
 
         np.random.seed(10)
         dg = DummyGenerator()
         dg.fit(train_val_inputs)
-        gen_structures = dg.gen(n=100)
+        gen_structures = dg.gen(n=3)
 
         mptm.evaluate_and_record(fold, gen_structures)
 

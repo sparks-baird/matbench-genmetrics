@@ -123,7 +123,8 @@ class GenMatcher(object):
     def duplicity_counts(self):
         if self.num_test != self.num_gen:
             raise ValueError("Test and gen sets should be identical.")
-        return np.clip(self.match_counts - 1, 0, None)
+        # TODO: assert that test and gen sets are identical
+        return np.clip(self.match_counts - 1, 0, None) / 2
 
     @property
     def duplicity_count(self):
@@ -219,8 +220,9 @@ class GenMetrics(object):
 
 
 class MPTSMetrics(GenMetrics):
-    def __init__(self, dummy=False):
+    def __init__(self, dummy=False, verbose=True):
         self.dummy = dummy
+        self.verbose = verbose
         self.mpt = MPTimeSplit(target="energy_above_hull")
         self.folds = self.mpt.folds
         self.recorded_metrics = [None] * len(self.folds)
@@ -246,6 +248,7 @@ class MPTSMetrics(GenMetrics):
             self.val_inputs.tolist(),
             gen_structures,
             test_pred_structures=test_pred_structures,
+            verbose=self.verbose,
         )
 
         self.recorded_metrics[fold] = self.metrics
