@@ -68,13 +68,28 @@ def fib(n):
 
 sm = StructureMatcher(stol=0.5, ltol=0.3, angle_tol=10.0)
 
+try:
+    import google.colab  # type: ignore # noqa: F401
+
+    IN_COLAB = True
+except ImportError:
+    IN_COLAB = False
+
 
 class GenMatcher(object):
-    def __init__(self, test_structures, gen_structures) -> None:
+    def __init__(self, test_structures, gen_structures, verbose=True) -> None:
         self.test_structures = test_structures
         self.gen_structures = gen_structures
         self.num_test = len(test_structures)
         self.num_gen = len(gen_structures)
+        self.verbose = verbose
+
+        if self.verbose:
+            self.tqdm = tqdm
+            self.tqdm_kwargs = dict(position=0, leave=True) if IN_COLAB else {}
+        else:
+            self.tqdm = lambda x: x
+            self.tqdm_kwargs = {}
 
         self._match_matrix = None
 
@@ -84,8 +99,8 @@ class GenMatcher(object):
             return self._match_matrix
 
         match_matrix = np.zeros((self.num_test, self.num_gen))
-        for i, ts in enumerate(tqdm(self.test_structures)):
-            for j, gs in enumerate(tqdm(self.gen_structures)):
+        for i, ts in enumerate(self.tqdm(self.test_structures, **self.tqdm_kwargs)):
+            for j, gs in enumerate(self.tqdm(self.gen_structures, **self.tqdm_kwargs)):
                 match_matrix[i, j] = sm.fit(ts, gs)
 
         self._match_matrix = match_matrix
@@ -124,11 +139,13 @@ class GenMetrics(object):
         test_structures,
         gen_structures,
         test_pred_structures=None,
+        verbose=True,
     ):
         self.train_structures = train_structures
         self.test_structures = test_structures
         self.gen_structures = gen_structures
         self.test_pred_structures = test_pred_structures
+        self.verbose = verbose
         self._cdvae_metrics = None
         self._mpts_metrics = None
 
@@ -167,17 +184,26 @@ class GenMetrics(object):
     @property
     def coverage(self):
         """Match rate between test structures and generated structures."""
-        return GenMatcher(self.test_structures, self.gen_structures).match_rate
+        coverage = GenMatcher(
+            self.test_structures, self.gen_structures, verbose=self.verbose
+        ).match_rate
+        return coverage
 
     @property
     def novelty(self):
         """One minus match rate between train structures and generated structures."""
-        return 1.0 - GenMatcher(self.train_structures, self.gen_structures).match_rate
+        similarity = GenMatcher(
+            self.train_structures, self.gen_structures, verbose=self.verbose
+        ).match_rate
+        return 1.0 - similarity
 
     @property
     def uniqueness(self):
         """One minus duplicity rate within generated structures."""
-        return 1.0 - GenMatcher(self.gen_structures, self.gen_structures).duplicity_rate
+        commonality = GenMatcher(
+            self.gen_structures, self.gen_structures, verbose=self.verbose
+        ).duplicity_rate
+        return 1.0 - commonality
 
     @property
     def metrics(self):
@@ -211,7 +237,7 @@ class MPTSMetrics(GenMetrics):
 
         return self.train_inputs
 
-    def record(self, fold, gen_structures, test_pred_structures=None):
+    def evaluate_and_record(self, fold, gen_structures, test_pred_structures=None):
         GenMetrics.__init__(
             self,
             self.train_inputs.tolist(),
