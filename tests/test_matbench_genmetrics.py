@@ -123,6 +123,7 @@ def test_mpts_metrics():
 
         mptm.evaluate_and_record(fold, gen_structures)
 
+    # TODO: check that all metrics are between 0 and 1
     print(mptm.recorded_metrics)
 
 
@@ -134,7 +135,7 @@ def test_non_verbose():
     np.random.seed(10)
     dg = DummyGenerator()
     dg.fit(train_val_inputs)
-    gen_structures = dg.gen(n=2)
+    gen_structures = dg.gen(n=3)
 
     mptm.evaluate_and_record(fold, gen_structures)
 
