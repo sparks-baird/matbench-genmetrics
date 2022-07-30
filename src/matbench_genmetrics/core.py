@@ -1,25 +1,4 @@
-"""
-This is a skeleton file that can serve as a starting point for a Python
-console script. To run this script uncomment the following lines in the
-``[options.entry_points]`` section in ``setup.cfg``::
-
-    console_scripts =
-         fibonacci = matbench_genmetrics.skeleton:run
-
-Then run ``pip install .`` (or ``pip install -e .`` for editable mode)
-which will install the command ``fibonacci`` inside your current environment.
-
-Besides console scripts, the header (i.e. until ``_logger``...) of this file can
-also be used as template for Python modules.
-
-Note:
-    This file can be renamed depending on your needs or safely removed if not needed.
-
-References:
-    - https://setuptools.pypa.io/en/latest/userguide/entry_point.html
-    - https://pip.pypa.io/en/stable/reference/pip_install
-"""
-
+"""Core functionality for matbench-genmetrics (generative materials benchmarking)"""
 import argparse
 import logging
 import sys
@@ -263,9 +242,10 @@ class GenMetrics(object):
 
 
 class MPTSMetrics(object):
-    def __init__(self, dummy=False, verbose=True):
+    def __init__(self, dummy=False, verbose=True, num_gen=None):
         self.dummy = dummy
         self.verbose = verbose
+        self.num_gen = num_gen
         self.mpt = MPTimeSplit(target="energy_above_hull")
         self.folds = self.mpt.folds
         self.gms: List[Optional[GenMetrics]] = [None] * len(self.folds)
@@ -286,6 +266,10 @@ class MPTSMetrics(object):
         return self.train_inputs
 
     def evaluate_and_record(self, fold, gen_structures, test_pred_structures=None):
+        if self.num_gen is not None and self.num_gen != len(gen_structures):
+            raise ValueError(
+                f"Number of generated structures ({len(gen_structures)}) does not match expected number ({self.num_gen})."  # noqa: E501
+            )
         self.gms[fold] = GenMetrics(
             self.train_inputs.tolist(),
             self.val_inputs.tolist(),
@@ -299,6 +283,26 @@ class MPTSMetrics(object):
         # i.e. store the values for the current fold for testing purposes
         for metric, value in self.recorded_metrics[fold].items():
             setattr(self, metric, value)
+
+
+class MPTSMetrics10(MPTSMetrics):
+    def __init__(self, dummy=False, verbose=True):
+        MPTSMetrics.__init__(self, dummy=dummy, verbose=verbose, num_gen=10)
+
+
+class MPTSMetrics100(MPTSMetrics):
+    def __init__(self, dummy=False, verbose=True):
+        MPTSMetrics.__init__(self, dummy=dummy, verbose=verbose, num_gen=100)
+
+
+class MPTSMetrics1000(MPTSMetrics):
+    def __init__(self, dummy=False, verbose=True):
+        MPTSMetrics.__init__(self, dummy=dummy, verbose=verbose, num_gen=1000)
+
+
+class MPTSMetrics10000(MPTSMetrics):
+    def __init__(self, dummy=False, verbose=True):
+        MPTSMetrics.__init__(self, dummy=dummy, verbose=verbose, num_gen=10000)
 
 
 # def get_rms_dist(gen_structures, test_structures):
