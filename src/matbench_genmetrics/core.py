@@ -76,12 +76,14 @@ def pairwise_match(s1: Structure, s2: Structure):
     return sm.fit(s1, s2)
 
 
-try:
-    import google.colab  # type: ignore # noqa: F401
+IN_COLAB = "google.colab" in sys.modules
 
-    IN_COLAB = True
-except ImportError:
-    IN_COLAB = False
+# try:
+#     import google.colab  # type: ignore # noqa: F401
+
+#     IN_COLAB = True
+# except ImportError:
+#     IN_COLAB = False
 
 
 class GenMatcher(object):
@@ -148,9 +150,12 @@ class GenMatcher(object):
 
     @property
     def duplicity_counts(self):
+        """Get number of duplicates within the match matrix ignoring self-comparison."""
         if self.num_test != self.num_gen:
             raise ValueError("Test and gen sets should be identical.")
-        # TODO: assert that test and gen sets are identical
+            # TODO: assert that test and gen sets are identical
+
+        # minus one is subtraction of the diagonal that got summed
         return np.clip(self.match_counts - 1, 0, None)
 
     @property
@@ -159,6 +164,12 @@ class GenMatcher(object):
 
     @property
     def duplicity_rate(self):
+        """Get number of duplicates divided by number of possible duplicate locations.
+
+        A set with 4 instances of the same structure will score lower than 2 repeat
+        instances each for 2 structures. In other words, the metric favors a larger
+        of unique structures, even if repeat structures exist.
+        """
         num_possible = self.num_test**2 - self.num_test
         return self.duplicity_count / num_possible
 
@@ -226,7 +237,9 @@ class GenMetrics(object):
         self.similarity_matcher = GenMatcher(
             self.train_structures, self.gen_structures, verbose=self.verbose
         )
-        similarity = self.similarity_matcher.match_rate
+        similarity = (
+            self.similarity_matcher.match_count / self.similarity_matcher.num_gen
+        )
         return 1.0 - similarity
 
     @property
