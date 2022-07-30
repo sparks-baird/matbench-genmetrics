@@ -182,12 +182,12 @@ html_theme = "sphinx_rtd_theme"
 # documentation.
 html_theme_options = {"sidebar_width": "300px", "page_width": "1200px"}
 
-html_context = {
-    "display_github": True,
-    "github_user": "sgbaird",
-    "github_repo": "matbench-genmetrics",
-    "github_version": "main/docs/",
-}
+# html_context = {
+#     "display_github": True,
+#     "github_user": "sgbaird",
+#     "github_repo": "matbench-genmetrics",
+#     "github_version": "main/docs/",
+# }
 
 # Add any paths that contain custom themes here, relative to this directory.
 # html_theme_path = []
