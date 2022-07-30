@@ -8,16 +8,29 @@ from mp_time_split.utils.gen import DummyGenerator
 from numpy.testing import assert_array_equal
 from pymatgen.core.lattice import Lattice
 from pymatgen.core.structure import Structure
+from pymatgen.transformations.standard_transformations import (
+    PerturbStructureTransformation,
+)
 
 from matbench_genmetrics.core import GenMatcher, GenMetrics, MPTSMetrics
 
 # from pytest_cases import fixture, parametrize, parametrize_with_cases
 
+np.random.seed(10)
+
 coords = [[0, 0, 0], [0.75, 0.5, 0.75]]
 lattice = Lattice.from_parameters(a=3.84, b=3.84, c=3.84, alpha=120, beta=90, gamma=60)
+
+# cases: exact same, different composition, different lattice
 dummy_structures = [
     Structure(lattice, ["Si", "Si"], coords),
+    Structure(lattice, ["Si", "Si"], coords),
     Structure(lattice, ["Ni", "Ni"], coords),
+    Structure(
+        Lattice.from_parameters(a=2.95, b=2.95, c=14.37, alpha=90, beta=90, gamma=120),
+        ["Ag", "Au"],
+        [[0, 0, 0], [1 / 3, 2 / 3, 1 / 6]],
+    ),  # https://materialsproject.org/materials/mp-1229092
 ]
 
 
@@ -29,9 +42,33 @@ def dummy_gen_matcher():
 
 # @fixture
 def dummy_gen_metrics():
-    """Get GenMetrics instance with dummy_structures as train/test/gen structures."""
+    """Get GenMetrics instance with dummy_structures as train/test/gen structures.
+
+    Notes
+    -----
+    - No matches between train and test (except train is repeated)
+    - One match between test and test_pred
+    - One match between train and gen
+    - One match between test and gen
+    """
+    train_structures = dummy_structures[0:2]
+    test_structures = dummy_structures[2:4]
+    test_pred_structures = [dummy_structures[2], dummy_structures[0]]
+
+    gen_structures = [
+        dummy_structures[0],
+        dummy_structures[0],
+        dummy_structures[2],
+        PerturbStructureTransformation(
+            distance=5.0, min_distance=2.5
+        ).apply_transformation(dummy_structures[3]),
+    ]
+
     return GenMetrics(
-        dummy_structures, dummy_structures, dummy_structures, dummy_structures
+        train_structures,
+        test_structures,
+        gen_structures,
+        test_pred_structures,
     )
 
 
@@ -47,31 +84,33 @@ def dummy_mpts_metrics():
     return mptm
 
 
-# TODO: test duplicity for non-zero case
-
-
 dummy_matcher_expected = {
-    "match_matrix": [[1.0, 0.0], [0.0, 1.0]],
-    "match_counts": [1.0, 1.0],
-    "match_count": 2.0,
+    "match_matrix": [
+        [1.0, 1.0, 0.0, 0.0],
+        [1.0, 1.0, 0.0, 0.0],
+        [0.0, 0.0, 1.0, 0.0],
+        [0.0, 0.0, 0.0, 1.0],
+    ],
+    "match_counts": [2.0, 2.0, 1.0, 1.0],
+    "match_count": 4.0,
     "match_rate": 1.0,
-    "duplicity_counts": [0.0, 0.0],
-    "duplicity_count": 0.0,
-    "duplicity_rate": 0.0,
+    "duplicity_counts": [1.0, 1.0, 0.0, 0.0],
+    "duplicity_count": 2.0,
+    "duplicity_rate": 1 / 6,  # 1 of 6 entries in upper triangle of match matrix
 }
 
 dummy_metrics_expected = {
-    "validity": 1.0,
-    "coverage": 1.0,
-    "novelty": 0.0,
-    "uniqueness": 1.0,
+    "validity": 0.8139255702280912,
+    "coverage": 0.5,
+    "novelty": 0.5,
+    "uniqueness": 5 / 6,
 }
 
 dummy_mpts_expected = {
-    "validity": 0.9866071428571429,
+    "validity": 0.9207589285714286,
     "coverage": 0.0,
     "novelty": 1.0,
-    "uniqueness": 1.0,
+    "uniqueness": 5 / 6,
 }
 
 fixtures = [dummy_gen_matcher(), dummy_gen_metrics(), dummy_mpts_metrics()]
