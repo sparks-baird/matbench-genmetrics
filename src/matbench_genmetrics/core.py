@@ -23,10 +23,12 @@ References:
 import argparse
 import logging
 import sys
+from typing import List, Optional
 
 import numpy as np
 from mp_time_split.core import MPTimeSplit
 from pymatgen.analysis.structure_matcher import StructureMatcher
+from pymatgen.core.structure import Structure
 from scipy.stats import wasserstein_distance
 from tqdm import tqdm
 from tqdm.notebook import tqdm as ipython_tqdm
@@ -69,6 +71,11 @@ def fib(n):
 
 sm = StructureMatcher(stol=0.5, ltol=0.3, angle_tol=10.0)
 
+
+def pairwise_match(s1: Structure, s2: Structure):
+    return sm.fit(s1, s2)
+
+
 try:
     import google.colab  # type: ignore # noqa: F401
 
@@ -78,12 +85,24 @@ except ImportError:
 
 
 class GenMatcher(object):
-    def __init__(self, test_structures, gen_structures, verbose=True) -> None:
+    def __init__(
+        self,
+        test_structures,
+        gen_structures: Optional[List[Structure]] = None,
+        verbose=True,
+    ) -> None:
         self.test_structures = test_structures
-        self.gen_structures = gen_structures
-        self.num_test = len(test_structures)
-        self.num_gen = len(gen_structures)
         self.verbose = verbose
+
+        if gen_structures is None:
+            self.gen_structures = test_structures
+            self.symmetric = True
+        else:
+            self.gen_structures = gen_structures
+            self.symmetric = False
+
+        self.num_test = len(self.test_structures)
+        self.num_gen = len(self.gen_structures)
 
         if self.verbose:
             # https://stackoverflow.com/a/58102605/13697228
@@ -105,7 +124,11 @@ class GenMatcher(object):
         match_matrix = np.zeros((self.num_test, self.num_gen))
         for i, ts in enumerate(self.tqdm(self.test_structures, **self.tqdm_kwargs)):
             for j, gs in enumerate(self.gen_structures):
-                match_matrix[i, j] = sm.fit(ts, gs)
+                if not self.symmetric or (self.symmetric and i < j):
+                    match_matrix[i, j] = pairwise_match(ts, gs)
+
+        if self.symmetric:
+            match_matrix = match_matrix + match_matrix.T
 
         self._match_matrix = match_matrix
 
@@ -192,25 +215,27 @@ class GenMetrics(object):
     @property
     def coverage(self):
         """Match rate between test structures and generated structures."""
-        coverage = GenMatcher(
+        self.coverage_matcher = GenMatcher(
             self.test_structures, self.gen_structures, verbose=self.verbose
-        ).match_rate
-        return coverage
+        )
+        return self.coverage_matcher.match_rate
 
     @property
     def novelty(self):
         """One minus match rate between train structures and generated structures."""
-        similarity = GenMatcher(
+        self.similarity_matcher = GenMatcher(
             self.train_structures, self.gen_structures, verbose=self.verbose
-        ).match_rate
+        )
+        similarity = self.similarity_matcher.match_rate
         return 1.0 - similarity
 
     @property
     def uniqueness(self):
         """One minus duplicity rate within generated structures."""
-        commonality = GenMatcher(
+        self.commonality_matcher = GenMatcher(
             self.gen_structures, self.gen_structures, verbose=self.verbose
-        ).duplicity_rate
+        )
+        commonality = self.commonality_matcher.duplicity_rate
         return 1.0 - commonality
 
     @property
