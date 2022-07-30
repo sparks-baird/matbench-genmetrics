@@ -249,12 +249,13 @@ class GenMetrics(object):
         }
 
 
-class MPTSMetrics(GenMetrics):
+class MPTSMetrics(object):
     def __init__(self, dummy=False, verbose=True):
         self.dummy = dummy
         self.verbose = verbose
         self.mpt = MPTimeSplit(target="energy_above_hull")
         self.folds = self.mpt.folds
+        self.gms: List[Optional[GenMetrics]] = [None] * len(self.folds)
         self.recorded_metrics = {}
 
     def get_train_and_val_data(self, fold, include_val=False):
@@ -272,8 +273,7 @@ class MPTSMetrics(GenMetrics):
         return self.train_inputs
 
     def evaluate_and_record(self, fold, gen_structures, test_pred_structures=None):
-        GenMetrics.__init__(
-            self,
+        self.gms[fold] = GenMetrics(
             self.train_inputs.tolist(),
             self.val_inputs.tolist(),
             gen_structures,
@@ -281,7 +281,11 @@ class MPTSMetrics(GenMetrics):
             verbose=self.verbose,
         )
 
-        self.recorded_metrics[fold] = self.metrics
+        self.recorded_metrics[fold] = self.gms[fold].metrics
+
+        # i.e. store the values for the current fold for testing purposes
+        for metric, value in self.recorded_metrics[fold].items():
+            setattr(self, metric, value)
 
 
 # def get_rms_dist(gen_structures, test_structures):
