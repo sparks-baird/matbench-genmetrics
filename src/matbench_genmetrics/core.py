@@ -390,3 +390,13 @@ if __name__ == "__main__":
 #     match_rate = (match_rate + match_rate.T) / 2 - np.diag(np.diag(match_rate))
 
 #     return match_rate
+
+# from CBFV.composition import generate_features
+
+# self.test_formulas = [s.reduced_formula for s in test_structures]
+# self.gen_formulas = [s.reduced_formula for s in gen_structures]
+
+# self.test_cbfv, _, _, _ =
+# generate_features(pd.DataFrame(dict(formula=self.test_formulas, target=0.0)))
+# self.gen_cbfv, _, _, _ = generate_features(dict(formula=self.gen_formulas,
+# target=0.0))
