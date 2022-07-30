@@ -20,10 +20,14 @@ of best (i.e. metric) associated with it.
 
 ## Getting Started
 
+Installation, a dummy example, output metrics for the example, and descriptions of the benchmark metrics.
 ### Installation
 
 Create a conda environment with the `matbench-genmetrics` package installed from the
 `conda-forge` channel. Then activate the environment.
+
+> **NOTE: not available on conda-forge as of 2022-07-30, recipe under review by
+> conda-forge team. So use `pip install matbench-genmetrics` for now
 
 ```bash
 conda create --name matbench-genmetrics --channel conda-forge python==3.9.* matbench-genmetrics
@@ -33,63 +37,156 @@ conda activate matbench-genmetrics
 > NOTE: It doesn't have to be Python 3.9; you can remove `python==3.9.*` altogether or
 change this to e.g. `python==3.8.*`. See [Advanced Installation](##Advanced-Installation)
 
-### Basic Usage
+### Example
+
+> NOTE: be sure to set `dummy=False` for the real/full benchmark run
 
 ```python
-from mp_time_split.utils.gen import DummyGenerator
-from matbench_genmetrics.core import MPTSMetrics
+>>> from tqdm import tqdm
+>>> from mp_time_split.utils.gen import DummyGenerator
+>>> from matbench_genmetrics.core import MPTSMetrics1000
+>>>
+>>> mptm = MPTSMetrics1000(dummy=True)
+>>> for fold in mptm.folds:
+>>>     train_val_inputs = mptm.get_train_and_val_data(fold)
+>>>
+>>>     dg = DummyGenerator()
+>>>     dg.fit(train_val_inputs)
+>>>     gen_structures = dg.gen(n=1000)
+>>>
+>>>     mptm.record(fold, gen_structures)
+```
 
-mptm = MPTSMetrics(dummy=False)
-for fold in mptm.folds:
-    train_val_inputs = mptm.get_train_and_val_data(fold)
+### Output
 
-    dg = DummyGenerator()
-    dg.fit(train_val_inputs)
-    gen_structures = dg.gen(n=10000)
-
-    mptm.record(fold, gen_structures)
-
+```python
 print(mptm.recorded_metrics)
 ```
 
-> ```python
->
-> ```
+```python
+{
+    0: {
+        "validity": 0.4375,
+        "coverage": 0.0,
+        "novelty": 1.0,
+        "uniqueness": 0.9777777777777777,
+    },
+    1: {
+        "validity": 0.4390681003584229,
+        "coverage": 0.0,
+        "novelty": 1.0,
+        "uniqueness": 0.9333333333333333,
+    },
+    2: {
+        "validity": 0.4401197604790419,
+        "coverage": 0.0,
+        "novelty": 1.0,
+        "uniqueness": 0.8222222222222222,
+    },
+    3: {
+        "validity": 0.4408740359897172,
+        "coverage": 0.0,
+        "novelty": 1.0,
+        "uniqueness": 0.8444444444444444,
+    },
+    4: {
+        "validity": 0.4414414414414415,
+        "coverage": 0.0,
+        "novelty": 1.0,
+        "uniqueness": 0.9111111111111111,
+    },
+}
+```
+
+### Metrics
+
+| Metric | Description |
+|---|---|
+| Validity | One minus (Wasserstein distance between distribution of space group numbers for train and generated structures divided by distance of dummy case between train and `space_group_number == 1`). |
+| Coverage | Match counts between held-out test structures and generated structures divided by number of test structures ("predict the future"). |
+| Novelty | One minus (match counts between train structures and generated structures divided by number of generated structures). |
+| Uniqueness | One minus (non-self-comparing match counts within generated structures divided by total possible non-self-comparing matches). |
+
+A match is when [`StructureMatcher`](https://pymatgen.org/pymatgen.analysis.structure_matcher.html#pymatgen.analysis.structure_matcher.StructureMatcher)`(stol=0.5, ltol=0.3, angle_tol=10.0).fit(s1, s2)`
+evaluates to `True`.
 
 ## Advanced Installation
 
+### Anaconda (`conda`) installation (recommended)
+
+(2022-07-30, conda-forge installation pending, fallback to `pip install xtal2png` as separate command)
+
+Create and activate a new `conda` environment named `xtal2png` (`-n`) that will search for and install the `xtal2png` package from the `conda-forge` Anaconda channel (`-c`).
+
+```bash
+conda env create -n xtal2png -c conda-forge xtal2png
+conda activate xtal2png
+```
+
+Alternatively, in an already activated environment:
+
+```bash
+conda install -c conda-forge xtal2png
+```
+
+If you run into conflicts with packages you are integrating with `xtal2png`, please try installing all packages in a single line of code (or two if mixing `conda` and `pip` packages in the same environment) and installing with `mamba` ([source](https://stackoverflow.com/a/69137255/13697228)).
+
+### PyPI (`pip`) installation
+
+Create and activate a new `conda` environment named `matbench-genmetrics` (`-n`) with `python==3.9.*` or your preferred Python version, then install `matbench-genmetrics` via `pip`.
+
+```bash
+conda create -n xtal2png python==3.9.*
+conda activate xtal2png
+pip install xtal2png
+```
+
+## Editable installation
+
 In order to set up the necessary environment:
 
-1. review and uncomment what you need in `environment.yml` and create an environment `matbench-genmetrics` with the help of [conda]:
+1. clone and enter the repository via:
+
+   ```bash
+   git clone https://github.com/sparks-baird/matbench-genmetrics.git
+   cd matbench-genmetrics
    ```
-   conda env create -f environment.yml
-   ```
-2. activate the new environment with:
-   ```
+
+2. create and activate a new conda environment (optional, but recommended)
+
+   ```bash
+   conda env create --name matbench-genmetrics python==3.9.*
    conda activate matbench-genmetrics
    ```
 
-> **_NOTE:_**  The conda environment will have matbench-genmetrics installed in editable mode.
-> Some changes, e.g. in `setup.cfg`, might require you to run `pip install -e .` again.
+3. perform an editable (`-e`) installation in the current directory (`.`):
 
+   ```bash
+   pip install -e .
+   ```
+
+> **_NOTE:_**  Some changes, e.g. in `setup.cfg`, might require you to run `pip install -e .` again.
 
 Optional and needed only once after `git clone`:
 
 3. install several [pre-commit] git hooks with:
+
    ```bash
    pre-commit install
    # You might also want to run `pre-commit autoupdate`
    ```
+
    and checkout the configuration under `.pre-commit-config.yaml`.
    The `-n, --no-verify` flag of `git commit` can be used to deactivate pre-commit hooks temporarily.
 
 4. install [nbstripout] git hooks to remove the output cells of committed notebooks with:
+
    ```bash
    nbstripout --install --attributes notebooks/.gitattributes
    ```
+
    This is useful to avoid large diffs due to plots in your notebooks.
    A simple `nbstripout --uninstall` will revert these changes.
-
 
 Then take a look into the `scripts` and `notebooks` folders.
 
