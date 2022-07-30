@@ -9,16 +9,16 @@
 
 Generative materials benchmarking metrics, inspired by CDVAE.
 
-<a class="github-button" href="https://github.com/sparks-baird/ matbench-genmetrics"
+<a class="github-button" href="https://github.com/sparks-baird/matbench-genmetrics"
 data-icon="octicon-star" data-size="large" data-show-count="true" aria-label="Star
-sparks-baird/ matbench-genmetrics on GitHub">Star</a>
+sparks-baird/matbench-genmetrics on GitHub">Star</a>
 <a class="github-button"
 href="https://github.com/sgbaird" data-size="large" data-show-count="true"
 aria-label="Follow @sgbaird on GitHub">Follow @sgbaird</a>
-<a class="github-button" href="https://github.com/sparks-baird/ matbench-genmetrics/issues"
+<a class="github-button" href="https://github.com/sparks-baird/matbench-genmetrics/issues"
 data-icon="octicon-issue-opened" data-size="large" data-show-count="true"
-aria-label="Issue sparks-baird/ matbench-genmetrics on GitHub">Issue</a>
-<a class="github-button" href="https://github.com/sparks-baird/ matbench-genmetrics/discussions" data-icon="octicon-comment-discussion" data-size="large" aria-label="Discuss sparks-baird/ matbench-genmetrics on GitHub">Discuss</a>
+aria-label="Issue sparks-baird/matbench-genmetrics on GitHub">Issue</a>
+<a class="github-button" href="https://github.com/sparks-baird/matbench-genmetrics/discussions" data-icon="octicon-comment-discussion" data-size="large" aria-label="Discuss sparks-baird/matbench-genmetrics on GitHub">Discuss</a>
 <br><br>
 
 Many generative models for crystal structure have been developed; however, few

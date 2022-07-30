@@ -4,6 +4,7 @@
 [![PyPI-Server](https://img.shields.io/pypi/v/matbench-genmetrics.svg)](https://pypi.org/project/matbench-genmetrics/)
 [![Conda-Forge](https://img.shields.io/conda/vn/conda-forge/matbench-genmetrics.svg)](https://anaconda.org/conda-forge/matbench-genmetrics)
 ![PyPI - Downloads](https://img.shields.io/pypi/dm/matbench-genmetrics)
+![Lines of code](https://img.shields.io/tokei/lines/github/sparks-baird/matbench-genmetrics)
 <!-- These are examples of badges you might also want to add to your README. Update the URLs accordingly.
 [![Built Status](https://api.cirrus-ci.com/github/<USER>/matbench-genmetrics.svg?branch=main)](https://cirrus-ci.com/github/<USER>/matbench-genmetrics)
 [![Monthly Downloads](https://pepy.tech/badge/matbench-genmetrics/month)](https://pepy.tech/project/matbench-genmetrics)
