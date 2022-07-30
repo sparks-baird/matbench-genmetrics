@@ -19,6 +19,8 @@ This repository provides standardized benchmarks for benchmarking generative mod
 crystal structure. Each benchmark has a fixed dataset, a predefined split, and a notion
 of best (i.e. metric) associated with it.
 
+![metrics](reports/figures/metrics.png)
+
 ## Getting Started
 
 Installation, a dummy example, output metrics for the example, and descriptions of the benchmark metrics.
