@@ -43,6 +43,7 @@ License <license>
 Authors <authors>
 Changelog <changelog>
 Module Reference <api/modules>
+GitHub Source <https://github.com/sparks-baird/matbench-genmetrics>
 ```
 
 ## Indices and tables
