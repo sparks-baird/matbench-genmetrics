@@ -7,7 +7,7 @@
 [![Conda-Forge](https://img.shields.io/conda/vn/conda-forge/matbench-genmetrics.svg)](https://anaconda.org/conda-forge/matbench-genmetrics)
 ![PyPI - Downloads](https://img.shields.io/pypi/dm/matbench-genmetrics)
 
-Generative materials benchmarking metrics, inspired by CDVAE.
+Generative materials benchmarking metrics, inspired by [guacamol](https://www.benevolent.com/guacamol) and [CDVAE](https://github.com/txie-93/cdvae).
 
 <a class="github-button" href="https://github.com/sparks-baird/matbench-genmetrics"
 data-icon="octicon-star" data-size="large" data-show-count="true" aria-label="Star
