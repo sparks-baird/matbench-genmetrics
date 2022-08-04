@@ -49,15 +49,12 @@ change this to e.g. `python==3.8.*`. See [Advanced Installation](##Advanced-Inst
 >>> from tqdm import tqdm
 >>> from mp_time_split.utils.gen import DummyGenerator
 >>> from matbench_genmetrics.core import MPTSMetrics10, MPTSMetrics100, MPTSMetrics1000, MPTSMetrics10000
->>>
 >>> mptm = MPTSMetrics10(dummy=True)
 >>> for fold in mptm.folds:
 >>>     train_val_inputs = mptm.get_train_and_val_data(fold)
->>>
 >>>     dg = DummyGenerator()
 >>>     dg.fit(train_val_inputs)
 >>>     gen_structures = dg.gen(n=mptm.num_gen)
->>>
 >>>     mptm.record(fold, gen_structures)
 ```
 
