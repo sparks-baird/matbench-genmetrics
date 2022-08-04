@@ -6,13 +6,13 @@ from typing import List, Optional
 
 import numpy as np
 from mp_time_split.core import MPTimeSplit
-from pymatgen.analysis.structure_matcher import StructureMatcher
 from pymatgen.core.structure import Structure
 from scipy.stats import wasserstein_distance
 from tqdm import tqdm
 from tqdm.notebook import tqdm as ipython_tqdm
 
 from matbench_genmetrics import __version__
+from matbench_genmetrics.utils.match import ALLOWED_MATCH_TYPES, get_match_matrix
 
 # causes pytest to fail (tests not found, DLL load error)
 # from matbench_genmetrics.cdvae.metrics import RecEval, GenEval, OptEval
@@ -48,21 +48,7 @@ def fib(n):
     return a
 
 
-sm = StructureMatcher(stol=0.5, ltol=0.3, angle_tol=10.0)
-
-
-def pairwise_match(s1: Structure, s2: Structure):
-    return sm.fit(s1, s2)
-
-
 IN_COLAB = "google.colab" in sys.modules
-
-# try:
-#     import google.colab  # type: ignore # noqa: F401
-
-#     IN_COLAB = True
-# except ImportError:
-#     IN_COLAB = False
 
 
 class GenMatcher(object):
@@ -71,9 +57,16 @@ class GenMatcher(object):
         test_structures,
         gen_structures: Optional[List[Structure]] = None,
         verbose=True,
+        match_type="cdvae_coverage",
+        **match_kwargs,
     ) -> None:
         self.test_structures = test_structures
         self.verbose = verbose
+        assert (
+            match_type in ALLOWED_MATCH_TYPES
+        ), f"type must be one of {ALLOWED_MATCH_TYPES}"
+        self.match_type = match_type
+        self.match_kwargs = match_kwargs
 
         if gen_structures is None:
             self.gen_structures = test_structures
@@ -102,14 +95,13 @@ class GenMatcher(object):
         if self._match_matrix is not None:
             return self._match_matrix
 
-        match_matrix = np.zeros((self.num_test, self.num_gen))
-        for i, ts in enumerate(self.tqdm(self.test_structures, **self.tqdm_kwargs)):
-            for j, gs in enumerate(self.gen_structures):
-                if not self.symmetric or (self.symmetric and i < j):
-                    match_matrix[i, j] = pairwise_match(ts, gs)
-
-        if self.symmetric:
-            match_matrix = match_matrix + match_matrix.T
+        match_matrix = get_match_matrix(
+            self.test_structures,
+            self.gen_structures,
+            match_type=self.match_type,
+            symmetric=self.symmetric,
+            **self.match_kwargs,
+        )
 
         self._match_matrix = match_matrix
 
@@ -161,12 +153,16 @@ class GenMetrics(object):
         gen_structures,
         test_pred_structures=None,
         verbose=True,
+        match_type="cdvae_coverage",
+        **match_kwargs,
     ):
         self.train_structures = train_structures
         self.test_structures = test_structures
         self.gen_structures = gen_structures
         self.test_pred_structures = test_pred_structures
         self.verbose = verbose
+        self.match_type = match_type
+        self.match_kwargs = match_kwargs
         self._cdvae_metrics = None
         self._mpts_metrics = None
 
@@ -206,7 +202,11 @@ class GenMetrics(object):
     def coverage(self):
         """Match rate between test structures and generated structures."""
         self.coverage_matcher = GenMatcher(
-            self.test_structures, self.gen_structures, verbose=self.verbose
+            self.test_structures,
+            self.gen_structures,
+            verbose=self.verbose,
+            match_type=self.match_type,
+            **self.match_kwargs,
         )
         return self.coverage_matcher.match_rate
 
@@ -214,7 +214,11 @@ class GenMetrics(object):
     def novelty(self):
         """One minus match rate between train structures and generated structures."""
         self.similarity_matcher = GenMatcher(
-            self.train_structures, self.gen_structures, verbose=self.verbose
+            self.train_structures,
+            self.gen_structures,
+            verbose=self.verbose,
+            match_type=self.match_type,
+            **self.match_kwargs,
         )
         similarity = (
             self.similarity_matcher.match_count / self.similarity_matcher.num_gen
@@ -225,7 +229,11 @@ class GenMetrics(object):
     def uniqueness(self):
         """One minus duplicity rate within generated structures."""
         self.commonality_matcher = GenMatcher(
-            self.gen_structures, self.gen_structures, verbose=self.verbose
+            self.gen_structures,
+            self.gen_structures,
+            verbose=self.verbose,
+            match_type=self.match_type,
+            **self.match_kwargs,
         )
         commonality = self.commonality_matcher.duplicity_rate
         return 1.0 - commonality
@@ -242,10 +250,19 @@ class GenMetrics(object):
 
 
 class MPTSMetrics(object):
-    def __init__(self, dummy=False, verbose=True, num_gen=None):
+    def __init__(
+        self,
+        dummy=False,
+        verbose=True,
+        num_gen=None,
+        match_type="cdvae_coverage",
+        **match_kwargs,
+    ):
         self.dummy = dummy
         self.verbose = verbose
         self.num_gen = num_gen
+        self.match_type = match_type
+        self.match_kwargs = match_kwargs
         self.mpt = MPTimeSplit(target="energy_above_hull")
         self.folds = self.mpt.folds
         self.gms: List[Optional[GenMetrics]] = [None] * len(self.folds)
@@ -276,6 +293,8 @@ class MPTSMetrics(object):
             gen_structures,
             test_pred_structures=test_pred_structures,
             verbose=self.verbose,
+            match_type=self.match_type,
+            **self.match_kwargs,
         )
 
         self.recorded_metrics[fold] = self.gms[fold].metrics
@@ -287,22 +306,38 @@ class MPTSMetrics(object):
 
 class MPTSMetrics10(MPTSMetrics):
     def __init__(self, dummy=False, verbose=True):
-        MPTSMetrics.__init__(self, dummy=dummy, verbose=verbose, num_gen=10)
+        MPTSMetrics.__init__(
+            self, dummy=dummy, verbose=verbose, num_gen=10, match_type="cdvae_coverage"
+        )
 
 
 class MPTSMetrics100(MPTSMetrics):
     def __init__(self, dummy=False, verbose=True):
-        MPTSMetrics.__init__(self, dummy=dummy, verbose=verbose, num_gen=100)
+        MPTSMetrics.__init__(
+            self, dummy=dummy, verbose=verbose, num_gen=100, match_type="cdvae_coverage"
+        )
 
 
 class MPTSMetrics1000(MPTSMetrics):
     def __init__(self, dummy=False, verbose=True):
-        MPTSMetrics.__init__(self, dummy=dummy, verbose=verbose, num_gen=1000)
+        MPTSMetrics.__init__(
+            self,
+            dummy=dummy,
+            verbose=verbose,
+            num_gen=1000,
+            match_type="cdvae_coverage",
+        )
 
 
 class MPTSMetrics10000(MPTSMetrics):
     def __init__(self, dummy=False, verbose=True):
-        MPTSMetrics.__init__(self, dummy=dummy, verbose=verbose, num_gen=10000)
+        MPTSMetrics.__init__(
+            self,
+            dummy=dummy,
+            verbose=verbose,
+            num_gen=10000,
+            match_type="cdvae_coverage",
+        )
 
 
 # def get_rms_dist(gen_structures, test_structures):
@@ -446,3 +481,10 @@ if __name__ == "__main__":
 # generate_features(pd.DataFrame(dict(formula=self.test_formulas, target=0.0)))
 # self.gen_cbfv, _, _, _ = generate_features(dict(formula=self.gen_formulas,
 # target=0.0))
+
+# try:
+#     import google.colab  # type: ignore # noqa: F401
+
+#     IN_COLAB = True
+# except ImportError:
+#     IN_COLAB = False
