@@ -182,6 +182,21 @@ def test_non_verbose():
     print(mptm.recorded_metrics)
 
 
+def test_cdvae_coverage():
+    mptm = MPTSMetrics(dummy=True, verbose=True, match_type="cdvae_coverage")
+    fold = mptm.folds[0]
+    train_val_inputs = mptm.get_train_and_val_data(fold)
+
+    np.random.seed(10)
+    dg = DummyGenerator()
+    dg.fit(train_val_inputs)
+    gen_structures = dg.gen(n=3)
+
+    mptm.evaluate_and_record(fold, gen_structures)
+
+    print(mptm.recorded_metrics)
+
+
 # %% Code Graveyard
 # def flatten_params(
 #     fixtures: List[Callable], expecteds: List[dict]
