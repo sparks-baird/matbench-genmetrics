@@ -46,7 +46,15 @@ bva = BVAnalyzer()
 
 
 def cdvae_cov_struct_fingerprints(structures):
-    oxi_structures = [bva.get_oxi_state_decorated_structure(s) for s in structures]
+    oxi_structures = []
+    for s in structures:
+        try:
+            oxi_struct = bva.get_oxi_state_decorated_structure(s)
+        except ValueError:
+            # TODO: track how many couldn't have valences assigned
+            oxi_struct = s
+        oxi_structures.append(oxi_struct)
+
     struct_fps = []
     for s in oxi_structures:
         site_fps = [CrystalNNFP.featurize(s, i) for i in range(len(s))]
