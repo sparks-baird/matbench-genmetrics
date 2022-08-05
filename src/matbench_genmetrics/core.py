@@ -8,8 +8,6 @@ import numpy as np
 from mp_time_split.core import MPTimeSplit
 from pymatgen.core.structure import Structure
 from scipy.stats import wasserstein_distance
-from tqdm import tqdm
-from tqdm.notebook import tqdm as ipython_tqdm
 
 from matbench_genmetrics import __version__
 from matbench_genmetrics.utils.match import ALLOWED_MATCH_TYPES, get_match_matrix
@@ -78,16 +76,6 @@ class GenMatcher(object):
         self.num_test = len(self.test_structures)
         self.num_gen = len(self.gen_structures)
 
-        if self.verbose:
-            # https://stackoverflow.com/a/58102605/13697228
-            is_notebook = hasattr(__builtins__, "__IPYTHON__")
-            self.tqdm = ipython_tqdm if is_notebook else tqdm
-            self.tqdm = tqdm
-            self.tqdm_kwargs = dict(position=0, leave=True) if IN_COLAB else {}
-        else:
-            self.tqdm = lambda x: x
-            self.tqdm_kwargs = {}
-
         self._match_matrix = None
 
     @property
@@ -100,6 +88,7 @@ class GenMatcher(object):
             self.gen_structures,
             match_type=self.match_type,
             symmetric=self.symmetric,
+            verbose=self.verbose,
             **self.match_kwargs,
         )
 
