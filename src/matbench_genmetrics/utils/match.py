@@ -20,7 +20,7 @@ is_notebook = hasattr(__builtins__, "__IPYTHON__")
 
 
 def dummy_tqdm(x, **kwargs):  # noqa: E731
-    pass
+    return x
 
 
 def get_tqdm(verbose):
