@@ -10,7 +10,10 @@ from pymatgen.core.structure import Structure
 from scipy.stats import wasserstein_distance
 
 from matbench_genmetrics import __version__
-from matbench_genmetrics.utils.match import ALLOWED_MATCH_TYPES, get_match_matrix
+from matbench_genmetrics.utils.match import (
+    ALLOWED_MATCH_TYPES,
+    get_structure_match_matrix,
+)
 
 # causes pytest to fail (tests not found, DLL load error)
 # from matbench_genmetrics.cdvae.metrics import RecEval, GenEval, OptEval
@@ -83,7 +86,7 @@ class GenMatcher(object):
         if self._match_matrix is not None:
             return self._match_matrix
 
-        match_matrix = get_match_matrix(
+        match_matrix = get_structure_match_matrix(
             self.test_structures,
             self.gen_structures,
             match_type=self.match_type,
@@ -258,13 +261,28 @@ class MPTSMetrics(object):
         self.recorded_metrics = {}
 
     def get_train_and_val_data(self, fold, include_val=False):
-        self.mpt.load(dummy=self.dummy)
+
+        if self.recorded_metrics == {}:
+            self.mpt.load(dummy=self.dummy)
         (
             self.train_inputs,
             self.val_inputs,
             self.train_outputs,
             self.val_outputs,
         ) = self.mpt.get_train_and_val_data(fold)
+
+        if self.match_type == "cdvae_coverage":
+            # TODO: load fingerprints if not already loaded
+            self.comp_fps = None
+            self.struct_fps = None
+
+            self.train_comp_fingerprints, self.val_comp_fingerprints = [
+                self.comp_fps.iloc[tvs] for tvs in self.mpt.trainval_splits[fold]
+            ]
+
+            self.train_struct_fingerprints, self.val_struct_fingerprints = [
+                self.struct_fps.iloc[tvs] for tvs in self.mpt.trainval_splits[fold]
+            ]
 
         if include_val:
             return self.train_inputs, self.val_inputs
