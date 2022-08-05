@@ -100,6 +100,7 @@ class GenMatcher(object):
             self.gen_structures,
             match_type=self.match_type,
             symmetric=self.symmetric,
+            verbose=self.verbose,
             **self.match_kwargs,
         )
 
