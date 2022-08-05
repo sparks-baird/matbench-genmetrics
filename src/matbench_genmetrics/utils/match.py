@@ -10,8 +10,8 @@ from scipy.spatial.distance import cdist, pdist, squareform
 from tqdm import tqdm
 from tqdm.notebook import tqdm as ipython_tqdm
 
+logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
-logger.setLevel(level=logging.DEBUG)
 
 sm = StructureMatcher(stol=0.5, ltol=0.3, angle_tol=10.0)
 
