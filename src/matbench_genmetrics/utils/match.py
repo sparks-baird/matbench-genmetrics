@@ -1,3 +1,5 @@
+import logging
+
 import numpy as np
 from matminer.featurizers.composition.composite import ElementProperty
 from matminer.featurizers.site.fingerprint import CrystalNNFingerprint
@@ -5,8 +7,27 @@ from pymatgen.analysis.bond_valence import BVAnalyzer
 from pymatgen.analysis.structure_matcher import StructureMatcher
 from pymatgen.core.structure import Structure
 from scipy.spatial.distance import cdist, pdist, squareform
+from tqdm import tqdm
+from tqdm.notebook import tqdm as ipython_tqdm
+
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(__name__)
 
 sm = StructureMatcher(stol=0.5, ltol=0.3, angle_tol=10.0)
+
+# https://stackoverflow.com/a/58102605/13697228
+is_notebook = hasattr(__builtins__, "__IPYTHON__")
+
+
+def dummy_tqdm(x, **kwargs):  # noqa: E731
+    return x
+
+
+def get_tqdm(verbose):
+    if verbose:
+        return ipython_tqdm if is_notebook else tqdm
+    else:
+        return dummy_tqdm
 
 
 def structure_matcher(s1: Structure, s2: Structure):
@@ -20,12 +41,17 @@ def structure_pairwise_match_matrix(
     test_structures,
     gen_structures,
     match_type="StructureMatcher",
+    verbose=False,
     symmetric=False,
 ):
     # TODO: replace with group_structures to be faster
     pairwise_match_fn = pairwise_match_fn_dict[match_type]
     match_matrix = np.zeros((len(test_structures), len(gen_structures)))
-    for i, ts in enumerate(test_structures):
+    if verbose:
+        logger.info(f"Computing {match_type} match matrix pairwise")
+
+    my_tqdm = get_tqdm(verbose)
+    for i, ts in enumerate(my_tqdm(test_structures)):
         for j, gs in enumerate(gen_structures):
             if not symmetric or (symmetric and i < j):
                 match_matrix[i, j] = pairwise_match_fn(ts, gs)
@@ -37,26 +63,24 @@ def structure_pairwise_match_matrix(
 CompFP = ElementProperty.from_preset("magpie")
 
 
-def cdvae_cov_comp_fingerprints(structures):
-    return [CompFP.featurize(s.composition) for s in structures]
+def cdvae_cov_comp_fingerprints(structures, verbose=False):
+    if verbose:
+        logger.info("Computing composition fingerprints")
+    my_tqdm = get_tqdm(verbose)
+    return [CompFP.featurize(s.composition) for s in my_tqdm(structures)]
 
 
 CrystalNNFP = CrystalNNFingerprint.from_preset("ops")
 bva = BVAnalyzer()
 
 
-def cdvae_cov_struct_fingerprints(structures):
-    oxi_structures = []
-    for s in structures:
-        try:
-            oxi_struct = bva.get_oxi_state_decorated_structure(s)
-        except ValueError:
-            # TODO: track how many couldn't have valences assigned
-            oxi_struct = s
-        oxi_structures.append(oxi_struct)
-
+def cdvae_cov_struct_fingerprints(structures, verbose=False):
+    my_tqdm = get_tqdm(verbose)
     struct_fps = []
-    for s in oxi_structures:
+    # base_10_check = [10 ** j for j in range(0, 20)]
+    for i, s in enumerate(my_tqdm(structures)):
+        # if i in base_10_check == 0:
+        #     logger.info(f"{time()} Struct fingerprint {i}/{len(structures)}")
         site_fps = [CrystalNNFP.featurize(s, i) for i in range(len(s))]
         struct_fp = np.array(site_fps).mean(axis=0)
         struct_fps.append(struct_fp)
@@ -64,14 +88,27 @@ def cdvae_cov_struct_fingerprints(structures):
 
 
 def cdvae_cov_dist_matrix(
-    test_structures, gen_structures, composition_only=False, symmetric=False
+    test_structures,
+    gen_structures,
+    composition_only=False,
+    symmetric=False,
+    verbose=False,
 ):
     fingerprint_fn = (
         cdvae_cov_comp_fingerprints
         if composition_only
         else cdvae_cov_struct_fingerprints
     )
-    test_comp_fps = fingerprint_fn(test_structures)
+
+    type_str = "composition" if composition_only else "structure"
+    if verbose:
+        logger.info(f"Computing {type_str} fingerprints")
+
+    test_comp_fps = fingerprint_fn(test_structures, verbose=verbose)
+
+    if verbose:
+        logger.info(f"Computing {type_str} distance matrix")
+
     if symmetric:
         dm = squareform(pdist(test_comp_fps))
     else:
@@ -85,6 +122,7 @@ def cdvae_cov_match_matrix(
     gen_structures,
     composition_only=False,
     symmetric=False,
+    verbose=False,
     cutoff=10.0,
 ):
     dm = cdvae_cov_dist_matrix(
@@ -92,6 +130,7 @@ def cdvae_cov_match_matrix(
         gen_structures,
         composition_only=composition_only,
         symmetric=symmetric,
+        verbose=verbose,
     )
     return dm <= cutoff
 
@@ -102,12 +141,14 @@ def cdvae_cov_compstruct_match_matrix(
     symmetric=False,
     comp_cutoff=10.0,
     struct_cutoff=0.4,
+    verbose=False,
 ):
     comp_match_matrix = cdvae_cov_match_matrix(
         test_structures,
         gen_structures,
         composition_only=True,
         symmetric=symmetric,
+        verbose=verbose,
         cutoff=comp_cutoff,
     )
     struct_match_matrix = cdvae_cov_match_matrix(
@@ -115,6 +156,7 @@ def cdvae_cov_compstruct_match_matrix(
         gen_structures,
         composition_only=False,
         symmetric=symmetric,
+        verbose=verbose,
         cutoff=struct_cutoff,
     )
     # multiply, since 0*0=0, 0*1=0, 1*0=0, 1*1=1
@@ -129,6 +171,7 @@ def get_match_matrix(
     gen_structures,
     match_type="cdvae_coverage",
     symmetric=False,
+    verbose=False,
     **match_kwargs,
 ):
     assert (
@@ -140,6 +183,7 @@ def get_match_matrix(
             test_structures,
             gen_structures,
             symmetric=symmetric,
+            verbose=verbose,
             **match_kwargs,
         )
     elif match_type == "StructureMatcher":
@@ -148,5 +192,20 @@ def get_match_matrix(
             gen_structures,
             match_type="StructureMatcher",
             symmetric=symmetric,
+            verbose=verbose,
             **match_kwargs,
         )
+
+
+# %% Code Graveyard
+
+# if verbose:
+#     logger.info("Decorating structures with oxidation states")
+# oxi_structures = []
+# for s in structures:
+#     try:
+#         oxi_struct = bva.get_oxi_state_decorated_structure(s)
+#     except ValueError:
+#         # TODO: track how many couldn't have valences assigned
+#         oxi_struct = s
+#     oxi_structures.append(oxi_struct)
