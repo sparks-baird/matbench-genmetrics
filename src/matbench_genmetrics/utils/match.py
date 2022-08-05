@@ -1,4 +1,5 @@
 import logging
+import warnings
 
 import numpy as np
 from matminer.featurizers.composition.composite import ElementProperty
@@ -9,6 +10,15 @@ from pymatgen.core.structure import Structure
 from scipy.spatial.distance import cdist, pdist, squareform
 from tqdm import tqdm
 from tqdm.notebook import tqdm as ipython_tqdm
+
+warnings.filterwarnings(
+    "ignore",
+    message="No oxidation states specified on sites! For better results, set the site oxidation states in the structure.",  # noqa: E501
+)
+warnings.filterwarnings(
+    "ignore",
+    message="CrystalNN: cannot locate an appropriate radius, covalent or atomic radii will be used, this can lead to non-optimal results.",  # noqa: E501
+)
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
@@ -64,8 +74,6 @@ CompFP = ElementProperty.from_preset("magpie")
 
 
 def cdvae_cov_comp_fingerprints(structures, verbose=False):
-    if verbose:
-        logger.info("Computing composition fingerprints")
     my_tqdm = get_tqdm(verbose)
     return [CompFP.featurize(s.composition) for s in my_tqdm(structures)]
 
@@ -78,7 +86,7 @@ def cdvae_cov_struct_fingerprints(structures, verbose=False):
     my_tqdm = get_tqdm(verbose)
     struct_fps = []
     # base_10_check = [10 ** j for j in range(0, 20)]
-    for i, s in enumerate(my_tqdm(structures)):
+    for s in my_tqdm(structures):
         # if i in base_10_check == 0:
         #     logger.info(f"{time()} Struct fingerprint {i}/{len(structures)}")
         site_fps = [CrystalNNFP.featurize(s, i) for i in range(len(s))]
@@ -87,73 +95,44 @@ def cdvae_cov_struct_fingerprints(structures, verbose=False):
     return struct_fps
 
 
-def cdvae_cov_dist_matrix(
-    test_structures,
-    gen_structures,
-    composition_only=False,
-    symmetric=False,
-    verbose=False,
-):
-    fingerprint_fn = (
-        cdvae_cov_comp_fingerprints
-        if composition_only
-        else cdvae_cov_struct_fingerprints
-    )
-
-    type_str = "composition" if composition_only else "structure"
-    if verbose:
-        logger.info(f"Computing {type_str} fingerprints")
-
-    test_comp_fps = fingerprint_fn(test_structures, verbose=verbose)
-
-    if verbose:
-        logger.info(f"Computing {type_str} distance matrix")
-
-    if symmetric:
-        dm = squareform(pdist(test_comp_fps))
-    else:
-        gen_comp_fps = fingerprint_fn(gen_structures)
-        dm = cdist(test_comp_fps, gen_comp_fps)
-    return dm
-
-
 def cdvae_cov_match_matrix(
-    test_structures,
-    gen_structures,
-    composition_only=False,
+    test_fingerprints,
+    gen_fingerprints,
     symmetric=False,
-    verbose=False,
     cutoff=10.0,
 ):
-    dm = cdvae_cov_dist_matrix(
-        test_structures,
-        gen_structures,
-        composition_only=composition_only,
-        symmetric=symmetric,
-        verbose=verbose,
-    )
+    if symmetric:
+        dm = squareform(pdist(test_fingerprints))
+    else:
+        dm = cdist(test_fingerprints, gen_fingerprints)
     return dm <= cutoff
 
 
 def cdvae_cov_compstruct_match_matrix(
-    test_structures,
-    gen_structures,
+    test_comp_fingerprints,
+    gen_comp_fingerprints,
+    test_struct_fingerprints,
+    gen_struct_fingerprints,
     symmetric=False,
     comp_cutoff=10.0,
     struct_cutoff=0.4,
     verbose=False,
 ):
+    if verbose:
+        logger.info("Computing composition match matrix")
     comp_match_matrix = cdvae_cov_match_matrix(
-        test_structures,
-        gen_structures,
+        test_comp_fingerprints,
+        gen_comp_fingerprints,
         composition_only=True,
         symmetric=symmetric,
         verbose=verbose,
         cutoff=comp_cutoff,
     )
+    if verbose:
+        logger.info("Computing structure match matrix")
     struct_match_matrix = cdvae_cov_match_matrix(
-        test_structures,
-        gen_structures,
+        test_struct_fingerprints,
+        gen_struct_fingerprints,
         composition_only=False,
         symmetric=symmetric,
         verbose=verbose,
@@ -166,7 +145,7 @@ def cdvae_cov_compstruct_match_matrix(
 ALLOWED_MATCH_TYPES = ["StructureMatcher", "cdvae_coverage"]
 
 
-def get_match_matrix(
+def get_structure_match_matrix(
     test_structures,
     gen_structures,
     match_type="cdvae_coverage",
@@ -174,19 +153,7 @@ def get_match_matrix(
     verbose=False,
     **match_kwargs,
 ):
-    assert (
-        match_type in ALLOWED_MATCH_TYPES
-    ), f"type must be one of {ALLOWED_MATCH_TYPES}"
-
-    if match_type == "cdvae_coverage":
-        return cdvae_cov_compstruct_match_matrix(
-            test_structures,
-            gen_structures,
-            symmetric=symmetric,
-            verbose=verbose,
-            **match_kwargs,
-        )
-    elif match_type == "StructureMatcher":
+    if match_type == "StructureMatcher":
         return structure_pairwise_match_matrix(
             test_structures,
             gen_structures,
@@ -195,6 +162,36 @@ def get_match_matrix(
             verbose=verbose,
             **match_kwargs,
         )
+    else:
+        raise ValueError(
+            f"Unknown match type {match_type}. Must be one of {ALLOWED_MATCH_TYPES}"
+        )  # noqa: E501
+
+
+def get_fingerprint_match_matrix(
+    test_comp_fingerprints,
+    gen_comp_fingerprints,
+    test_struct_fingerprints,
+    gen_struct_fingerprints,
+    match_type="cdvae_coverage",
+    symmetric=False,
+    verbose=False,
+    **match_kwargs,
+):
+    if match_type == "cdvae_coverage":
+        return cdvae_cov_compstruct_match_matrix(
+            test_comp_fingerprints,
+            gen_comp_fingerprints,
+            test_struct_fingerprints,
+            gen_struct_fingerprints,
+            symmetric=symmetric,
+            verbose=verbose,
+            **match_kwargs,
+        )
+    else:
+        raise ValueError(
+            f"Unknown match type {match_type}. Must be one of {ALLOWED_MATCH_TYPES}"
+        )  # noqa: E501
 
 
 # %% Code Graveyard
@@ -209,3 +206,9 @@ def get_match_matrix(
 #         # TODO: track how many couldn't have valences assigned
 #         oxi_struct = s
 #     oxi_structures.append(oxi_struct)
+
+# fingerprint_fn = (
+#     cdvae_cov_comp_fingerprints
+#     if composition_only
+#     else cdvae_cov_struct_fingerprints
+# )
