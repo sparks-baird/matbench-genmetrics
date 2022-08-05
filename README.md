@@ -13,7 +13,7 @@
 > **NOTE: This is a WIP repository (as of 2022-06-21) being developed in parallel with [`xtal2png`](https://github.com/sparks-baird/xtal2png). Feedback and contributions welcome!**
 # matbench-genmetrics
 
-> Generative materials benchmarking metrics, inspired by https://www.benevolent.com/guacamol and [CDVAE](https://github.com/txie-93/cdvae).
+> Generative materials benchmarking metrics, inspired by [guacamol](https://www.benevolent.com/guacamol) and [CDVAE](https://github.com/txie-93/cdvae).
 
 This repository provides standardized benchmarks for benchmarking generative models for
 crystal structure. Each benchmark has a fixed dataset, a predefined split, and a notion
