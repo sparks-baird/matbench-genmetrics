@@ -23,6 +23,13 @@ def dummy_tqdm(x, **kwargs):  # noqa: E731
     pass
 
 
+def get_tqdm(verbose):
+    if verbose:
+        return ipython_tqdm if is_notebook else tqdm
+    else:
+        return dummy_tqdm
+
+
 def structure_matcher(s1: Structure, s2: Structure):
     return sm.fit(s1, s2)
 
@@ -43,10 +50,7 @@ def structure_pairwise_match_matrix(
     if verbose:
         logger.info(f"Computing {match_type} match matrix pairwise")
 
-    if verbose:
-        my_tqdm = ipython_tqdm if is_notebook else tqdm
-    else:
-        my_tqdm = dummy_tqdm
+    my_tqdm = get_tqdm(verbose)
     for i, ts in enumerate(my_tqdm(test_structures)):
         for j, gs in enumerate(gen_structures):
             if not symmetric or (symmetric and i < j):
@@ -62,7 +66,8 @@ CompFP = ElementProperty.from_preset("magpie")
 def cdvae_cov_comp_fingerprints(structures, verbose=False):
     if verbose:
         logger.info("Computing composition fingerprints")
-    return [CompFP.featurize(s.composition) for s in structures]
+    my_tqdm = get_tqdm(verbose)
+    return [CompFP.featurize(s.composition) for s in my_tqdm(structures)]
 
 
 CrystalNNFP = CrystalNNFingerprint.from_preset("ops")
@@ -72,8 +77,9 @@ bva = BVAnalyzer()
 def cdvae_cov_struct_fingerprints(structures, verbose=False):
     if verbose:
         logger.info("Computing structure fingerprints")
+    my_tqdm = get_tqdm(verbose)
     struct_fps = []
-    for s in structures:
+    for s in my_tqdm(structures):
         site_fps = [CrystalNNFP.featurize(s, i) for i in range(len(s))]
         struct_fp = np.array(site_fps).mean(axis=0)
         struct_fps.append(struct_fp)
