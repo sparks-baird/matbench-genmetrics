@@ -19,7 +19,7 @@ This repository provides standardized benchmarks for benchmarking generative mod
 crystal structure. Each benchmark has a fixed dataset, a predefined split, and a notion
 of best (i.e. metric) associated with it.
 
-<p align="center"><img src="https://github.com/sparks-baird/matbench-genmetrics/blob/main/reports/figures/metrics.png" width=450></p>
+<p align="center"><img src="https://github.com/sparks-baird/matbench-genmetrics/raw/main/reports/figures/metrics.png" width=450></p>
 
 ## Getting Started
 
