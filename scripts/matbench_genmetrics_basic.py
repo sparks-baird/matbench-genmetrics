@@ -11,8 +11,6 @@ for fold in tqdm(mptm.folds):
     dg.fit(train_val_inputs)
     gen_structures = dg.gen(n=mptm.num_gen)
 
-    # gen_structures = train_val_inputs.head(10)
-
     mptm.evaluate_and_record(fold, gen_structures)
 
 print(mptm.recorded_metrics)
