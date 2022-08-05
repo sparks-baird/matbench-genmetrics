@@ -75,11 +75,12 @@ bva = BVAnalyzer()
 
 
 def cdvae_cov_struct_fingerprints(structures, verbose=False):
-    if verbose:
-        logger.info("Computing structure fingerprints")
     my_tqdm = get_tqdm(verbose)
     struct_fps = []
-    for s in my_tqdm(structures):
+    # base_10_check = [10 ** j for j in range(0, 20)]
+    for i, s in enumerate(my_tqdm(structures)):
+        # if i in base_10_check == 0:
+        #     logger.info(f"{time()} Struct fingerprint {i}/{len(structures)}")
         site_fps = [CrystalNNFP.featurize(s, i) for i in range(len(s))]
         struct_fp = np.array(site_fps).mean(axis=0)
         struct_fps.append(struct_fp)
@@ -93,15 +94,21 @@ def cdvae_cov_dist_matrix(
     symmetric=False,
     verbose=False,
 ):
-    if verbose:
-        type_str = "composition" if composition_only else "structure"
-        logger.info(f"Computing {type_str} distance matrix")
     fingerprint_fn = (
         cdvae_cov_comp_fingerprints
         if composition_only
         else cdvae_cov_struct_fingerprints
     )
-    test_comp_fps = fingerprint_fn(test_structures)
+
+    type_str = "composition" if composition_only else "structure"
+    if verbose:
+        logger.info(f"Computing {type_str} fingerprints")
+
+    test_comp_fps = fingerprint_fn(test_structures, verbose=verbose)
+
+    if verbose:
+        logger.info(f"Computing {type_str} distance matrix")
+
     if symmetric:
         dm = squareform(pdist(test_comp_fps))
     else:
