@@ -103,7 +103,7 @@ print(mptm.recorded_metrics)
 
 | Metric | Description |
 |---|---|
-| Validity | One minus (Wasserstein distance between distribution of space group numbers for train and generated structures divided by distance of dummy case between train and `space_group_number == 1`). |
+| Validity | One minus (Wasserstein distance between distribution of space group numbers for train and generated structures divided by distance of dummy case between train and `space_group_number == 1`). See also https://github.com/sparks-baird/matbench-genmetrics/issues/44 |
 | Coverage | Match counts between held-out test structures and generated structures divided by number of test structures ("predict the future"). |
 | Novelty | One minus (match counts between train structures and generated structures divided by number of generated structures). |
 | Uniqueness | One minus (non-self-comparing match counts within generated structures divided by total possible non-self-comparing matches). |
