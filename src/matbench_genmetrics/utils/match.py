@@ -101,9 +101,7 @@ def cdvae_cov_compstruct_match_matrix(
     comp_match_matrix = cdvae_cov_match_matrix(
         test_comp_fingerprints,
         gen_comp_fingerprints,
-        composition_only=True,
         symmetric=symmetric,
-        verbose=verbose,
         cutoff=comp_cutoff,
     )
     if verbose:
@@ -111,9 +109,7 @@ def cdvae_cov_compstruct_match_matrix(
     struct_match_matrix = cdvae_cov_match_matrix(
         test_struct_fingerprints,
         gen_struct_fingerprints,
-        composition_only=False,
         symmetric=symmetric,
-        verbose=verbose,
         cutoff=struct_cutoff,
     )
     # multiply, since 0*0=0, 0*1=0, 1*0=0, 1*1=1
