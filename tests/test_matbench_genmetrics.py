@@ -13,6 +13,7 @@ from pymatgen.transformations.standard_transformations import (
 )
 
 from matbench_genmetrics.core import GenMatcher, GenMetrics, MPTSMetrics
+from matbench_genmetrics.utils.featurize import cdvae_cov_struct_fingerprints
 
 # from pytest_cases import fixture, parametrize, parametrize_with_cases
 
@@ -195,6 +196,10 @@ def test_cdvae_coverage():
     mptm.evaluate_and_record(fold, gen_structures)
 
     print(mptm.recorded_metrics)
+
+
+def test_cdvae_cov_struct_fingerprints():
+    cdvae_cov_struct_fingerprints(dummy_structures, verbose=True)
 
 
 # %% Code Graveyard
