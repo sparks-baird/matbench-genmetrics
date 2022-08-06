@@ -2,18 +2,21 @@
 import argparse
 import logging
 import sys
+from pathlib import Path
 from typing import List, Optional
 
 import numpy as np
+import pystow
 from mp_time_split.core import MPTimeSplit
 from pymatgen.core.structure import Structure
+from pystow import ensure_csv
 from scipy.stats import wasserstein_distance
 
 from matbench_genmetrics import __version__
+from matbench_genmetrics.utils.featurize import featurize_comp_struct
 from matbench_genmetrics.utils.match import (
     ALLOWED_MATCH_TYPES,
     cdvae_cov_compstruct_match_matrix,
-    featurize_comp_struct,
     get_structure_match_matrix,
 )
 
@@ -52,6 +55,24 @@ def fib(n):
 
 
 IN_COLAB = "google.colab" in sys.modules
+
+FULL_COMP_SNAPSHOT_NAME = "comp_fingerprints.csv"
+DUMMY_COMP_SNAPSHOT_NAME = "dummy_comp_fingerprints.csv"
+FULL_STRUCT_SNAPSHOT_NAME = "struct_fingerprints.csv"
+DUMMY_STRUCT_SNAPSHOT_NAME = "dummy_struct_fingerprints.csv"
+
+FULL_COMP_CHECKSUM_FROZEN = "0d714081a8f0bc53af84b0ce96d3536f"
+DUMMY_COMP_CHECKSUM_FROZEN = "5630a3bfc7cbeac0cb3d7897b02aae9f"
+FULL_STRUCT_CHECKSUM_FROZEN = "312a4a282c57d80aed19a07dd2760ad9"
+DUMMY_STRUCT_CHECKSUM_FROZEN = "d402abc2ba383e6b18b24413bdd96a7e"
+
+FULL_COMP_URL = "https://figshare.com/ndownloader/files/36581838"
+DUMMY_COMP_URL = "https://figshare.com/ndownloader/files/36582174"
+FULL_STRUCT_URL = "https://figshare.com/ndownloader/files/36581841"
+DUMMY_STRUCT_URL = "https://figshare.com/ndownloader/files/36582177"
+
+
+MBGM_HOME = pystow.join("matbench-genmetrics")
 
 
 class GenMatcher(object):
@@ -299,18 +320,36 @@ class MPTSMetrics(object):
         dummy=False,
         verbose=True,
         num_gen=None,
+        save_dir="results",
         match_type="cdvae_coverage",
         **match_kwargs,
     ):
         self.dummy = dummy
         self.verbose = verbose
         self.num_gen = num_gen
+        self.save_dir = save_dir
         self.match_type = match_type
         self.match_kwargs = match_kwargs
+
+        Path(self.save_dir).mkdir(exist_ok=True, parents=True)
+
         self.mpt = MPTimeSplit(target="energy_above_hull")
         self.folds = self.mpt.folds
         self.gms: List[Optional[GenMetrics]] = [None] * len(self.folds)
         self.recorded_metrics = {}
+
+    def load_fingerprints(self, dummy=False):
+
+        comp_url = DUMMY_COMP_URL if dummy else FULL_COMP_URL
+        struct_url = DUMMY_STRUCT_URL if dummy else FULL_STRUCT_URL
+
+        self.comp_fps_df = ensure_csv(MBGM_HOME, comp_url)
+        self.struct_fps_df = ensure_csv(MBGM_HOME, struct_url)
+
+        self.comp_fingerprints = self.comp_fps_df.drop("material_id", axis=1).values
+        self.struct_fingerprints = self.struct_fps_df.drop("material_id", axis=1).values
+
+        return self.comp_fingerprints, self.struct_fingerprints
 
     def get_train_and_val_data(self, fold, include_val=False):
 
@@ -324,16 +363,14 @@ class MPTSMetrics(object):
         ) = self.mpt.get_train_and_val_data(fold)
 
         if self.match_type == "cdvae_coverage":
-            # TODO: load fingerprints if not already loaded
-            self.comp_fps = None
-            self.struct_fps = None
+            comp_fps, struct_fps = self.load_fingerprints()
 
             self.train_comp_fingerprints, self.val_comp_fingerprints = [
-                self.comp_fps.iloc[tvs] for tvs in self.mpt.trainval_splits[fold]
+                comp_fps.iloc[tvs] for tvs in self.mpt.trainval_splits[fold]
             ]
 
             self.train_struct_fingerprints, self.val_struct_fingerprints = [
-                self.struct_fps.iloc[tvs] for tvs in self.mpt.trainval_splits[fold]
+                struct_fps.iloc[tvs] for tvs in self.mpt.trainval_splits[fold]
             ]
 
         if include_val:
@@ -350,6 +387,10 @@ class MPTSMetrics(object):
             self.train_inputs.tolist(),
             self.val_inputs.tolist(),
             gen_structures,
+            train_comp_fingerprints=self.train_comp_fingerprints,
+            test_comp_fingerprints=self.val_comp_fingerprints,
+            train_struct_fingerprints=self.train_struct_fingerprints,
+            test_struct_fingerprints=self.val_struct_fingerprints,
             test_pred_structures=test_pred_structures,
             verbose=self.verbose,
             match_type=self.match_type,
