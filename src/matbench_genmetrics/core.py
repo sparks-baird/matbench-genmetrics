@@ -213,7 +213,10 @@ class GenMetrics(object):
         self.match_type = match_type
         self.match_kwargs = match_kwargs
 
-        self.gen_comp_fingerprints = featurize_comp_struct(self.gen_structures)
+        (
+            self.gen_comp_fingerprints,
+            self.gen_struct_fingerprints,
+        ) = featurize_comp_struct(self.gen_structures)
 
         self._cdvae_metrics = None
         self._mpts_metrics = None
@@ -343,8 +346,8 @@ class MPTSMetrics(object):
         comp_url = DUMMY_COMP_URL if dummy else FULL_COMP_URL
         struct_url = DUMMY_STRUCT_URL if dummy else FULL_STRUCT_URL
 
-        self.comp_fps_df = ensure_csv(MBGM_HOME, comp_url)
-        self.struct_fps_df = ensure_csv(MBGM_HOME, struct_url)
+        self.comp_fps_df = ensure_csv(MBGM_HOME, url=comp_url)
+        self.struct_fps_df = ensure_csv(MBGM_HOME, url=struct_url)
 
         self.comp_fingerprints = self.comp_fps_df.drop("material_id", axis=1).values
         self.struct_fingerprints = self.struct_fps_df.drop("material_id", axis=1).values
@@ -372,6 +375,11 @@ class MPTSMetrics(object):
             self.train_struct_fingerprints, self.val_struct_fingerprints = [
                 struct_fps.iloc[tvs] for tvs in self.mpt.trainval_splits[fold]
             ]
+        elif self.match_type == "StructureMatcher":
+            self.train_comp_fingerprints = None
+            self.val_comp_fingerprints = None
+            self.train_struct_fingerprints = None
+            self.val_struct_fingerprints = None
 
         if include_val:
             return self.train_inputs, self.val_inputs
