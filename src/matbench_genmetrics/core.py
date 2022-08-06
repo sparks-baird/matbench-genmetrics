@@ -12,6 +12,8 @@ from scipy.stats import wasserstein_distance
 from matbench_genmetrics import __version__
 from matbench_genmetrics.utils.match import (
     ALLOWED_MATCH_TYPES,
+    cdvae_cov_compstruct_match_matrix,
+    featurize_comp_struct,
     get_structure_match_matrix,
 )
 
@@ -57,11 +59,17 @@ class GenMatcher(object):
         self,
         test_structures,
         gen_structures: Optional[List[Structure]] = None,
+        test_comp_fingerprints: Optional[np.ndarray] = None,
+        gen_comp_fingerprints: Optional[np.ndarray] = None,
+        test_struct_fingerprints: Optional[np.ndarray] = None,
+        gen_struct_fingerprints: Optional[np.ndarray] = None,
         verbose=True,
         match_type="cdvae_coverage",
         **match_kwargs,
     ) -> None:
         self.test_structures = test_structures
+        self.test_comp_fingerprints = test_comp_fingerprints
+        self.test_struct_fingerprints = test_struct_fingerprints
         self.verbose = verbose
         assert (
             match_type in ALLOWED_MATCH_TYPES
@@ -69,11 +77,20 @@ class GenMatcher(object):
         self.match_type = match_type
         self.match_kwargs = match_kwargs
 
-        if gen_structures is None:
+        if test_structures and (gen_structures is None):
             self.gen_structures = test_structures
             self.symmetric = True
-        else:
+        elif test_structures and gen_structures:
             self.gen_structures = gen_structures
+            self.symmetric = False
+        elif test_comp_fingerprints and (gen_comp_fingerprints is None):
+            self.gen_comp_fingerprints = test_comp_fingerprints
+            self.gen_struct_fingerprints = test_struct_fingerprints
+            self.symmetric = True
+        elif test_comp_fingerprints and gen_comp_fingerprints:
+            assert gen_comp_fingerprints is not None
+            self.gen_comp_fingerprints = gen_comp_fingerprints
+            self.gen_struct_fingerprints = gen_struct_fingerprints
             self.symmetric = False
 
         self.num_test = len(self.test_structures)
@@ -86,14 +103,25 @@ class GenMatcher(object):
         if self._match_matrix is not None:
             return self._match_matrix
 
-        match_matrix = get_structure_match_matrix(
-            self.test_structures,
-            self.gen_structures,
-            match_type=self.match_type,
-            symmetric=self.symmetric,
-            verbose=self.verbose,
-            **self.match_kwargs,
-        )
+        if self.match_type == "StructureMatcher":
+            match_matrix = get_structure_match_matrix(
+                self.test_structures,
+                self.gen_structures,
+                match_type=self.match_type,
+                symmetric=self.symmetric,
+                verbose=self.verbose,
+                **self.match_kwargs,
+            )
+        elif self.match_type == "cdvae_coverage":
+            match_matrix = cdvae_cov_compstruct_match_matrix(
+                self.test_comp_fingerprints,
+                self.gen_comp_fingerprints,
+                self.test_struct_fingerprints,
+                self.gen_struct_fingerprints,
+                symmetric=self.symmetric,
+                verbose=self.verbose,
+                **self.match_kwargs,
+            )
 
         self._match_matrix = match_matrix
 
@@ -143,6 +171,10 @@ class GenMetrics(object):
         train_structures,
         test_structures,
         gen_structures,
+        train_comp_fingerprints=None,
+        test_comp_fingerprints=None,
+        train_struct_fingerprints=None,
+        test_struct_fingerprints=None,
         test_pred_structures=None,
         verbose=True,
         match_type="cdvae_coverage",
@@ -151,10 +183,17 @@ class GenMetrics(object):
         self.train_structures = train_structures
         self.test_structures = test_structures
         self.gen_structures = gen_structures
+        self.train_comp_fingerprints = train_comp_fingerprints
+        self.test_comp_fingerprints = test_comp_fingerprints
+        self.train_struct_fingerprints = train_struct_fingerprints
+        self.test_struct_fingerprints = test_struct_fingerprints
         self.test_pred_structures = test_pred_structures
         self.verbose = verbose
         self.match_type = match_type
         self.match_kwargs = match_kwargs
+
+        self.gen_comp_fingerprints = featurize_comp_struct(self.gen_structures)
+
         self._cdvae_metrics = None
         self._mpts_metrics = None
 
@@ -184,6 +223,7 @@ class GenMetrics(object):
     @property
     def validity(self):
         """Scaled Wasserstein distance between real (train/test) and gen structures."""
+        # TODO: implement notion of compositional validity, since this is only structure
         train_test_structures = self.train_structures + self.test_structures
         train_test_spg = [ts.get_space_group_info()[1] for ts in train_test_structures]
         gen_spg = [ts.get_space_group_info()[1] for ts in self.gen_structures]
@@ -196,6 +236,10 @@ class GenMetrics(object):
         self.coverage_matcher = GenMatcher(
             self.test_structures,
             self.gen_structures,
+            test_comp_fingerprints=self.test_comp_fingerprints,
+            test_struct_fingerprints=self.test_struct_fingerprints,
+            gen_comp_fingerprints=self.gen_comp_fingerprints,
+            gen_struct_fingerprints=self.gen_struct_fingerprints,
             verbose=self.verbose,
             match_type=self.match_type,
             **self.match_kwargs,
@@ -208,6 +252,10 @@ class GenMetrics(object):
         self.similarity_matcher = GenMatcher(
             self.train_structures,
             self.gen_structures,
+            test_comp_fingerprints=self.train_comp_fingerprints,
+            test_struct_fingerprints=self.train_struct_fingerprints,
+            gen_comp_fingerprints=self.gen_comp_fingerprints,
+            gen_struct_fingerprints=self.gen_struct_fingerprints,
             verbose=self.verbose,
             match_type=self.match_type,
             **self.match_kwargs,
@@ -223,6 +271,10 @@ class GenMetrics(object):
         self.commonality_matcher = GenMatcher(
             self.gen_structures,
             self.gen_structures,
+            test_comp_fingerprints=self.gen_comp_fingerprints,
+            test_struct_fingerprints=self.gen_struct_fingerprints,
+            gen_comp_fingerprints=self.gen_comp_fingerprints,
+            gen_struct_fingerprints=self.gen_struct_fingerprints,
             verbose=self.verbose,
             match_type=self.match_type,
             **self.match_kwargs,
