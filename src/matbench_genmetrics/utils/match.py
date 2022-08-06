@@ -83,15 +83,55 @@ bva = BVAnalyzer()
 
 
 def cdvae_cov_struct_fingerprints(structures, verbose=False):
+    """Use SiteStatsFingerprint if OK with NaN rows upon partial site failures."""
     my_tqdm = get_tqdm(verbose)
     struct_fps = []
-    # base_10_check = [10 ** j for j in range(0, 20)]
+    num_sites = []
+    num_failed_sites = []
+    failed_structures = []
     for s in my_tqdm(structures):
-        # if i in base_10_check == 0:
-        #     logger.info(f"{time()} Struct fingerprint {i}/{len(structures)}")
-        site_fps = [CrystalNNFP.featurize(s, i) for i in range(len(s))]
-        struct_fp = np.array(site_fps).mean(axis=0)
+        site_fps = []
+        exceptions = []
+        ns = len(s)
+        num_sites.append(ns)
+        for i in range(ns):
+            try:
+                site_fp = CrystalNNFP.featurize(s, i)
+                site_fps.append(site_fp)
+            except Exception as e:
+                exceptions.append(f"site {i}: {str(e)}")
+
+        num_failed_sites.append(len(exceptions))
+        if exceptions:
+            exception_strs = "\n".join(exceptions)
+            logger.warning(
+                f"{len(exception_strs)} exceptions encountered for structure {i}:\n{s}\n The exceptions are:\n{exception_strs}"  # noqa: E501
+            )
+        if site_fps:
+            struct_fp = np.array(site_fps).mean(axis=0)
+        else:
+            failed_structures.append(s)
+            # NaN vector https://stackoverflow.com/a/1704853/13697228
+            num_features = len(CrystalNNFP.feature_labels())
+            struct_fp = np.empty(num_features)
+            struct_fp[:] = np.nan
         struct_fps.append(struct_fp)
+    if num_failed_sites:
+        fail_rate = np.array(num_failed_sites) / np.array(num_sites)
+        avg_fail_rate = np.mean(fail_rate[fail_rate > 0])
+        logger.warning(
+            f"{len(num_failed_sites)} structures partially failed to featurize, with on average {avg_fail_rate:.2f} site failure rate per failed structure, and where failed sites were ignored during averaging."  # noqa: E501
+        )
+    if failed_structures:
+        failed_structure_strs = [str(fs) for fs in failed_structures]
+        if len(failed_structure_strs) < 10:
+            failed_structure_str = "\n".join(failed_structure_strs)
+        else:
+            failed_structure_str = "\n".join(failed_structure_strs[:10])
+        logger.warning(
+            f"{len(failed_structures)} structures totally failed to featurize. These were replaced with NaN values. Up to the first 10 structures are displayed here: {failed_structure_str}"  # noqa: E501
+        )
+
     return struct_fps
 
 
@@ -212,3 +252,9 @@ def get_fingerprint_match_matrix(
 #     if composition_only
 #     else cdvae_cov_struct_fingerprints
 # )
+
+# site_fps = [CrystalNNFP.featurize(s, i) for i in range(len(s))]
+
+# base_10_check = [10 ** j for j in range(0, 20)]
+# if i in base_10_check == 0:
+#     logger.info(f"{time()} Struct fingerprint {i}/{len(structures)}")
