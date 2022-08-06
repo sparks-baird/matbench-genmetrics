@@ -10,7 +10,7 @@
 [![Monthly Downloads](https://pepy.tech/badge/matbench-genmetrics/month)](https://pepy.tech/project/matbench-genmetrics)
 [![Twitter](https://img.shields.io/twitter/url/http/shields.io.svg?style=social&label=Twitter)](https://twitter.com/matbench-genmetrics)
 -->
-> **NOTE: This is a WIP repository (as of 2022-06-21) being developed in parallel with [`xtal2png`](https://github.com/sparks-baird/xtal2png). Feedback and contributions welcome!**
+> **NOTE: This is a WIP repository (as of 2022-08-06) being developed in parallel with [`xtal2png`](https://github.com/sparks-baird/xtal2png) and [`mp-time-split`](https://github.com/sparks-baird/mp-time-split). Feedback and contributions welcome!**
 # matbench-genmetrics
 
 > Generative materials benchmarking metrics, inspired by [guacamol](https://www.benevolent.com/guacamol) and [CDVAE](https://github.com/txie-93/cdvae).
