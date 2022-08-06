@@ -15,6 +15,8 @@ def featurize_comp_struct(
     comp_name="composition",
     struct_name="structure",
     material_id_name="material_id",
+    include_pmg_object=False,
+    keep_as_df=False,
 ):
     cnnf = CrystalNNFingerprint.from_preset("ops")
     ep = ElementProperty.from_preset("magpie")
@@ -40,6 +42,14 @@ def featurize_comp_struct(
     struct_fingerprints = ssf.featurize_dataframe(
         structures, struct_name, ignore_errors=True
     )
+
+    if not include_pmg_object:
+        comp_fingerprints.drop(comp_name, axis=1, inplace=True)
+        struct_fingerprints.drop(struct_name, axis=1, inplace=True)
+
+    if not keep_as_df:
+        comp_fingerprints = comp_fingerprints.values
+        struct_fingerprints = struct_fingerprints.values
 
     return comp_fingerprints, struct_fingerprints
 
