@@ -1,47 +1,45 @@
 import logging
 import warnings
+from typing import List, Optional
 
 import numpy as np
+import pandas as pd
 from matminer.featurizers.composition.composite import ElementProperty
 from matminer.featurizers.site.fingerprint import CrystalNNFingerprint
 from matminer.featurizers.structure.sites import SiteStatsFingerprint
-from mp_time_split.core import MPTimeSplit
+from pymatgen.core.structure import Structure
 
 from matbench_genmetrics.utils.match import get_tqdm
 
+cnnf = CrystalNNFingerprint.from_preset("ops")
+ep = ElementProperty.from_preset("magpie")
+ssf = SiteStatsFingerprint(cnnf, stats=("mean"))
+
 
 def featurize_comp_struct(
-    dummy=False,
+    structures: List[Structure],
+    material_ids: Optional[List] = None,
     comp_name="composition",
     struct_name="structure",
     material_id_name="material_id",
     include_pmg_object=False,
     keep_as_df=False,
 ):
-    cnnf = CrystalNNFingerprint.from_preset("ops")
-    ep = ElementProperty.from_preset("magpie")
-    ssf = SiteStatsFingerprint(cnnf, stats=("mean"))
-    mpt = MPTimeSplit(target="energy_above_hull")
+    S = pd.Series(structures)
+    compositions = S.apply(lambda s: s.composition)
 
-    mpt.load(dummy=dummy)
-
-    structures = mpt.data.structure
-    compositions = structures.apply(lambda s: s.composition)
-    material_ids = mpt.data.material_id
-
-    structures = structures.to_frame(struct_name)
+    S = S.to_frame(struct_name)
     compositions = compositions.to_frame(comp_name)
 
-    structures.index = material_ids
-    compositions.index = material_ids
-    structures.index.name = material_id_name
-    compositions.index.name = material_id_name
+    if material_ids:
+        S.index = pd.Index(material_ids)
+        compositions.index = pd.Index(material_ids)
+        S.index.name = material_id_name
+        compositions.index.name = material_id_name
 
     comp_fingerprints = ep.featurize_dataframe(compositions, comp_name)
 
-    struct_fingerprints = ssf.featurize_dataframe(
-        structures, struct_name, ignore_errors=True
-    )
+    struct_fingerprints = ssf.featurize_dataframe(S, struct_name, ignore_errors=True)
 
     if not include_pmg_object:
         comp_fingerprints.drop(comp_name, axis=1, inplace=True)
@@ -125,3 +123,8 @@ def cdvae_cov_struct_fingerprints(structures, verbose=False):
         )
 
     return struct_fps
+
+
+# %% Code Graveyard
+# structures = pd.DataFrame({struct_name: structures})
+# compositions = pd.DataFrame({comp_name: compositions})
