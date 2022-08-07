@@ -19,7 +19,7 @@ warnings.filterwarnings(
     message="CrystalNN: cannot locate an appropriate radius, covalent or atomic radii will be used, this can lead to non-optimal results.",  # noqa: E501
 )
 
-logging.basicConfig(level=logging.DEBUG)
+# logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 sm = StructureMatcher(stol=0.5, ltol=0.3, angle_tol=10.0)
@@ -57,6 +57,7 @@ def structure_pairwise_match_matrix(
     pairwise_match_fn = pairwise_match_fn_dict[match_type]
     match_matrix = np.zeros((len(test_structures), len(gen_structures)))
     if verbose:
+        #     logger.setLevel(logging.DEBUG)
         logger.info(f"Computing {match_type} match matrix pairwise")
 
     my_tqdm = get_tqdm(verbose)
@@ -97,6 +98,7 @@ def cdvae_cov_compstruct_match_matrix(
     verbose=False,
 ):
     if verbose:
+        #     logger.setLevel(logging.DEBUG)
         logger.info("Computing composition match matrix")
     comp_match_matrix = cdvae_cov_match_matrix(
         test_comp_fingerprints,
