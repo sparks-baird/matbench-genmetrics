@@ -388,7 +388,7 @@ class MPTSMetrics(object):
         ) = self.mpt.get_train_and_val_data(fold)
 
         if self.match_type == "cdvae_coverage":
-            comp_fps, struct_fps = self.load_fingerprints()
+            comp_fps, struct_fps = self.load_fingerprints(dummy=self.dummy)
 
             self.train_comp_fingerprints, self.val_comp_fingerprints = [
                 comp_fps.iloc[tvs].values for tvs in self.mpt.trainval_splits[fold]
