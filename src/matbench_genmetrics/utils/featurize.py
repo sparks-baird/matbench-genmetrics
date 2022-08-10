@@ -54,7 +54,9 @@ def featurize_comp_struct(
 
 
 def mod_petti_contributions(structures):
-    compositions = structures.apply(lambda s: s.composition.fractional_composition)
+    compositions = pd.Series(structures).apply(
+        lambda s: s.composition.fractional_composition
+    )
     # NOTE: be aware of amount_tolerance=1e-8
     summed_comp = np.sum(compositions).fractional_composition
     _data = summed_comp._data
