@@ -221,7 +221,7 @@ class GenMetrics(object):
         train_struct_fingerprints=None,
         test_struct_fingerprints=None,
         train_test_spg=None,
-        train_test_modpetti=None,
+        train_test_modpetti_df=None,
         test_pred_structures=None,
         verbose=True,
         match_type="cdvae_coverage",
@@ -235,7 +235,7 @@ class GenMetrics(object):
         self.train_struct_fingerprints = train_struct_fingerprints
         self.test_struct_fingerprints = test_struct_fingerprints
         self.train_test_spg = train_test_spg
-        self.train_test_modpetti = train_test_modpetti
+        self.train_test_modpetti_df = train_test_modpetti_df
         self.test_pred_structures = test_pred_structures
         self.verbose = verbose
         self.match_type = match_type
@@ -277,26 +277,30 @@ class GenMetrics(object):
         """Scaled Wasserstein distance between real (train/test) and gen structures."""
         # TODO: implement notion of compositional validity, since this is only structure
         train_test_structures = self.train_structures + self.test_structures
-        if not self.train_test_spg:
+        if self.train_test_spg is None:
             self.train_test_spg = [
                 ts.get_space_group_info()[1] for ts in train_test_structures
             ]
         gen_spg = [ts.get_space_group_info()[1] for ts in self.gen_structures]
 
-        if not self.train_test_modpetti:
-            self.train_test_modpetti = mod_petti_contributions(train_test_structures)
-        gen_modpetti = mod_petti_contributions(self.gen_structures)
+        if self.train_test_modpetti_df is None:
+            self.train_test_modpetti_df = mod_petti_contributions(train_test_structures)
+        gen_modpetti_df = mod_petti_contributions(self.gen_structures)
 
         dummy_spg_case = wasserstein_distance(self.train_test_spg, [1])
-        dummy_modpetti_case = wasserstein_distance(self.train_test_modpetti, [1])
-
         spg_distance = wasserstein_distance(self.train_test_spg, gen_spg)
 
+        dummy_modpetti_case = wasserstein_distance(
+            self.train_test_modpetti_df.mod_petti.values,
+            [1],
+            u_weights=self.train_test_modpetti_df.contribution.values,
+            v_weights=[1],
+        )
         modpetti_distance = wasserstein_distance(
-            self.train_test_modpetti.mod_petti,
-            gen_modpetti.mod_petti,
-            u_weights=self.train_test_modpetti.contribution,
-            v_weights=gen_modpetti.contribution,
+            self.train_test_modpetti_df.mod_petti.values,
+            gen_modpetti_df.mod_petti.values,
+            u_weights=self.train_test_modpetti_df.contribution.values,
+            v_weights=gen_modpetti_df.contribution.values,
         )
 
         spg_scaled_distance = spg_distance / dummy_spg_case
@@ -449,9 +453,9 @@ class MPTSMetrics(object):
             self.val_outputs,
         ) = self.mpt.get_train_and_val_data(fold)
 
-        spg, modpetti = self.load_space_group_and_mod_petti(dummy=self.dummy)
-        self.spg = spg.values
-        self.modpetti = modpetti.values
+        spg_df, modpetti_df = self.load_space_group_and_mod_petti(dummy=self.dummy)
+        self.spg = spg_df.space_group_number.values
+        self.modpetti_df = modpetti_df
         # self.train_spg, self.val_spg = [
         #     spg.iloc[tvs].values for tvs in self.mpt.trainval_splits[fold]
         # ]
@@ -491,7 +495,7 @@ class MPTSMetrics(object):
             train_struct_fingerprints=self.train_struct_fingerprints,
             test_struct_fingerprints=self.val_struct_fingerprints,
             train_test_spg=self.spg,
-            train_test_modpetti=self.modpetti,
+            train_test_modpetti_df=self.modpetti_df,
             test_pred_structures=test_pred_structures,
             verbose=self.verbose,
             match_type=self.match_type,
