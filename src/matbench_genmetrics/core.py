@@ -12,7 +12,10 @@ from pystow import ensure_csv
 from scipy.stats import wasserstein_distance
 
 from matbench_genmetrics import __version__
-from matbench_genmetrics.utils.featurize import featurize_comp_struct
+from matbench_genmetrics.utils.featurize import (
+    featurize_comp_struct,
+    mod_petti_contributions,
+)
 from matbench_genmetrics.utils.match import (
     ALLOWED_MATCH_TYPES,
     cdvae_cov_compstruct_match_matrix,
@@ -59,17 +62,26 @@ FULL_COMP_NAME = "comp_fingerprints.csv"
 DUMMY_COMP_NAME = "dummy_comp_fingerprints.csv"
 FULL_STRUCT_NAME = "struct_fingerprints.csv"
 DUMMY_STRUCT_NAME = "dummy_struct_fingerprints.csv"
+FULL_SPG_NAME = "space_group_number.csv"
+DUMMY_SPG_NAME = "dummy_space_group_number.csv"
+FULL_MODPETTI_NAME = "mod_petti_contributions.csv"
+DUMMY_MODPETTI_NAME = "dummy_mod_petti_contributions.csv"
 
-FULL_COMP_CHECKSUM_FROZEN = "0d714081a8f0bc53af84b0ce96d3536f"
-DUMMY_COMP_CHECKSUM_FROZEN = "5630a3bfc7cbeac0cb3d7897b02aae9f"
-FULL_STRUCT_CHECKSUM_FROZEN = "312a4a282c57d80aed19a07dd2760ad9"
-DUMMY_STRUCT_CHECKSUM_FROZEN = "d402abc2ba383e6b18b24413bdd96a7e"
+# FULL_COMP_CHECKSUM_FROZEN = ""
+# DUMMY_COMP_CHECKSUM_FROZEN = ""
+# FULL_STRUCT_CHECKSUM_FROZEN = ""
+# DUMMY_STRUCT_CHECKSUM_FROZEN = ""
+# FULL_SPG_CHECKSUM_FROZEN = ""
+# DUMMY_SPG_CHECKSUM_FROZEN = ""
 
 FULL_COMP_URL = "https://figshare.com/ndownloader/files/36581838"
 DUMMY_COMP_URL = "https://figshare.com/ndownloader/files/36582174"
 FULL_STRUCT_URL = "https://figshare.com/ndownloader/files/36581841"
 DUMMY_STRUCT_URL = "https://figshare.com/ndownloader/files/36582177"
-
+FULL_SPG_URL = "https://figshare.com/ndownloader/files/36620538"
+DUMMY_SPG_URL = "https://figshare.com/ndownloader/files/36620544"
+FULL_MODPETTI_URL = "https://figshare.com/ndownloader/files/36620535"
+DUMMY_MODPETTI_URL = "https://figshare.com/ndownloader/files/36620541"
 
 DATA_HOME = "matbench-genmetrics"
 
@@ -208,6 +220,8 @@ class GenMetrics(object):
         test_comp_fingerprints=None,
         train_struct_fingerprints=None,
         test_struct_fingerprints=None,
+        train_test_spg=None,
+        train_test_modpetti_df=None,
         test_pred_structures=None,
         verbose=True,
         match_type="cdvae_coverage",
@@ -220,6 +234,8 @@ class GenMetrics(object):
         self.test_comp_fingerprints = test_comp_fingerprints
         self.train_struct_fingerprints = train_struct_fingerprints
         self.test_struct_fingerprints = test_struct_fingerprints
+        self.train_test_spg = train_test_spg
+        self.train_test_modpetti_df = train_test_modpetti_df
         self.test_pred_structures = test_pred_structures
         self.verbose = verbose
         self.match_type = match_type
@@ -261,10 +277,39 @@ class GenMetrics(object):
         """Scaled Wasserstein distance between real (train/test) and gen structures."""
         # TODO: implement notion of compositional validity, since this is only structure
         train_test_structures = self.train_structures + self.test_structures
-        train_test_spg = [ts.get_space_group_info()[1] for ts in train_test_structures]
+        if self.train_test_spg is None:
+            self.train_test_spg = [
+                ts.get_space_group_info()[1] for ts in train_test_structures
+            ]
         gen_spg = [ts.get_space_group_info()[1] for ts in self.gen_structures]
-        dummy_case = wasserstein_distance(train_test_spg, [1])
-        return 1 - wasserstein_distance(train_test_spg, gen_spg) / dummy_case
+
+        if self.train_test_modpetti_df is None:
+            self.train_test_modpetti_df = mod_petti_contributions(train_test_structures)
+        gen_modpetti_df = mod_petti_contributions(self.gen_structures)
+
+        dummy_spg_case = wasserstein_distance(self.train_test_spg, [1])
+        spg_distance = wasserstein_distance(self.train_test_spg, gen_spg)
+
+        dummy_modpetti_case = wasserstein_distance(
+            self.train_test_modpetti_df.mod_petti.values,
+            [1],
+            u_weights=self.train_test_modpetti_df.contribution.values,
+            v_weights=[1],
+        )
+        modpetti_distance = wasserstein_distance(
+            self.train_test_modpetti_df.mod_petti.values,
+            gen_modpetti_df.mod_petti.values,
+            u_weights=self.train_test_modpetti_df.contribution.values,
+            v_weights=gen_modpetti_df.contribution.values,
+        )
+
+        spg_scaled_distance = spg_distance / dummy_spg_case
+        modpetti_scaled_distance = modpetti_distance / dummy_modpetti_case
+
+        self.spg_validity = 1 - spg_scaled_distance
+        self.modpetti_validity = 1 - modpetti_scaled_distance
+
+        return 0.5 * (self.spg_validity + self.modpetti_validity)
 
     @property
     def coverage(self):
@@ -373,8 +418,29 @@ class MPTSMetrics(object):
             url=struct_url,
             read_csv_kwargs=read_csv_kwargs,
         )
+        # REVIEW: consider doing checksum validation
 
         return self.comp_fingerprints_df, self.struct_fingerprints_df
+
+    def load_space_group_and_mod_petti(self, dummy=False):
+        spg_name = DUMMY_SPG_NAME if dummy else FULL_SPG_NAME
+        spg_url = DUMMY_SPG_URL if dummy else FULL_SPG_URL
+        modpetti_name = DUMMY_MODPETTI_NAME if dummy else FULL_MODPETTI_NAME
+        modpetti_url = DUMMY_MODPETTI_URL if dummy else FULL_MODPETTI_URL
+
+        self.spg_df = ensure_csv(
+            DATA_HOME,
+            name=spg_name,
+            url=spg_url,
+            read_csv_kwargs=dict(index_col="material_id", sep=","),
+        )
+        self.modpetti_df = ensure_csv(
+            DATA_HOME,
+            name=modpetti_name,
+            url=modpetti_url,
+            read_csv_kwargs=dict(index_col="symbol", sep=","),
+        )
+        return self.spg_df, self.modpetti_df
 
     def get_train_and_val_data(self, fold, include_val=False):
 
@@ -386,6 +452,13 @@ class MPTSMetrics(object):
             self.train_outputs,
             self.val_outputs,
         ) = self.mpt.get_train_and_val_data(fold)
+
+        spg_df, modpetti_df = self.load_space_group_and_mod_petti(dummy=self.dummy)
+        self.spg = spg_df.space_group_number.values
+        self.modpetti_df = modpetti_df
+        # self.train_spg, self.val_spg = [
+        #     spg.iloc[tvs].values for tvs in self.mpt.trainval_splits[fold]
+        # ]
 
         if self.match_type == "cdvae_coverage":
             comp_fps, struct_fps = self.load_fingerprints(dummy=self.dummy)
@@ -421,6 +494,8 @@ class MPTSMetrics(object):
             test_comp_fingerprints=self.val_comp_fingerprints,
             train_struct_fingerprints=self.train_struct_fingerprints,
             test_struct_fingerprints=self.val_struct_fingerprints,
+            train_test_spg=self.spg,
+            train_test_modpetti_df=self.modpetti_df,
             test_pred_structures=test_pred_structures,
             verbose=self.verbose,
             match_type=self.match_type,
@@ -628,3 +703,9 @@ if __name__ == "__main__":
 #     self.gen_comp_fingerprints = gen_comp_fingerprints
 #     self.gen_struct_fingerprints = gen_struct_fingerprints
 #     self.symmetric = False
+
+# if dummy:
+#     self.train_test_spg = ensure_csv(DUMMY_SPG_URL, name=DUMMY_SPG_NAME).values
+# else:
+#     self.train_test_spg = ensure_csv(FULL_SPG_URL, name=FULL_SPG_NAME).values
+# return self.train_test_spg

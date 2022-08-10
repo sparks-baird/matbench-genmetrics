@@ -102,14 +102,14 @@ dummy_matcher_expected = {
 }
 
 dummy_metrics_expected = {
-    "validity": 0.8139255702280912,
+    "validity": 0.9069627851140456,
     "coverage": 0.5,
     "novelty": 0.5,
     "uniqueness": 5 / 6,
 }
 
 dummy_mpts_expected = {
-    "validity": 0.9207589285714286,
+    "validity": 0.826756929211137,
     "coverage": 0.0,
     "novelty": 1.0,
     "uniqueness": 5 / 6,
