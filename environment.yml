@@ -11,13 +11,17 @@ dependencies:
   - numpy
   - scipy
   - pandas
-  - tqdm
-  - click
+  - mp-time-split
+  - pyxtal
+  - pystow
+  - pymatgen
+  # - tqdm
+  # - click
   - ipython
   # VISUALIZATION
-  - matplotlib
-  - ipympl  # interactive matplotlib plots
-  - seaborn
+  # - matplotlib
+  # - ipympl  # interactive matplotlib plots
+  # - seaborn
   # - altair
   # - yellowbrick
   # ML, STATS & DEEP LEARNING
@@ -39,6 +43,7 @@ dependencies:
   # - snakeviz
   - pip:
      - -e .  # install git checkout of matbench-genmetrics in editable mode
+     - element-coder
      # add here only pip-packages that are not available in conda/conda-forge! E.g.:
      # - icecream
      # - jax
