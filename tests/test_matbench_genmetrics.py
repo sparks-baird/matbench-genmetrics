@@ -14,6 +14,7 @@ from pymatgen.transformations.standard_transformations import (
 
 from matbench_genmetrics.core import GenMatcher, GenMetrics, MPTSMetrics
 from matbench_genmetrics.utils.featurize import cdvae_cov_struct_fingerprints
+from matbench_genmetrics.utils.pymatviz.ptable import count_elements
 
 # from pytest_cases import fixture, parametrize, parametrize_with_cases
 
@@ -200,6 +201,13 @@ def test_cdvae_coverage():
 
 def test_cdvae_cov_struct_fingerprints():
     cdvae_cov_struct_fingerprints(dummy_structures, verbose=True)
+
+
+def test_count_elements():
+    srs = count_elements(["H", "H", "He", "Al", "O", "Fe", "Fe", "Fe"])
+    check_dict = {"H": 2, "He": 1, "Al": 1, "O": 1, "Fe": 3}
+    for k, v in check_dict.items():
+        assert srs[k] == v
 
 
 # %% Code Graveyard
