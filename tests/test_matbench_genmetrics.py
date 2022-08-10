@@ -109,7 +109,7 @@ dummy_metrics_expected = {
 }
 
 dummy_mpts_expected = {
-    "validity": 0.8553794642857143,
+    "validity": 0.826756929211137,
     "coverage": 0.0,
     "novelty": 1.0,
     "uniqueness": 5 / 6,
