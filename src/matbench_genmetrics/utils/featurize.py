@@ -4,6 +4,7 @@ from typing import List, Optional
 
 import numpy as np
 import pandas as pd
+from element_coder import encode
 from matminer.featurizers.composition.composite import ElementProperty
 from matminer.featurizers.site.fingerprint import CrystalNNFingerprint
 from matminer.featurizers.structure.sites import SiteStatsFingerprint
@@ -50,6 +51,24 @@ def featurize_comp_struct(
         struct_fingerprints = struct_fingerprints.values
 
     return comp_fingerprints, struct_fingerprints
+
+
+def mod_petti_contributions(structures):
+    compositions = structures.apply(lambda s: s.composition.fractional_composition)
+    # NOTE: be aware of amount_tolerance=1e-8
+    summed_comp = np.sum(compositions).fractional_composition
+    _data = summed_comp._data
+    mod_petti = [encode(k, "mod_pettifor") for k in _data.keys()]
+    mod_petti_comp = dict(zip(mod_petti, _data.values()))
+
+    mod_petti_df = pd.DataFrame(
+        dict(
+            symbol=list(_data.keys()),
+            mod_petti=mod_petti_comp.keys(),
+            contribution=mod_petti_comp.values(),
+        )
+    ).sort_values("mod_petti")
+    return mod_petti_df
 
 
 def cdvae_cov_comp_fingerprints(structures, verbose=False):
