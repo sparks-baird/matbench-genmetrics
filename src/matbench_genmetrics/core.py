@@ -302,7 +302,10 @@ class GenMetrics(object):
         spg_scaled_distance = spg_distance / dummy_spg_case
         modpetti_scaled_distance = modpetti_distance / dummy_modpetti_case
 
-        return 1 - np.mean([spg_scaled_distance, modpetti_scaled_distance])
+        self.spg_validity = 1 - spg_scaled_distance
+        self.modpetti_validity = 1 - modpetti_scaled_distance
+
+        return 0.5 * (self.spg_validity + self.modpetti_validity)
 
     @property
     def coverage(self):
