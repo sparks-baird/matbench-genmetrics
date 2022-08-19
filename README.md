@@ -11,6 +11,7 @@
 [![Twitter](https://img.shields.io/twitter/url/http/shields.io.svg?style=social&label=Twitter)](https://twitter.com/matbench-genmetrics)
 -->
 > **NOTE: This is a WIP repository (as of 2022-08-06) being developed in parallel with [`xtal2png`](https://github.com/sparks-baird/xtal2png) and [`mp-time-split`](https://github.com/sparks-baird/mp-time-split). Feedback and contributions welcome!**
+
 # matbench-genmetrics
 
 > Generative materials benchmarking metrics, inspired by [guacamol](https://www.benevolent.com/guacamol) and [CDVAE](https://github.com/txie-93/cdvae).
@@ -24,6 +25,7 @@ of best (i.e. metric) associated with it.
 ## Getting Started
 
 Installation, a dummy example, output metrics for the example, and descriptions of the benchmark metrics.
+
 ### Installation
 
 Create a conda environment with the `matbench-genmetrics` package installed from the
@@ -101,12 +103,12 @@ print(mptm.recorded_metrics)
 
 ### Metrics
 
-| Metric | Description |
-|---|---|
-| Validity | One minus (Wasserstein distance between distribution of space group numbers for train and generated structures divided by distance of dummy case between train and `space_group_number == 1`). See also https://github.com/sparks-baird/matbench-genmetrics/issues/44 |
-| Coverage | Match counts between held-out test structures and generated structures divided by number of test structures ("predict the future"). |
-| Novelty | One minus (match counts between train structures and generated structures divided by number of generated structures). |
-| Uniqueness | One minus (non-self-comparing match counts within generated structures divided by total possible non-self-comparing matches). |
+| Metric     | Description                                                                                                                                                                                                                                                             |
+| ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Validity   | One minus (Wasserstein distance between distribution of space group numbers for train and generated structures divided by distance of dummy case between train and `space_group_number == 1`). See also <https://github.com/sparks-baird/matbench-genmetrics/issues/44> |
+| Coverage   | Match counts between held-out test structures and generated structures divided by number of test structures ("predict the future").                                                                                                                                     |
+| Novelty    | One minus (match counts between train structures and generated structures divided by number of generated structures).                                                                                                                                                   |
+| Uniqueness | One minus (non-self-comparing match counts within generated structures divided by total possible non-self-comparing matches).                                                                                                                                           |
 
 A match is when [`StructureMatcher`](https://pymatgen.org/pymatgen.analysis.structure_matcher.html#pymatgen.analysis.structure_matcher.StructureMatcher)`(stol=0.5, ltol=0.3, angle_tol=10.0).fit(s1, s2)`
 evaluates to `True`.
@@ -197,17 +199,21 @@ Then take a look into the `scripts` and `notebooks` folders.
    in `setup.cfg` if you want to ship and install your package via `pip` later on.
 2. Create concrete dependencies as `environment.lock.yml` for the exact reproduction of your
    environment with:
+
    ```bash
    conda env export -n matbench-genmetrics -f environment.lock.yml
    ```
+
    For multi-OS development, consider using `--no-builds` during the export.
 3. Update your current environment with respect to a new `environment.lock.yml` using:
+
    ```bash
    conda env update -f environment.lock.yml --prune
    ```
+
 ## Project Organization
 
-```
+```txt
 ├── AUTHORS.md              <- List of developers and maintainers.
 ├── CHANGELOG.md            <- Changelog to keep track of new features and fixes.
 ├── CONTRIBUTING.md         <- Guidelines for contributing to this project.
