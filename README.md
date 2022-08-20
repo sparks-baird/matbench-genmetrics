@@ -12,8 +12,7 @@
 -->
 > **NOTE: This is a WIP repository (as of 2022-08-06) being developed in parallel with [`xtal2png`](https://github.com/sparks-baird/xtal2png) and [`mp-time-split`](https://github.com/sparks-baird/mp-time-split). Feedback and contributions welcome!**
 
-# matbench-genmetrics
-
+# matbench-genmetrics [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/sparks-baird/matbench-genmetrics/blob/main/notebooks/1.0-matbench-genmetrics-basic.ipynb)
 > Generative materials benchmarking metrics, inspired by [guacamol](https://www.benevolent.com/guacamol) and [CDVAE](https://github.com/txie-93/cdvae).
 
 This repository provides standardized benchmarks for benchmarking generative models for
@@ -118,31 +117,31 @@ A match is when <code><a href="https://pymatgen.org/pymatgen.analysis.structure_
 
 ### Anaconda (`conda`) installation (recommended)
 
-(2022-07-30, conda-forge installation pending, fallback to `pip install xtal2png` as separate command)
+(2022-07-30, conda-forge installation pending, fallback to `pip install matbench-genmetrics` as separate command)
 
-Create and activate a new `conda` environment named `xtal2png` (`-n`) that will search for and install the `xtal2png` package from the `conda-forge` Anaconda channel (`-c`).
+Create and activate a new `conda` environment named `matbench-genmetrics` (`-n`) that will search for and install the `matbench-genmetrics` package from the `conda-forge` Anaconda channel (`-c`).
 
 ```bash
-conda env create -n xtal2png -c conda-forge xtal2png
-conda activate xtal2png
+conda env create -n matbench-genmetrics -c conda-forge matbench-genmetrics
+conda activate matbench-genmetrics
 ```
 
 Alternatively, in an already activated environment:
 
 ```bash
-conda install -c conda-forge xtal2png
+conda install -c conda-forge matbench-genmetrics
 ```
 
-If you run into conflicts with packages you are integrating with `xtal2png`, please try installing all packages in a single line of code (or two if mixing `conda` and `pip` packages in the same environment) and installing with `mamba` ([source](https://stackoverflow.com/a/69137255/13697228)).
+If you run into conflicts with packages you are integrating with `matbench-genmetrics`, please try installing all packages in a single line of code (or two if mixing `conda` and `pip` packages in the same environment) and installing with `mamba` ([source](https://stackoverflow.com/a/69137255/13697228)).
 
 ### PyPI (`pip`) installation
 
 Create and activate a new `conda` environment named `matbench-genmetrics` (`-n`) with `python==3.9.*` or your preferred Python version, then install `matbench-genmetrics` via `pip`.
 
 ```bash
-conda create -n xtal2png python==3.9.*
-conda activate xtal2png
-pip install xtal2png
+conda create -n matbench-genmetrics python==3.9.*
+conda activate matbench-genmetrics
+pip install matbench-genmetrics
 ```
 
 ## Editable installation
