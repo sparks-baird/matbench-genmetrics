@@ -56,7 +56,7 @@ change this to e.g. `python==3.8.*`. See [Advanced Installation](##Advanced-Inst
 >>>     dg = DummyGenerator()
 >>>     dg.fit(train_val_inputs)
 >>>     gen_structures = dg.gen(n=mptm.num_gen)
->>>     mptm.record(fold, gen_structures)
+>>>     mptm.evaluate_and_record(fold, gen_structures)
 ```
 
 ### Output
