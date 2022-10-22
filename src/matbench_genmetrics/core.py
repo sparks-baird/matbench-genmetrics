@@ -277,11 +277,21 @@ class GenMetrics(object):
         """Scaled Wasserstein distance between real (train/test) and gen structures."""
         # TODO: implement notion of compositional validity, since this is only structure
         train_test_structures = self.train_structures + self.test_structures
+
+        def try_get_space_group_info(structure):
+            try:
+                spg_tmp = structure.get_space_group_info()
+            except TypeError as e:
+                _logger.debug(e)
+                spg_tmp = ("P", 1)
+            return spg_tmp
+
         if self.train_test_spg is None:
             self.train_test_spg = [
-                ts.get_space_group_info()[1] for ts in train_test_structures
+                try_get_space_group_info(ts)[1] for ts in train_test_structures
             ]
-        gen_spg = [ts.get_space_group_info()[1] for ts in self.gen_structures]
+
+        gen_spg = [try_get_space_group_info(ts)[1] for ts in self.gen_structures]
 
         if self.train_test_modpetti_df is None:
             self.train_test_modpetti_df = mod_petti_contributions(train_test_structures)
@@ -709,3 +719,19 @@ if __name__ == "__main__":
 # else:
 #     self.train_test_spg = ensure_csv(FULL_SPG_URL, name=FULL_SPG_NAME).values
 # return self.train_test_spg
+
+# self.train_test_spg = [
+#     ts.get_space_group_info()[1] for ts in train_test_structures
+# ]
+
+# gen_spg = [ts.get_space_group_info()[1] for ts in self.gen_structures]
+
+# self.train_test_spg = []
+# for ts in train_test_structures:
+
+# self.train_test_spg.append(spg_tmp[1] if spg_tmp is not None else 1)
+# gen_spg = []
+# for i, gs in enumerate(self.gen_structures):
+#     print(i)
+#     spg_tmp = gs.get_space_group_info()
+#     gen_spg.append(spg_tmp[1] if spg_tmp is not None else 1)
