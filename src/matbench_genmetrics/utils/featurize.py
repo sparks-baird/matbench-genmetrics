@@ -62,13 +62,8 @@ def mod_petti_contributions(structures):
     _data = summed_comp._data
     mod_petti = [encode(k, "mod_pettifor") for k in _data.keys()]
     mod_petti_comp = dict(zip(mod_petti, _data.values()))
-
     mod_petti_df = pd.DataFrame(
-        dict(
-            symbol=list(_data.keys()),
-            mod_petti=mod_petti_comp.keys(),
-            contribution=mod_petti_comp.values(),
-        )
+        dict(mod_petti=mod_petti_comp.keys(), contribution=mod_petti_comp.values()),
     ).sort_values("mod_petti")
     return mod_petti_df
 
@@ -149,3 +144,13 @@ def cdvae_cov_struct_fingerprints(structures, verbose=False):
 # %% Code Graveyard
 # structures = pd.DataFrame({struct_name: structures})
 # compositions = pd.DataFrame({comp_name: compositions})
+
+# pd.DataFrame(
+# dict(
+#     # symbol=list(_data.keys()), # mod_petti lacking 118 unique mappings
+#     mod_petti=mod_petti_comp.keys(),
+#     contribution=mod_petti_comp.values(),
+# )
+# )
+
+# mod_petti_df = pd.DataFrame(mod_petti_comp, index=[0]).sort_values("mod_petti")
