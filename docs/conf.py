@@ -110,7 +110,6 @@ master_doc = "index"
 
 # General information about the project.
 project = "matbench-genmetrics"
-copyright = "2022, sgbaird"
 copyright = "2023, sgbaird"
 
 # The version info for the project you're documenting, acts as replacement for
@@ -269,8 +268,6 @@ latex_elements = {
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-    (
-        "index",
     ("index", "user_guide.tex", "matbench-genmetrics Documentation", "sgbaird", "manual")
 ]
 

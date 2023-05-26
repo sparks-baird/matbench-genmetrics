@@ -4,7 +4,7 @@ from typing import List
 
 from mp_time_split.core import MPTimeSplit
 
-from matbench_genmetrics.utils.featurize import featurize_comp_struct
+from matbench_genmetrics.core.utils.featurize import featurize_comp_struct
 
 mpt = MPTimeSplit(target="energy_above_hull")
 

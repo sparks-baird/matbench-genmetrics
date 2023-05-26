@@ -5,11 +5,12 @@ from typing import List, Optional
 import numpy as np
 import pandas as pd
 from element_coder import encode
-from matbench_genmetrics.utils.match import get_tqdm
 from matminer.featurizers.composition.composite import ElementProperty
 from matminer.featurizers.site.fingerprint import CrystalNNFingerprint
 from matminer.featurizers.structure.sites import SiteStatsFingerprint
 from pymatgen.core.structure import Structure
+
+from matbench_genmetrics.core.utils.match import get_tqdm
 
 cnnf = CrystalNNFingerprint.from_preset("ops")
 ep = ElementProperty.from_preset("magpie")
