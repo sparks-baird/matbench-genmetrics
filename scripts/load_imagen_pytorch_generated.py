@@ -5,6 +5,7 @@ def main():
     from xtal2png import XtalConverter
 
     from matbench_genmetrics.core import MPTSMetrics10, MPTSMetrics1000
+    from matbench_genmetrics.utils.plotting import plot_structures_2d
 
     fold = 0
     dummy = False
@@ -26,10 +27,22 @@ def main():
 
     gen_structures = xc.png2xtal(gen_images)
 
+    # with open(path.join(data_dir, f"gen_structures_fold={fold}.pkl"), "wb") as f:
+    #     pickle.dump(gen_structures, f)
+
+    # with open(path.join(data_dir, f"gen_structures_fold={fold}.pkl"), "rb") as f:
+    #     gen_structures_loaded = pickle.load(f)
+
     mptm.get_train_and_val_data(fold)
     mptm.evaluate_and_record(fold, gen_structures)
 
     print(mptm.recorded_metrics)
+
+    mptm.save(
+        path.join(data_dir, f"gen_metrics_fold={fold},epoch={checkpoint_epoch}.pkl")
+    )
+
+    fig, _ = plot_structures_2d(gen_structures, 6, 5)
 
     return mptm
 
