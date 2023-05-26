@@ -1,6 +1,8 @@
 """Core functionality for matbench-genmetrics (generative materials benchmarking)"""
 import argparse
+import json
 import logging
+import pickle
 import sys
 from pathlib import Path
 from typing import List, Optional
@@ -517,6 +519,17 @@ class MPTSMetrics(object):
         # i.e. store the values for the current fold for testing purposes
         for metric, value in self.recorded_metrics[fold].items():
             setattr(self, metric, value)
+
+    def save(self, fpath_stem):
+        with open(fpath_stem + ".pkl", "wb") as f:
+            pickle.dump(self, f)
+
+        with open(fpath_stem + ".json", "w") as fp:
+            json.dump(self.recorded_metrics, fp)
+
+    def load(self, fpath):
+        with open(fpath, "rb") as f:
+            return pickle.load(f)
 
 
 class MPTSMetrics10(MPTSMetrics):
