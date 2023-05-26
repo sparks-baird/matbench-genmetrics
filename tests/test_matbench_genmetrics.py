@@ -12,7 +12,7 @@ from pymatgen.transformations.standard_transformations import (
     PerturbStructureTransformation,
 )
 
-from matbench_genmetrics.core.core import GenMatcher, GenMetrics, MPTSMetrics
+from matbench_genmetrics.core.metrics import GenMatcher, GenMetrics, MPTSMetrics
 from matbench_genmetrics.core.utils.featurize import cdvae_cov_struct_fingerprints
 
 # from pytest_cases import fixture, parametrize, parametrize_with_cases
