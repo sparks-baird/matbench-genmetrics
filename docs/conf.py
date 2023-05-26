@@ -121,7 +121,7 @@ copyright = "2023, sgbaird"
 # If you don’t need the separation provided between version and release,
 # just set them both to the same value.
 try:
-    from core.matbench_genmetrics import __version__ as version
+    from matbench_genmetrics.core import __version__ as version
 except ImportError:
     version = ""
 
