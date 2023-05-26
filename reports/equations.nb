@@ -1,0 +1,1152 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 13.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     52024,       1145]
+NotebookOptionsPosition[     49130,       1084]
+NotebookOutlinePosition[     49576,       1101]
+CellTagsIndexPosition[     49533,       1098]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["Equations for matbench-genmetrics", "Title",
+ CellChangeTimes->{{3.885657576657568*^9,
+  3.8856575942050314`*^9}},ExpressionUUID->"847a7412-5059-4110-87e2-\
+6716a0c7d1d5"],
+
+Cell[BoxData[
+ RowBox[{"<<", "Notation`"}]], "Input",
+ CellChangeTimes->{{3.842221637045106*^9, 3.842221639492199*^9}},
+ CellLabel->"In[1]:=",ExpressionUUID->"6f296bd4-a3cd-4157-a339-1917d1e89a04"],
+
+Cell[BoxData[{
+ RowBox[{"Symbolize", "[",
+  RowBox[{
+   TemplateBox[{
+     SubscriptBox["_", "_"]},
+    "NotationTemplateTag"], ",",
+   RowBox[{"WorkingForm", "\[Rule]", "TraditionalForm"}]}],
+  "]"}], "\[IndentingNewLine]",
+ RowBox[{"Symbolize", "[",
+  RowBox[{
+   TemplateBox[{
+     SubscriptBox[
+      OverscriptBox["x", "~"], "_"]},
+    "NotationTemplateTag"], ",",
+   RowBox[{"WorkingForm", "\[Rule]", "TraditionalForm"}]}], "]"}]}], "Input",
+ CellChangeTimes->{{3.8427482563260655`*^9, 3.8427482569818883`*^9}, {
+  3.8427483046450524`*^9, 3.84274831052477*^9}, {3.84274886730157*^9,
+  3.842748867739689*^9}, {3.882722640612115*^9, 3.8827226635686717`*^9}},
+ CellLabel->"In[2]:=",ExpressionUUID->"d9afcb90-6e17-4b7c-84e8-51a9c7a30dc7"],
+
+Cell[BoxData[
+ RowBox[{"<<", "TeXport`"}]], "Input",
+ CellChangeTimes->{{3.8422209020078125`*^9, 3.8422209078920603`*^9}},
+ CellLabel->"In[4]:=",ExpressionUUID->"d937c9eb-cf18-4bd0-bcdb-ce124ff35daf"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"?", "TeXport"}]], "Input",
+ CellChangeTimes->{{3.842220941254505*^9, 3.842220944460104*^9}},
+ CellLabel->"In[5]:=",ExpressionUUID->"6a6db971-677e-404c-8cab-74f09dd2fde5"],
+
+Cell[BoxData[
+ InterpretationBox[
+  StyleBox[
+   FrameBox[
+    DynamicModuleBox[{System`InformationDump`open$$ = False,
+     System`InformationDump`mouseOver$$ = False},
+     PaneSelectorBox[{True->
+      TagBox[GridBox[{
+         {
+          ItemBox[
+           PaneBox[
+            StyleBox["\<\" Symbol\"\>", "InformationTitleText",
+             StripOnInput->False,
+             BaseStyle -> None],
+            FrameMargins->{{4, 0}, {-1, 1}}],
+           BaseStyle->"InformationTitleBackground",
+           StripOnInput->False],
+          ItemBox["\<\"\"\>",
+           BaseStyle->"InformationTitleBackground",
+           StripOnInput->False]},
+         {
+          ItemBox[
+           PaneBox[
+
+            StyleBox["\<\"TeXport can have its default options set for later \
+calls via e.g. \
+SetOptions[TeXport,Export\[Rule]True]\\nTeXport[fname,eqn,keyvalues] returns \
+a TeX-formatted sentence corresponding to an expression (eqn) and a \
+definition of variables (keyvalues) that immediately follows in a sentence \
+format. E.g. \[Ellipsis] \\\"\\\\begin{equation} \[Ellipsis] \
+\\\\label{eq:texport-example} \[Ellipsis] \\ta+b=c \[Ellipsis] \
+\\\\end{equation} \[Ellipsis] where $a$, $b$, and $c$ represent apples, \
+bananas, and cantaloupe, \
+respectively.\\\"\\nTeXport[fname,eqn,keyvalues,Print\[Rule]True] prints a \
+TeX-formatted expression to $Output with key-value pair \
+definitions.\\nTeXport[fname,eqn,,Print\[Rule]True] prints a TeX-formatted \
+expression to $Output without key-value \
+pairs.\\nTeXport[fname,eqn,keyvalues,Export\[Rule]True] exports a \
+TeX-formatted expression to <fname>.tex.\\nTeXport[fname,eqn,keyvalues,Export\
+\[Rule]True,Folder\[Rule]\\\"equations\\\"] exports a TeX-formatted \
+expression to equations\\\\<fname>.tex.\\nTo troubleshoot, try \
+TraditionalForm[<your expression>]. If running into an issue with subscripts, \
+the Notation package, and TraditionalForm, try writing e.g., Subscript[a, 1] \
+explicitly rather than using Ctrl+<underscore>.\"\>", "InformationUsageText",
+             StripOnInput->False,
+             LineSpacing->{1.5, 1.5, 3.}],
+            FrameMargins->{{10, 10}, {8, 10}}],
+           BaseStyle->"InformationUsageSubtitleBackground",
+           StripOnInput->False],
+          ItemBox["\<\"\"\>",
+           BaseStyle->"InformationUsageSubtitleBackground",
+           StripOnInput->False]},
+         {
+          PaneBox[
+           TagBox[GridBox[{
+              {
+               StyleBox[
+                TagBox[
+                 TooltipBox[
+                  StyleBox["\<\" Definitions\"\>", "InformationRowLabel",
+                   StripOnInput->False],
+                  "\"Definitions\"",
+                  TooltipStyle->"TextStyling"],
+                 Annotation[#, "Definitions", "Tooltip"]& ], "DialogStyle",
+                StripOnInput->False]},
+              {
+               TemplateBox[{"\"\[ThinSpace]\"",
+                 GridBox[{{
+                    RowBox[{
+                    RowBox[{"TeXport", "[",
+
+                    RowBox[{
+                    "TeXport`Private`fname_", ",", "TeXport`Private`eqn_",
+                    ",", "TeXport`Private`keyvalues_", ",",
+                    RowBox[{"OptionsPattern", "[", "]"}]}], "]"}], ":=",
+                    RowBox[{"Module", "[",
+                    RowBox[{
+                    RowBox[{"{",
+
+                    RowBox[{"TeXport`Private`folder", ",",
+                    "TeXport`Private`printQ", ",", "TeXport`Private`exportQ",
+                    ",", "TeXport`Private`widetextQ", ",",
+                    "TeXport`Private`fnametxt", ",",
+                    "TeXport`Private`fnametex", ",",
+                    "TeXport`Private`fpathtxt", ",",
+                    "TeXport`Private`fpathtex", ",",
+                    "TeXport`Private`equation", ",", "TeXport`Private`txt",
+                    ",", "TeXport`Private`keys", ",",
+                    "TeXport`Private`values", ",",
+                    "TeXport`Private`sentence"}], "}"}], ",",
+                    RowBox[{
+                    RowBox[{
+                    RowBox[{"{",
+
+                    RowBox[{"TeXport`Private`printQ", ",",
+                    "TeXport`Private`exportQ", ",", "TeXport`Private`folder",
+                    ",", "TeXport`Private`widetextQ"}], "}"}], "=",
+                    RowBox[{"OptionValue", "[",
+                    RowBox[{"{",
+
+                    RowBox[{"\"Print\"", ",", "\"Export\"", ",", "\"Folder\"",
+                     ",", "\"Widetext\""}], "}"}], "]"}]}], ";",
+                    RowBox[{"TeXport`Private`fnametxt", "=",
+                    RowBox[{"TeXport`Private`fname", "<>", "\".txt\""}]}],
+                    ";",
+                    RowBox[{"TeXport`Private`fnametex", "=",
+                    RowBox[{"TeXport`Private`fname", "<>", "\".tex\""}]}],
+                    ";",
+                    RowBox[{
+                    RowBox[{"{",
+
+                    RowBox[{"TeXport`Private`fpathtxt", ",",
+                    "TeXport`Private`fpathtex"}], "}"}], "=",
+                    RowBox[{
+                    RowBox[{"(",
+                    RowBox[{
+                    RowBox[{"FileNameJoin", "[",
+                    RowBox[{"{",
+                    RowBox[{"TeXport`Private`folder", ",", "#1"}], "}"}],
+                    "]"}], "&"}], ")"}], "/@",
+                    RowBox[{"{",
+
+                    RowBox[{"TeXport`Private`fnametxt", ",",
+                    "TeXport`Private`fnametex"}], "}"}]}]}], ";",
+                    RowBox[{"TeXport`Private`sentence", "=",
+                    RowBox[{"If", "[",
+                    RowBox[{
+                    RowBox[{
+                    RowBox[{"Length", "[", "TeXport`Private`keyvalues", "]"}],
+                     ">", "0"}], ",",
+                    RowBox[{
+                    RowBox[{
+                    RowBox[{"{",
+
+                    RowBox[{"TeXport`Private`keys", ",",
+                    "TeXport`Private`values"}], "}"}], "=",
+                    "TeXport`Private`keyvalues"}], ";",
+                    RowBox[{"\"\\n\"", "<>",
+                    RowBox[{"KeyValueToSentence", "[",
+
+                    RowBox[{"TeXport`Private`keys", ",",
+                    "TeXport`Private`values"}], "]"}]}]}], ",", "\"\""}],
+                    "]"}]}], ";",
+                    RowBox[{"TeXport`Private`equation", "=",
+
+                    RowBox[{"\"\\\\begin{equation} \\\\label{eq:\"", "<>",
+                    "TeXport`Private`fname", "<>", "\"} \\n\\t\"", "<>",
+                    RowBox[{"ToString", "[",
+                    RowBox[{"TeXForm", "[", "TeXport`Private`eqn", "]"}],
+                    "]"}], "<>", "\"\\n\\\\end{equation}\""}]}], ";",
+                    RowBox[{"If", "[",
+                    RowBox[{"TeXport`Private`widetextQ", ",",
+                    RowBox[{
+                    RowBox[{"TeXport`Private`equation", "=",
+
+                    RowBox[{"\"\\\\begin{widetext}\\n\"", "<>",
+                    "TeXport`Private`equation", "<>",
+                    "\"\\n\\\\end{widetext}\""}]}], ";"}]}], "]"}], ";",
+                    RowBox[{"TeXport`Private`txt", "=",
+
+                    RowBox[{"TeXport`Private`equation", "<>",
+                    "TeXport`Private`sentence"}]}], ";",
+                    RowBox[{"If", "[",
+                    RowBox[{"TeXport`Private`exportQ", ",",
+                    RowBox[{
+                    RowBox[{"Export", "[",
+
+                    RowBox[{"TeXport`Private`fpathtxt", ",",
+                    "TeXport`Private`txt"}], "]"}], ";",
+                    RowBox[{"RenameFile", "[",
+
+                    RowBox[{"TeXport`Private`fpathtxt", ",",
+                    "TeXport`Private`fpathtex", ",",
+                    RowBox[{"OverwriteTarget", "\[Rule]", "True"}]}], "]"}]}],
+                     ",",
+                    RowBox[{
+                    RowBox[{"(",
+                    RowBox[{"##1", "&"}], ")"}], "[", "]"}]}], "]"}], ";",
+                    RowBox[{"If", "[",
+                    RowBox[{"TeXport`Private`printQ", ",",
+                    RowBox[{"Print", "[", "TeXport`Private`txt", "]"}], ",",
+                    RowBox[{
+                    RowBox[{"(",
+                    RowBox[{"##1", "&"}], ")"}], "[", "]"}]}], "]"}], ";",
+                    "TeXport`Private`txt"}]}], "]"}]}]}, {" "}},
+                  GridBoxAlignment -> {"Columns" -> {{Left}}},
+                  DefaultBaseStyle -> "Column",
+                  GridBoxItemSize -> {
+                   "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}]},
+                "RowDefault"]}
+             },
+             DefaultBaseStyle->"Column",
+             GridBoxAlignment->{"Columns" -> {{Left}}},
+
+             GridBoxItemSize->{
+              "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
+            "Column"],
+           FrameMargins->{{6, 0}, {3, 6}}], "\<\"\"\>"},
+         {
+          PaneBox[GridBox[{
+             {
+
+              DynamicModuleBox[{System`InformationDump`open$$ = {
+               False, False, False, False, False, False}},
+               StyleBox[GridBox[{
+                  {
+                   PaneSelectorBox[{True->
+                    ButtonBox[
+                    PaneSelectorBox[{False->
+                    TemplateBox[{"\[ThickSpace]", "\"\[ThickSpace]\"",
+                    StyleBox[
+                    "\"Options\"", "InformationRowLabel", StripOnInput ->
+                    False],
+                    DynamicBox[
+                    FEPrivate`FrontEndResource[
+                    "FEBitmaps", "DownPointerOpener"]]},
+                    "RowWithSeparators"], True->
+                    TemplateBox[{"\[ThickSpace]", "\"\[ThickSpace]\"",
+                    StyleBox[
+                    "\"Options\"", "InformationRowLabel", StripOnInput ->
+                    False],
+                    DynamicBox[
+                    FEPrivate`FrontEndResource[
+                    "FEBitmaps", "DownPointerOpenerHot"]]},
+                    "RowWithSeparators"]}, Dynamic[
+                    CurrentValue["MouseOver"]],
+                    FrameMargins->0,
+                    ImageSize->Automatic],
+                    Appearance->None,
+                    BaseStyle->None,
+
+                    ButtonFunction:>(Part[System`InformationDump`open$$, 3] =
+                    False),
+                    Evaluator->Automatic,
+                    FrameMargins->0,
+                    ImageMargins->0,
+                    Method->"Preemptive"], False->
+                    ButtonBox[
+                    PaneSelectorBox[{False->
+                    TemplateBox[{"\[ThickSpace]", "\"\[ThickSpace]\"",
+                    StyleBox[
+                    "\"Options\"", "InformationRowLabel", StripOnInput ->
+                    False],
+                    DynamicBox[
+                    FEPrivate`FrontEndResource[
+                    "FEBitmaps", "RightPointerOpener"]]},
+                    "RowWithSeparators"], True->
+                    TemplateBox[{"\[ThickSpace]", "\"\[ThickSpace]\"",
+                    StyleBox[
+                    "\"Options\"", "InformationRowLabel", StripOnInput ->
+                    False],
+                    DynamicBox[
+                    FEPrivate`FrontEndResource[
+                    "FEBitmaps", "RightPointerOpenerHot"]]},
+                    "RowWithSeparators"]}, Dynamic[
+                    CurrentValue["MouseOver"]],
+                    FrameMargins->0,
+                    ImageSize->Automatic],
+                    Appearance->None,
+                    BaseStyle->None,
+
+                    ButtonFunction:>(Part[System`InformationDump`open$$, 3] =
+                    True),
+                    Evaluator->Automatic,
+                    FrameMargins->0,
+                    ImageMargins->0,
+                    Method->"Preemptive"]}, Dynamic[
+                    FEPrivate`Part[System`InformationDump`open$$, 3]]],
+                   PaneSelectorBox[{True->GridBox[{
+                    {
+                    RowBox[{"Print", "\[Rule]", "False"}]},
+                    {
+                    RowBox[{"Export", "\[Rule]", "False"}]},
+                    {
+                    RowBox[{
+                    "TeXport`Private`Folder", "\[Rule]", "\<\".\"\>"}]},
+                    {
+                    RowBox[{"TeXport`Private`Widetext", "\[Rule]", "False"}]},
+                    {
+                    StyleBox[
+
+                    TemplateBox[{
+                    "\"(\"", "\"\[InvisibleSpace]\"", "4", "\" total)\""},
+                    "RowDefault"], "InformationRowOpener",
+                    StripOnInput->False]}
+                    },
+                    BaselinePosition->{Baseline, {1, 1}},
+                    DefaultBaseStyle->"Column",
+                    GridBoxAlignment->{"Columns" -> {{Left}}},
+
+                    GridBoxItemSize->{
+                    "Columns" -> {{Automatic}}, "Rows" -> {{1.}}}], False->
+                    RowBox[{
+                    RowBox[{"Print", "\[Rule]", "False"}], "\[ThinSpace]",
+                    StyleBox["\<\"\[Ellipsis]\"\>", "InformationRowOpener",
+                    StripOnInput->False], "\[ThinSpace]",
+                    StyleBox[
+
+                    TemplateBox[{
+                    "\"(\"", "\"\[InvisibleSpace]\"", "4", "\" total)\""},
+                    "RowDefault"], "InformationRowOpener",
+                    StripOnInput->False]}]}, Dynamic[
+                    FEPrivate`Part[System`InformationDump`open$$, 3]],
+                    BaselinePosition->Baseline,
+                    ImageSize->Automatic]},
+                  {
+                   TagBox[
+                    TooltipBox[
+                    StyleBox["\<\" Attributes\"\>", "InformationRowLabel",
+                    StripOnInput->False],
+                    "\"Attributes\"",
+                    TooltipStyle->"TextStyling"],
+                    Annotation[#, "Attributes", "Tooltip"]& ],
+                   RowBox[{"{", "Protected", "}"}]},
+                  {
+                   TagBox[
+                    TooltipBox[
+                    StyleBox["\<\" Full Name\"\>", "InformationRowLabel",
+                    StripOnInput->False],
+                    "\"FullName\"",
+                    TooltipStyle->"TextStyling"],
+
+                    Annotation[#, "FullName",
+                    "Tooltip"]& ], "\<\"TeXport`TeXport\"\>"}
+                 },
+                 AutoDelete->False,
+                 GridBoxAlignment->{"Columns" -> {Right, Left}},
+                 GridBoxDividers->None,
+                 GridBoxItemSize->{"Columns" -> {Automatic, Automatic}},
+                 GridBoxSpacings->{"Columns" -> {
+                    Offset[0.27999999999999997`], {
+                    Offset[0.5599999999999999]},
+                    Offset[0.27999999999999997`]}, "Rows" -> {
+                    Offset[0.2], {
+                    Offset[0.8]},
+                    Offset[0.2]}}], "DialogStyle",
+                StripOnInput->False],
+               DynamicModuleValues:>{}]}
+            },
+            DefaultBaseStyle->"Column",
+            GridBoxAlignment->{"Columns" -> {{Left}}},
+            GridBoxDividers->{"Columns" -> {{False}}, "Rows" -> {{False}}},
+
+            GridBoxItemSize->{
+             "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}},
+            GridBoxSpacings->{"Columns" -> {
+                Offset[0.27999999999999997`], {
+                 Offset[0.5599999999999999]},
+                Offset[0.27999999999999997`]}, "Rows" -> {
+                Offset[0.2], {
+                 Offset[3.6]},
+                Offset[0.2]}}],
+           FrameMargins->{{6, 6}, {6, 3}}], ""},
+         {
+          ItemBox[
+           TagBox[
+            ButtonBox[
+             PaneSelectorBox[{False->
+
+              DynamicBox[FEPrivate`FrontEndResource[
+               "FEBitmaps", "UpPointerOpener"]], True->
+
+              DynamicBox[FEPrivate`FrontEndResource[
+               "FEBitmaps", "UpPointerOpenerHot"]]}, Dynamic[
+              System`InformationDump`mouseOver$$]],
+             Alignment->Left,
+             Appearance->{"Default" -> None},
+
+             ButtonFunction:>FEPrivate`Set[
+              System`InformationDump`open$$, False],
+             Evaluator->Automatic,
+             FrameMargins->{{9, 0}, {0, 0}},
+             ImageMargins->0,
+             ImageSize->Full,
+             Method->"Preemptive"],
+
+            EventHandlerTag[{
+             "MouseEntered" :>
+              FEPrivate`Set[System`InformationDump`mouseOver$$, True],
+              "MouseExited" :>
+              FEPrivate`Set[System`InformationDump`mouseOver$$, False],
+              Method -> "Preemptive", PassEventsDown -> Automatic,
+              PassEventsUp -> True}]],
+           BaseStyle->"InformationTitleBackground",
+           StripOnInput->False], "\[SpanFromLeft]"}
+        },
+        AutoDelete->False,
+        FrameStyle->Directive[
+          GrayLevel[0.8],
+          Thickness[Tiny]],
+        GridBoxAlignment->{"Columns" -> {Left, Right}, "Rows" -> {{Center}}},
+        GridBoxDividers->{
+         "Columns" -> {{None}}, "Rows" -> {False, {True}, False}},
+        GridBoxItemSize->{
+         "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
+       "Grid"], False->
+      TagBox[GridBox[{
+         {
+          ItemBox[
+           PaneBox[
+            StyleBox["\<\" Symbol\"\>", "InformationTitleText",
+             StripOnInput->False],
+            FrameMargins->{{4, 0}, {-1, 1}}],
+           BaseStyle->"InformationTitleBackground",
+           StripOnInput->False],
+          ItemBox["\<\"\"\>",
+           BaseStyle->"InformationTitleBackground",
+           StripOnInput->False]},
+         {
+          ItemBox[
+           PaneBox[
+
+            StyleBox["\<\"TeXport can have its default options set for later \
+calls via e.g. \
+SetOptions[TeXport,Export\[Rule]True]\\nTeXport[fname,eqn,keyvalues] returns \
+a TeX-formatted sentence corresponding to an expression (eqn) and a \
+definition of variables (keyvalues) that immediately follows in a sentence \
+format. E.g. \[Ellipsis] \\\"\\\\begin{equation} \[Ellipsis] \
+\\\\label{eq:texport-example} \[Ellipsis] \\ta+b=c \[Ellipsis] \
+\\\\end{equation} \[Ellipsis] where $a$, $b$, and $c$ represent apples, \
+bananas, and cantaloupe, \
+respectively.\\\"\\nTeXport[fname,eqn,keyvalues,Print\[Rule]True] prints a \
+TeX-formatted expression to $Output with key-value pair \
+definitions.\\nTeXport[fname,eqn,,Print\[Rule]True] prints a TeX-formatted \
+expression to $Output without key-value \
+pairs.\\nTeXport[fname,eqn,keyvalues,Export\[Rule]True] exports a \
+TeX-formatted expression to <fname>.tex.\\nTeXport[fname,eqn,keyvalues,Export\
+\[Rule]True,Folder\[Rule]\\\"equations\\\"] exports a TeX-formatted \
+expression to equations\\\\<fname>.tex.\\nTo troubleshoot, try \
+TraditionalForm[<your expression>]. If running into an issue with subscripts, \
+the Notation package, and TraditionalForm, try writing e.g., Subscript[a, 1] \
+explicitly rather than using Ctrl+<underscore>.\"\>", "InformationUsageText",
+             StripOnInput->False,
+             LineSpacing->{1.5, 1.5, 3.}],
+            FrameMargins->{{10, 10}, {8, 10}}],
+           BaseStyle->"InformationUsageSubtitleBackground",
+           StripOnInput->False],
+          ItemBox["\<\"\"\>",
+           BaseStyle->"InformationUsageSubtitleBackground",
+           StripOnInput->False]},
+         {
+          ItemBox[
+           TagBox[
+            ButtonBox[
+             PaneSelectorBox[{False->
+
+              DynamicBox[FEPrivate`FrontEndResource[
+               "FEBitmaps", "DownPointerOpener"],
+               ImageSizeCache->{10., {3., 7.}}], True->
+
+              DynamicBox[FEPrivate`FrontEndResource[
+               "FEBitmaps", "DownPointerOpenerHot"],
+               ImageSizeCache->{10., {3., 7.}}]}, Dynamic[
+              System`InformationDump`mouseOver$$]],
+             Alignment->Left,
+             Appearance->{"Default" -> None},
+
+             ButtonFunction:>FEPrivate`Set[
+              System`InformationDump`open$$, True],
+             Evaluator->Automatic,
+             FrameMargins->{{9, 0}, {0, 0}},
+             ImageMargins->0,
+             ImageSize->Full,
+             Method->"Preemptive"],
+
+            EventHandlerTag[{
+             "MouseEntered" :>
+              FEPrivate`Set[System`InformationDump`mouseOver$$, True],
+              "MouseExited" :>
+              FEPrivate`Set[System`InformationDump`mouseOver$$, False],
+              Method -> "Preemptive", PassEventsDown -> Automatic,
+              PassEventsUp -> True}]],
+           BaseStyle->"InformationTitleBackground",
+           StripOnInput->False], "\[SpanFromLeft]"}
+        },
+        AutoDelete->False,
+        FrameStyle->Directive[
+          GrayLevel[0.8],
+          Thickness[Tiny]],
+        GridBoxAlignment->{"Columns" -> {Left, Right}, "Rows" -> {{Center}}},
+        GridBoxDividers->{
+         "Columns" -> {{None}}, "Rows" -> {False, {True}, False}},
+        GridBoxItemSize->{
+         "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
+       "Grid"]}, Dynamic[System`InformationDump`open$$],
+      BaselinePosition->Baseline,
+      FrameMargins->0,
+      ImageSize->Automatic],
+     DynamicModuleValues:>{}],
+    BaseStyle->"InformationGridFrame",
+    StripOnInput->False], "InformationGridPlain",
+   StripOnInput->False],
+  InformationData[<|
+   "ObjectType" -> "Symbol", "Usage" ->
+    "TeXport can have its default options set for later calls via e.g. \
+SetOptions[TeXport,Export\[Rule]True]\nTeXport[fname,eqn,keyvalues] returns a \
+TeX-formatted sentence corresponding to an expression (eqn) and a definition \
+of variables (keyvalues) that immediately follows in a sentence format. E.g. \
+\[Ellipsis] \"\\begin{equation} \[Ellipsis] \\label{eq:texport-example} \
+\[Ellipsis] \ta+b=c \[Ellipsis] \\end{equation} \[Ellipsis] where $a$, $b$, \
+and $c$ represent apples, bananas, and cantaloupe, respectively.\"\n\
+TeXport[fname,eqn,keyvalues,Print\[Rule]True] prints a TeX-formatted \
+expression to $Output with key-value pair definitions.\n\
+TeXport[fname,eqn,,Print\[Rule]True] prints a TeX-formatted expression to \
+$Output without key-value pairs.\n\
+TeXport[fname,eqn,keyvalues,Export\[Rule]True] exports a TeX-formatted \
+expression to <fname>.tex.\n\
+TeXport[fname,eqn,keyvalues,Export\[Rule]True,Folder\[Rule]\"equations\"] \
+exports a TeX-formatted expression to equations\\<fname>.tex.\nTo \
+troubleshoot, try TraditionalForm[<your expression>]. If running into an \
+issue with subscripts, the Notation package, and TraditionalForm, try writing \
+e.g., Subscript[a, 1] explicitly rather than using Ctrl+<underscore>.",
+    "Documentation" -> None, "OwnValues" -> None, "UpValues" -> None,
+    "DownValues" ->
+    Information`InformationValueForm[
+     DownValues, TeXport`TeXport, {TeXport`TeXport[
+         Pattern[TeXport`Private`fname,
+          Blank[]],
+         Pattern[TeXport`Private`eqn,
+          Blank[]],
+         Pattern[TeXport`Private`keyvalues,
+          Blank[]],
+         OptionsPattern[]] :>
+       Module[{TeXport`Private`folder, TeXport`Private`printQ,
+          TeXport`Private`exportQ, TeXport`Private`widetextQ,
+          TeXport`Private`fnametxt, TeXport`Private`fnametex,
+          TeXport`Private`fpathtxt, TeXport`Private`fpathtex,
+          TeXport`Private`equation, TeXport`Private`txt, TeXport`Private`keys,
+           TeXport`Private`values,
+          TeXport`Private`sentence}, {
+           TeXport`Private`printQ, TeXport`Private`exportQ,
+            TeXport`Private`folder, TeXport`Private`widetextQ} =
+          OptionValue[{"Print", "Export", "Folder", "Widetext"}];
+         TeXport`Private`fnametxt = TeXport`Private`fname <> ".txt";
+         TeXport`Private`fnametex =
+          TeXport`Private`fname <> ".tex"; {
+           TeXport`Private`fpathtxt, TeXport`Private`fpathtex} =
+          Map[
+           FileNameJoin[{TeXport`Private`folder, #}]& , {
+            TeXport`Private`fnametxt, TeXport`Private`fnametex}];
+         TeXport`Private`sentence =
+          If[Length[TeXport`Private`keyvalues] >
+            0, {TeXport`Private`keys, TeXport`Private`values} =
+             TeXport`Private`keyvalues;
+            "\n" <> TeXport`KeyValueToSentence[
+              TeXport`Private`keys, TeXport`Private`values], ""];
+         TeXport`Private`equation =
+          "\\begin{equation} \\label{eq:" <> TeXport`Private`fname <>
+           "} \n\t" <> ToString[
+             TeXForm[TeXport`Private`eqn]] <> "\n\\end{equation}";
+         If[TeXport`Private`widetextQ,
+           TeXport`Private`equation =
+            "\\begin{widetext}\n" <> TeXport`Private`equation <>
+             "\n\\end{widetext}"; Null];
+         TeXport`Private`txt =
+          TeXport`Private`equation <> TeXport`Private`sentence;
+         If[TeXport`Private`exportQ,
+           Export[TeXport`Private`fpathtxt, TeXport`Private`txt];
+           RenameFile[
+            TeXport`Private`fpathtxt, TeXport`Private`fpathtex,
+             OverwriteTarget -> True],
+           (SlotSequence[1]& )[]]; If[TeXport`Private`printQ,
+           Print[TeXport`Private`txt],
+           (SlotSequence[1]& )[]]; TeXport`Private`txt]}], "SubValues" ->
+    None, "DefaultValues" -> None, "NValues" -> None, "FormatValues" -> None,
+    "Options" -> {
+     Print -> False, Export -> False, TeXport`Private`Folder -> ".",
+      TeXport`Private`Widetext -> False}, "Attributes" -> {Protected},
+    "FullName" -> "TeXport`TeXport"|>, False]]], "Output",
+ CellChangeTimes->{
+  3.8422209449807262`*^9, 3.842747845603958*^9, 3.8427480300789223`*^9, {
+   3.8427482632368546`*^9, 3.842748272635795*^9}, 3.8427488697891645`*^9,
+   3.842814122625131*^9, 3.842821591012494*^9, 3.8428336124271145`*^9,
+   3.8428338555866585`*^9, 3.8428339852966843`*^9, 3.8428344461341305`*^9,
+   3.8428347801940565`*^9, 3.842834868006427*^9, {3.8429614995377665`*^9,
+   3.842961511773721*^9}, 3.84319075608042*^9, 3.843372419401184*^9,
+   3.844272113228712*^9, 3.8473439683784285`*^9, {3.847347119208332*^9,
+   3.8473471306010256`*^9}, 3.8595639347945013`*^9, {3.859633141799017*^9,
+   3.859633153763296*^9}, 3.860344694133748*^9, {3.8603447274127307`*^9,
+   3.860344746013691*^9}, 3.8603689069372416`*^9, 3.861122350382599*^9,
+   3.882709111450612*^9, 3.8827197798491507`*^9, {3.8827226515358453`*^9,
+   3.8827226772663527`*^9}, {3.8827233536531615`*^9, 3.882723367426733*^9},
+   3.8827453866113777`*^9, 3.884104058834532*^9, 3.8856575109120293`*^9, {
+   3.8856592000358696`*^9, 3.8856592116882696`*^9}, 3.8856594789478607`*^9},
+ CellLabel->"Out[5]=",ExpressionUUID->"b526d0f2-076f-4ecf-9876-7c283e65e925"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"SetDirectory", "[",
+  "\"\<C:\\\\Users\\\\sterg\\\\Documents\\\\GitHub\\\\sparks-baird\\\\\
+matbench-genmetrics\\\\reports\>\"", "]"}]], "Input",
+ CellChangeTimes->{
+  3.8422211309216166`*^9, {3.859563940768597*^9, 3.859563944232668*^9}, {
+   3.8856574953700557`*^9, 3.885657503183401*^9}, {3.885659502048993*^9,
+   3.8856595029124656`*^9}},
+ CellLabel->"In[8]:=",ExpressionUUID->"5c4e33c8-dda4-475b-88c2-d41599eb407d"],
+
+Cell[BoxData["\<\"C:\\\\Users\\\\sterg\\\\Documents\\\\GitHub\\\\sparks-baird\
+\\\\matbench-genmetrics\\\\reports\"\>"], "Output",
+ CellChangeTimes->{
+  3.8422211363245687`*^9, 3.8427478456316013`*^9, 3.8427480301056423`*^9, {
+   3.8427482632649984`*^9, 3.842748272668677*^9}, 3.842748870363714*^9,
+   3.8428141226607924`*^9, 3.8428215910386734`*^9, 3.842833612463812*^9,
+   3.842833855619592*^9, 3.842833985331131*^9, 3.8428344475068045`*^9,
+   3.8428347802291145`*^9, 3.842834868034054*^9, {3.84296149956442*^9,
+   3.842961511800554*^9}, 3.8431907572492933`*^9, 3.8433724204015083`*^9,
+   3.844272114183311*^9, 3.84734396847216*^9, {3.8473471196144505`*^9,
+   3.8473471307124753`*^9}, {3.8595639355770564`*^9, 3.8595639462965374`*^9},
+   3.859633153968301*^9, 3.860344694685951*^9, {3.8603447279549923`*^9,
+   3.860344746067164*^9}, 3.8603689091402855`*^9, 3.861122351004134*^9,
+   3.8827091121385016`*^9, 3.882719780445786*^9, {3.882722652028285*^9,
+   3.882722677344369*^9}, {3.8827233538684673`*^9, 3.8827233674887886`*^9},
+   3.8827453866899443`*^9, 3.8841040594068336`*^9, 3.8856575113633738`*^9,
+   3.8856592119302406`*^9, {3.8856594819501925`*^9, 3.885659503499237*^9}},
+ CellLabel->"Out[8]=",ExpressionUUID->"3b2d5236-8530-403a-bf9d-0c2374f738d8"]
+}, Open  ]],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"SetOptions", "[",
+   RowBox[{"TeXport", ",",
+    RowBox[{"{",
+     RowBox[{
+      RowBox[{"\"\<Export\>\"", "\[Rule]", "True"}], ",",
+      RowBox[{"\"\<Folder\>\"", "\[Rule]", "\"\<equations\>\""}]}], "}"}]}],
+   "]"}], ";"}]], "Input",
+ CellChangeTimes->{{3.8422209509436355`*^9, 3.8422209834617805`*^9}, {
+  3.8422210181881304`*^9, 3.84222106511467*^9}, {3.8422211288735228`*^9,
+  3.842221143182009*^9}, {3.8422213278188972`*^9, 3.842221331752348*^9}},
+ CellLabel->"In[9]:=",ExpressionUUID->"017363c0-a292-4bfa-9234-6014cabcd06c"],
+
+Cell[CellGroupData[{
+
+Cell["Metrics", "Chapter",
+ CellChangeTimes->{{3.8856576013417025`*^9,
+  3.8856576019884725`*^9}},ExpressionUUID->"5832517c-7953-4ef2-9e8b-\
+736855980a29"],
+
+Cell[CellGroupData[{
+
+Cell["Validity", "Section",
+ CellChangeTimes->{{3.8856577105582952`*^9,
+  3.885657711320714*^9}},ExpressionUUID->"c5cef983-756f-49f0-bb10-\
+8f21e58d19d3"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"TeXport", "[",
+  RowBox[{"\"\<validity\>\"", ",",
+   RowBox[{"1", "-",
+    FractionBox[
+     RowBox[{"w", "[",
+      RowBox[{
+       RowBox[{"Subscript", "[",
+        RowBox[{"SG", ",", "train"}], "]"}], ",",
+       RowBox[{"Subscript", "[",
+        RowBox[{"SG", ",", "test"}], "]"}]}], "]"}],
+     RowBox[{"w", "[",
+      RowBox[{
+       RowBox[{"Subscript", "[",
+        RowBox[{"SG", ",", "train"}], "]"}], ",", "1"}], "]"}]]}], ",",
+   RowBox[{
+    RowBox[{"(", GridBox[{
+       {"\"\<\[ScriptW]\>\"", "\"\<Wasserstein distance\>\""},
+       {"\"\<\!\(\*SubscriptBox[\(SG\), \(train\)]\)\>\"",
+        "\"\<vector of space group numbers for the training data\>\""},
+       {"\"\<\!\(\*SubscriptBox[\(SG\), \(test\)]\)\>\"",
+        "\"\<vector of space group numbers for the test data\>\""}
+      }], ")"}], "\[Transpose]"}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.88271957062279*^9, 3.8827196291774197`*^9}, {
+   3.882719672114033*^9, 3.8827197566082582`*^9}, {3.8827198246462607`*^9,
+   3.8827199067867146`*^9}, 3.8827199435379553`*^9, {3.882720048631194*^9,
+   3.8827201014873514`*^9}, {3.88272013418756*^9, 3.8827202207146683`*^9}, {
+   3.882720262228433*^9, 3.8827202912031956`*^9}, 3.882720617064788*^9, {
+   3.8827218403236027`*^9, 3.8827218924379625`*^9}, {3.8827219417678566`*^9,
+   3.8827219507167616`*^9}, {3.882722172711549*^9, 3.882722249519209*^9}, {
+   3.882722360173284*^9, 3.8827224839086647`*^9}, {3.8827225313410892`*^9,
+   3.882722535330969*^9}, {3.882722579366706*^9, 3.8827226273092575`*^9}, {
+   3.8827226924791517`*^9, 3.882722752802643*^9}, {3.8827236802077403`*^9,
+   3.882723711661812*^9}, {3.882724029016981*^9, 3.8827240699535284`*^9}, {
+   3.8827241445330915`*^9, 3.882724159619825*^9}, 3.8827241987577553`*^9, {
+   3.882724265334963*^9, 3.88272427607521*^9}, {3.882724868098328*^9,
+   3.882724899784498*^9}, {3.8827509921265545`*^9, 3.882750995194487*^9}, {
+   3.884104035539508*^9, 3.884104049605446*^9}, {3.884104086029143*^9,
+   3.8841040991528587`*^9}, {3.884104149021676*^9, 3.8841041716535635`*^9}, {
+   3.88410420623897*^9, 3.8841042094148483`*^9}, {3.884104257510148*^9,
+   3.8841043172521925`*^9}, 3.8856576547446632`*^9, {3.8856586987187166`*^9,
+   3.8856587615296392`*^9}, {3.885659325916354*^9, 3.8856593410533686`*^9}},
+ CellLabel->"In[10]:=",ExpressionUUID->"b40a0a08-2c89-42c7-b98c-9bdc5f0e6c68"],
+
+Cell[BoxData["\<\"\\\\begin{equation} \\\\label{eq:validity} \
+\\n\\t1-\\\\frac{w\\\\left(\\\\text{SG}_{\\\\text{train}},\\\\text{SG}_{\\\\\
+text{test}}\\\\right)}{w\\\\left(\\\\text{SG}_{\\\\text{train}},1\\\\right)}\\\
+n\\\\end{equation}\\nwhere $\\\\mathit{w}$, $\\\\text{SG}_{\\\\text{train}}$, \
+and $\\\\text{SG}_{\\\\text{test}}$ represent Wasserstein distance, vector of \
+space group numbers for the training data, and vector of space group numbers \
+for the test data, respectively.\"\>"], "Output",
+ CellChangeTimes->{3.8856592120764604`*^9, 3.88565934163034*^9,
+  3.885659505124642*^9},
+ CellLabel->"Out[10]=",ExpressionUUID->"592a2215-b026-46a9-af3a-b908616411b2"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Coverage", "Section",
+ CellChangeTimes->{{3.885657717188744*^9,
+  3.8856577181025887`*^9}},ExpressionUUID->"907469a7-4df3-492f-88dd-\
+97f4d14c069c"],
+
+Cell["\<\
+Replaced \\text with \\mathrm in several places (actually just needed to \
+\\usepackage{amsmath}, see https://tex.stackexchange.com/a/3418/224861).\
+\>", "Text",
+ CellChangeTimes->{{3.8856604058577466`*^9, 3.885660411404317*^9}, {
+  3.8856608110662546`*^9,
+  3.8856608273658886`*^9}},ExpressionUUID->"96181d40-252e-4d73-9ec3-\
+90e3e0b63d08"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"TeXport", "[",
+  RowBox[{"\"\<coverage\>\"", ",",
+   FractionBox[
+    RowBox[{"HoldForm", "[",
+     RowBox[{
+      UnderoverscriptBox["\[Sum]",
+       RowBox[{"i", "=", "1"}],
+       RowBox[{"Subscript", "[",
+        RowBox[{"n", ",", "test"}], "]"}]],
+      RowBox[{
+       UnderoverscriptBox["\[Sum]",
+        RowBox[{"j", "=", "1"}],
+        RowBox[{"Subscript", "[",
+         RowBox[{"n", ",", "gen"}], "]"}]],
+       RowBox[{"\[Piecewise]", GridBox[{
+          {"1",
+           RowBox[{
+            RowBox[{"d", "[",
+             RowBox[{
+              RowBox[{"Subscript", "[",
+               RowBox[{"s", ",", "test", ",", "i"}], "]"}], ",",
+              RowBox[{"Subscript", "[",
+               RowBox[{"s", ",", "gen", ",", "j"}], "]"}]}], "]"}], "<=",
+            "\"\<tol\>\""}]},
+          {"0",
+           RowBox[{
+            RowBox[{"d", "[",
+             RowBox[{
+              RowBox[{"Subscript", "[",
+               RowBox[{"s", ",", "test", ",", "i"}], "]"}], ",",
+              RowBox[{"Subscript", "[",
+               RowBox[{"s", ",", "gen", ",", "j"}], "]"}]}], "]"}], ">",
+            "\"\<tol\>\""}]}
+         }]}]}]}], "]"}],
+    RowBox[{"Subscript", "[",
+     RowBox[{"n", ",", "test"}], "]"}]], ",",
+   RowBox[{
+    RowBox[{"(", GridBox[{
+       {"\"\<\!\(\*SubscriptBox[\(n\), \(test\)]\)\>\"",
+        "\"\<number of structures in the test set\>\""},
+       {"\"\<\!\(\*SubscriptBox[\(n\), \(gen\)]\)\>\"",
+        "\"\<number of structures in the generated set\>\""},
+       {"d",
+        "\"\<crystallographic distance according to \
+\\\\texttt{pymatgen.analysis.structure\\\\_matcher.StructureMatcher}\>\""},
+       {"\"\<\!\(\*SubscriptBox[\(s\), \(test, i\)]\)\>\"",
+        "\"\<$i$-th structure of the test set\>\""},
+       {"\"\<\!\(\*SubscriptBox[\(s\), \(gen, j\)]\)\>\"",
+        "\"\<$j$-th structure of the generated set\>\""},
+       {"\"\<tol\>\"", "\"\<a tolerance threshold\>\""}
+      }], ")"}], "\[Transpose]"}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.885658854788101*^9, 3.885659093033609*^9}, {
+   3.8856591617229176`*^9, 3.885659192094511*^9}, 3.8856593808787966`*^9, {
+   3.885659696393812*^9, 3.885659734523964*^9}, {3.885659829510566*^9,
+   3.885659839930769*^9}, {3.885659874504397*^9, 3.8856598783231916`*^9}, {
+   3.8856604798973227`*^9, 3.8856605110444727`*^9}, {3.8856605811927714`*^9,
+   3.8856605994943953`*^9}, {3.885660684220215*^9, 3.885660761834741*^9}, {
+   3.8856608512755384`*^9, 3.8856608613240347`*^9}, {3.8856609190332675`*^9,
+   3.8856609303840275`*^9}, {3.8856609948773055`*^9,
+   3.8856610331362896`*^9}, {3.8856611290742683`*^9, 3.885661129212669*^9}, {
+   3.8856611769753065`*^9, 3.8856611871196966`*^9}, {3.8856613000391397`*^9,
+   3.8856613112762003`*^9}},
+ CellLabel->"In[38]:=",ExpressionUUID->"b7618033-ae20-4715-97d9-36728529c3a3"],
+
+Cell[BoxData["\<\"\\\\begin{equation} \\\\label{eq:coverage} \
+\\n\\t\\\\frac{\\\\sum _{i=1}^{n_{\\\\text{test}}} \\\\sum \
+_{j=1}^{n_{\\\\text{gen}}} \\\\left(\\n\\\\begin{array}{cc}\\n \\\\{ & \
+\\n\\\\begin{array}{cc}\\n 1 & \
+d\\\\left(s_{\\\\text{test},i},s_{\\\\text{gen},j}\\\\right)\\\\leq \
+\\\\text{tol} \\\\\\\\\\n 0 & \
+d\\\\left(s_{\\\\text{test},i},s_{\\\\text{gen},j}\\\\right)>\\\\text{tol} \\\
+\\\\\\\\n\\\\end{array}\\n \
+\\\\\\\\\\n\\\\end{array}\\n\\\\right)}{n_{\\\\text{test}}}\\n\\\\end{\
+equation}\\nwhere $n_{\\\\text{test}}$, $n_{\\\\text{gen}}$, $d$, \
+$s_{\\\\text{test},i}$, $s_{\\\\text{gen},j}$, and $\\\\text{tol}$ represent \
+number of structures in the test set, number of structures in the generated \
+set, crystallographic distance according to \
+\\\\texttt{pymatgen.analysis.structure\\\\_matcher.StructureMatcher}, $i$-th \
+structure of the test set, $j$-th structure of the generated set, and a \
+tolerance threshold, respectively.\"\>"], "Output",
+ CellChangeTimes->{
+  3.885659028264227*^9, 3.885659067756198*^9, 3.8856591631315365`*^9,
+   3.885659216720525*^9, 3.8856593820607615`*^9, 3.8856595057051883`*^9, {
+   3.885659710062435*^9, 3.885659735526985*^9}, 3.8856598407029743`*^9, {
+   3.885659879244913*^9, 3.8856598975334735`*^9}, {3.8856604839977007`*^9,
+   3.885660512609335*^9}, 3.8856607263239937`*^9, 3.8856607567890425`*^9,
+   3.8856608734241953`*^9, 3.885660931161598*^9, 3.885661078814252*^9,
+   3.885661129540386*^9, {3.88566117831816*^9, 3.885661187474907*^9}, {
+   3.885661306017034*^9, 3.8856613119138546`*^9}},
+ CellLabel->"Out[38]=",ExpressionUUID->"6c5eb501-1498-44be-a866-8bcc6f1f6ede"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Novelty", "Section",
+ CellChangeTimes->{{3.8856577217021112`*^9, 3.885657722352784*^9}, {
+  3.8856581883153014`*^9,
+  3.885658189624033*^9}},ExpressionUUID->"0bb2355c-8f84-4b7a-943f-\
+1ba86c69b81d"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"TeXport", "[",
+  RowBox[{"\"\<novelty\>\"", ",",
+   RowBox[{"1", "-",
+    FractionBox[
+     RowBox[{"HoldForm", "[",
+      RowBox[{
+       UnderoverscriptBox["\[Sum]",
+        RowBox[{"i", "=", "1"}],
+        RowBox[{"Subscript", "[",
+         RowBox[{"n", ",", "train"}], "]"}]],
+       RowBox[{
+        UnderoverscriptBox["\[Sum]",
+         RowBox[{"j", "=", "1"}],
+         RowBox[{"Subscript", "[",
+          RowBox[{"n", ",", "gen"}], "]"}]],
+        RowBox[{"\[Piecewise]", GridBox[{
+           {"1",
+            RowBox[{
+             RowBox[{"d", "[",
+              RowBox[{
+               RowBox[{"Subscript", "[",
+                RowBox[{"s", ",", "train", ",", "i"}], "]"}], ",",
+               RowBox[{"Subscript", "[",
+                RowBox[{"s", ",", "gen", ",", "j"}], "]"}]}], "]"}], "<=",
+             "\"\<tol\>\""}]},
+           {"0",
+            RowBox[{
+             RowBox[{"d", "[",
+              RowBox[{
+               RowBox[{"Subscript", "[",
+                RowBox[{"s", ",", "train", ",", "i"}], "]"}], ",",
+               RowBox[{"Subscript", "[",
+                RowBox[{"s", ",", "gen", ",", "j"}], "]"}]}], "]"}], ">",
+             "\"\<tol\>\""}]}
+          }]}]}]}], "]"}],
+     RowBox[{"Subscript", "[",
+      RowBox[{"n", ",", "gen"}], "]"}]]}], ",",
+   RowBox[{
+    RowBox[{"(", GridBox[{
+       {"\"\<\!\(\*SubscriptBox[\(n\), \(train\)]\)\>\"",
+        "\"\<number of structures in the training set\>\""},
+       {"\"\<\!\(\*SubscriptBox[\(n\), \(gen\)]\)\>\"",
+        "\"\<number of structures in the generated set\>\""},
+       {"d",
+        "\"\<crystallographic distance according to \
+\\\\texttt{StructureMatcher} from \
+\\\\texttt{pymatgen.analysis.structure\\\\_matcher}\>\""},
+       {"\"\<\!\(\*SubscriptBox[\(s\), \(train, i\)]\)\>\"",
+        "\"\<$i$-th structure of the training set\>\""},
+       {"\"\<\!\(\*SubscriptBox[\(s\), \(gen, j\)]\)\>\"",
+        "\"\<$j$-th structure of the generated set\>\""},
+       {"\"\<tol\>\"", "\"\<a tolerance threshold\>\""}
+      }], ")"}], "\[Transpose]"}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.885658854788101*^9, 3.885659093033609*^9}, {
+   3.8856591617229176`*^9, 3.885659192094511*^9}, 3.8856593808787966`*^9, {
+   3.885659696393812*^9, 3.885659734523964*^9}, {3.885659829510566*^9,
+   3.885659839930769*^9}, {3.885659874504397*^9, 3.8856598783231916`*^9}, {
+   3.8856604798973227`*^9, 3.8856605110444727`*^9}, {3.8856605653718543`*^9,
+   3.8856605667159967`*^9}, {3.8856612275999966`*^9,
+   3.8856612560382833`*^9}, {3.8856614031412306`*^9,
+   3.8856614428994308`*^9}, {3.885661522217945*^9, 3.8856615249623346`*^9}},
+ CellLabel->"In[45]:=",ExpressionUUID->"44626dd7-0a78-4227-960c-1a1748cac084"],
+
+Cell[BoxData["\<\"\\\\begin{equation} \\\\label{eq:novelty} \\n\\t1-\\\\frac{\
+\\\\sum _{i=1}^{n_{\\\\text{train}}} \\\\sum _{j=1}^{n_{\\\\text{gen}}} \
+\\\\left(\\n\\\\begin{array}{cc}\\n \\\\{ & \\n\\\\begin{array}{cc}\\n 1 & \
+d\\\\left(s_{\\\\text{train},i},s_{\\\\text{gen},j}\\\\right)\\\\leq \
+\\\\text{tol} \\\\\\\\\\n 0 & \
+d\\\\left(s_{\\\\text{train},i},s_{\\\\text{gen},j}\\\\right)>\\\\text{tol} \
+\\\\\\\\\\n\\\\end{array}\\n \
+\\\\\\\\\\n\\\\end{array}\\n\\\\right)}{n_{\\\\text{gen}}}\\n\\\\end{equation}\
+\\nwhere $n_{\\\\text{train}}$, $n_{\\\\text{gen}}$, $d$, \
+$s_{\\\\text{train},i}$, $s_{\\\\text{gen},j}$, and $\\\\text{tol}$ represent \
+number of structures in the training set, number of structures in the \
+generated set, crystallographic distance according to \
+\\\\texttt{StructureMatcher} from \
+\\\\texttt{pymatgen.analysis.structure\\\\_matcher}, $i$-th structure of the \
+training set, $j$-th structure of the generated set, and a tolerance \
+threshold, respectively.\"\>"], "Output",
+ CellChangeTimes->{3.88566145343558*^9, 3.885661525386105*^9,
+  3.8856618710933113`*^9},
+ CellLabel->"Out[45]=",ExpressionUUID->"d60a8cc7-1067-4146-978b-1b7c12bf1d19"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Uniqueness", "Section",
+ CellChangeTimes->{{3.885657723903901*^9,
+  3.8856577249182177`*^9}},ExpressionUUID->"3d2db6ba-6662-415f-b638-\
+72e7992d575b"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"TeXport", "[",
+  RowBox[{"\"\<uniqueness\>\"", ",",
+   RowBox[{"1", "-",
+    FractionBox[
+     RowBox[{"HoldForm", "[",
+      RowBox[{
+       UnderoverscriptBox["\[Sum]",
+        RowBox[{"i", "=", "1"}],
+        RowBox[{"Subscript", "[",
+         RowBox[{"n", ",", "gen"}], "]"}]],
+       RowBox[{
+        UnderoverscriptBox["\[Sum]",
+         RowBox[{"j", "=", "1"}],
+         RowBox[{"Subscript", "[",
+          RowBox[{"n", ",", "gen"}], "]"}]],
+        RowBox[{"\[Piecewise]", GridBox[{
+           {"0",
+            RowBox[{"i", "==", "j"}]},
+           {"1",
+            RowBox[{
+             RowBox[{
+              RowBox[{"d", "[",
+               RowBox[{
+                RowBox[{"Subscript", "[",
+                 RowBox[{"s", ",", "gen", ",", "i"}], "]"}], ",",
+                RowBox[{"Subscript", "[",
+                 RowBox[{"s", ",", "gen", ",", "j"}], "]"}]}], "]"}], "<=",
+              "\"\<tol\>\""}], "&&",
+             RowBox[{"i", "!=", "j"}]}]},
+           {"0",
+            RowBox[{
+             RowBox[{
+              RowBox[{"d", "[",
+               RowBox[{
+                RowBox[{"Subscript", "[",
+                 RowBox[{"s", ",", "gen", ",", "i"}], "]"}], ",",
+                RowBox[{"Subscript", "[",
+                 RowBox[{"s", ",", "gen", ",", "j"}], "]"}]}], "]"}], ">",
+              "\"\<tol\>\""}], "&&",
+             RowBox[{"i", "!=", "j"}]}]}
+          }]}]}]}], "]"}],
+     RowBox[{
+      SuperscriptBox[
+       RowBox[{"Subscript", "[",
+        RowBox[{"n", ",", "gen"}], "]"}], "2"], "-",
+      RowBox[{"Subscript", "[",
+       RowBox[{"n", ",", "gen"}], "]"}]}]]}], ",",
+   RowBox[{
+    RowBox[{"(", GridBox[{
+       {"\"\<\!\(\*SubscriptBox[\(n\), \(gen\)]\)\>\"",
+        "\"\<number of structures in the generated set\>\""},
+       {"d",
+        "\"\<crystallographic distance according to \
+\\\\texttt{StructureMatcher} from \
+\\\\texttt{pymatgen.analysis.structure\\\\_matcher}\>\""},
+       {"\"\<\!\(\*SubscriptBox[\(s\), \(gen, i\)]\)\>\"",
+        "\"\<$i$-th structure of the generated set\>\""},
+       {"\"\<\!\(\*SubscriptBox[\(s\), \(gen, j\)]\)\>\"",
+        "\"\<$j$-th structure of the generated set\>\""},
+       {"\"\<tol\>\"", "\"\<a tolerance threshold\>\""}
+      }], ")"}], "\[Transpose]"}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.885658854788101*^9, 3.885659093033609*^9}, {
+   3.8856591617229176`*^9, 3.885659192094511*^9}, 3.8856593808787966`*^9, {
+   3.885659696393812*^9, 3.885659734523964*^9}, {3.885659829510566*^9,
+   3.885659839930769*^9}, {3.885659874504397*^9, 3.8856598783231916`*^9}, {
+   3.8856604798973227`*^9, 3.8856605110444727`*^9}, {3.8856605653718543`*^9,
+   3.8856605667159967`*^9}, {3.8856612275999966`*^9,
+   3.8856612560382833`*^9}, {3.8856614031412306`*^9,
+   3.8856614428994308`*^9}, {3.885661522217945*^9, 3.8856615249623346`*^9}, {
+   3.885661632937482*^9, 3.8856617371785774`*^9}, {3.88566178750397*^9,
+   3.8856618679306016`*^9}},
+ CellLabel->"In[44]:=",ExpressionUUID->"34c61c10-2f79-41c7-92dc-f054ceadb757"],
+
+Cell[BoxData["\<\"\\\\begin{equation} \\\\label{eq:uniqueness} \
+\\n\\t1-\\\\frac{\\\\sum _{i=1}^{n_{\\\\text{gen}}} \\\\sum \
+_{j=1}^{n_{\\\\text{gen}}} \\\\left(\\n\\\\begin{array}{cc}\\n \\\\{ & \
+\\n\\\\begin{array}{cc}\\n 0 & i=j \\\\\\\\\\n 1 & \
+d\\\\left(s_{\\\\text{gen},i},s_{\\\\text{gen},j}\\\\right)\\\\leq \
+\\\\text{tol}\\\\land i\\\\neq j \\\\\\\\\\n 0 & \
+d\\\\left(s_{\\\\text{gen},i},s_{\\\\text{gen},j}\\\\right)>\\\\text{tol}\\\\\
+land i\\\\neq j \\\\\\\\\\n\\\\end{array}\\n \
+\\\\\\\\\\n\\\\end{array}\\n\\\\right)}{n_{\\\\text{gen}}^2-n_{\\\\text{gen}}}\
+\\n\\\\end{equation}\\nwhere $n_{\\\\text{gen}}$, $d$, $s_{\\\\text{gen},i}$, \
+$s_{\\\\text{gen},j}$, and $\\\\text{tol}$ represent number of structures in \
+the generated set, crystallographic distance according to \
+\\\\texttt{StructureMatcher} from \
+\\\\texttt{pymatgen.analysis.structure\\\\_matcher}, $i$-th structure of the \
+generated set, $j$-th structure of the generated set, and a tolerance \
+threshold, respectively.\"\>"], "Output",
+ CellChangeTimes->{{3.8856618243949337`*^9, 3.8856618685610733`*^9}},
+ CellLabel->"Out[44]=",ExpressionUUID->"72d14172-3510-42cb-89a8-42c52130d7ac"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+},
+WindowSize->{1141.2, 568.8},
+WindowMargins->{{0, Automatic}, {Automatic, 0}},
+TaggingRules-><|"TryRealOnly" -> False|>,
+FrontEndVersion->"13.0 for Microsoft Windows (64-bit) (February 4, 2022)",
+StyleDefinitions->"Default.nb",
+ExpressionUUID->"d869be25-1e6b-4fc7-95c6-bf7a725ab5c9"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[580, 22, 178, 3, 98, "Title",ExpressionUUID->"847a7412-5059-4110-87e2-6716a0c7d1d5"],
+Cell[761, 27, 197, 3, 28, "Input",ExpressionUUID->"6f296bd4-a3cd-4157-a339-1917d1e89a04"],
+Cell[961, 32, 747, 18, 71, "Input",ExpressionUUID->"d9afcb90-6e17-4b7c-84e8-51a9c7a30dc7"],
+Cell[1711, 52, 200, 3, 28, "Input",ExpressionUUID->"d937c9eb-cf18-4bd0-bcdb-ce124ff35daf"],
+Cell[CellGroupData[{
+Cell[1936, 59, 194, 3, 28, "Input",ExpressionUUID->"6a6db971-677e-404c-8cab-74f09dd2fde5"],
+Cell[2133, 64, 27309, 584, 296, "Output",ExpressionUUID->"b526d0f2-076f-4ecf-9876-7c283e65e925"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[29479, 653, 445, 8, 28, "Input",ExpressionUUID->"5c4e33c8-dda4-475b-88c2-d41599eb407d"],
+Cell[29927, 663, 1269, 17, 32, "Output",ExpressionUUID->"3b2d5236-8530-403a-bf9d-0c2374f738d8"]
+}, Open  ]],
+Cell[31211, 683, 574, 12, 28, "Input",ExpressionUUID->"017363c0-a292-4bfa-9234-6014cabcd06c"],
+Cell[CellGroupData[{
+Cell[31810, 699, 156, 3, 69, "Chapter",ExpressionUUID->"5832517c-7953-4ef2-9e8b-736855980a29"],
+Cell[CellGroupData[{
+Cell[31991, 706, 155, 3, 67, "Section",ExpressionUUID->"c5cef983-756f-49f0-bb10-8f21e58d19d3"],
+Cell[CellGroupData[{
+Cell[32171, 713, 2395, 42, 63, "Input",ExpressionUUID->"b40a0a08-2c89-42c7-b98c-9bdc5f0e6c68"],
+Cell[34569, 757, 678, 9, 109, "Output",ExpressionUUID->"592a2215-b026-46a9-af3a-b908616411b2"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[35296, 772, 155, 3, 67, "Section",ExpressionUUID->"907469a7-4df3-492f-88dd-97f4d14c069c"],
+Cell[35454, 777, 352, 7, 35, "Text",ExpressionUUID->"96181d40-252e-4d73-9ec3-90e3e0b63d08"],
+Cell[CellGroupData[{
+Cell[35831, 788, 2879, 63, 196, "Input",ExpressionUUID->"b7618033-ae20-4715-97d9-36728529c3a3"],
+Cell[38713, 853, 1652, 25, 318, "Output",ExpressionUUID->"6c5eb501-1498-44be-a866-8bcc6f1f6ede"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[40414, 884, 205, 4, 67, "Section",ExpressionUUID->"0bb2355c-8f84-4b7a-943f-1ba86c69b81d"],
+Cell[CellGroupData[{
+Cell[40644, 892, 2759, 62, 196, "Input",ExpressionUUID->"44626dd7-0a78-4227-960c-1a1748cac084"],
+Cell[43406, 956, 1186, 18, 343, "Output",ExpressionUUID->"d60a8cc7-1067-4146-978b-1b7c12bf1d19"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[44641, 980, 157, 3, 67, "Section",ExpressionUUID->"3d2db6ba-6662-415f-b638-72e7992d575b"],
+Cell[CellGroupData[{
+Cell[44823, 987, 3077, 72, 197, "Input",ExpressionUUID->"34c61c10-2f79-41c7-92dc-f054ceadb757"],
+Cell[47903, 1061, 1175, 17, 343, "Output",ExpressionUUID->"72d14172-3510-42cb-89a8-42c52130d7ac"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)

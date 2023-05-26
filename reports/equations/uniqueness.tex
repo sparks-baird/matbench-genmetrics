@@ -1,0 +1,14 @@
+\begin{equation} \label{eq:uniqueness}
+	1-\frac{\sum _{i=1}^{n_{\text{gen}}} \sum _{j=1}^{n_{\text{gen}}} \left(
+\begin{array}{cc}
+ \{ &
+\begin{array}{cc}
+ 0 & i=j \\
+ 1 & d\left(s_{\text{gen},i},s_{\text{gen},j}\right)\leq \text{tol}\land i\neq j \\
+ 0 & d\left(s_{\text{gen},i},s_{\text{gen},j}\right)>\text{tol}\land i\neq j \\
+\end{array}
+ \\
+\end{array}
+\right)}{n_{\text{gen}}^2-n_{\text{gen}}}
+\end{equation}
+where $n_{\text{gen}}$, $d$, $s_{\text{gen},i}$, $s_{\text{gen},j}$, and $\text{tol}$ represent number of structures in the generated set, crystallographic distance according to \texttt{StructureMatcher} from \texttt{pymatgen.analysis.structure\_matcher}, $i$-th structure of the generated set, $j$-th structure of the generated set, and a tolerance threshold, respectively.
