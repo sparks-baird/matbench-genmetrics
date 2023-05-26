@@ -1,0 +1,13 @@
+\begin{equation} \label{eq:coverage}
+	\frac{\sum _{i=1}^{n_{\text{test}}} \sum _{j=1}^{n_{\text{gen}}} \left(
+\begin{array}{cc}
+ \{ &
+\begin{array}{cc}
+ 1 & d\left(s_{\text{test},i},s_{\text{gen},j}\right)\leq \text{tol} \\
+ 0 & d\left(s_{\text{test},i},s_{\text{gen},j}\right)>\text{tol} \\
+\end{array}
+ \\
+\end{array}
+\right)}{n_{\text{test}}}
+\end{equation}
+where $n_{\text{test}}$, $n_{\text{gen}}$, $d$, $s_{\text{test},i}$, $s_{\text{gen},j}$, and $\text{tol}$ represent number of structures in the test set, number of structures in the generated set, crystallographic distance according to \texttt{pymatgen.analysis.structure\_matcher.StructureMatcher}, $i$-th structure of the test set, $j$-th structure of the generated set, and a tolerance threshold, respectively.

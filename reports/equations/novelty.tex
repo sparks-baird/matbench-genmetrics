@@ -1,0 +1,13 @@
+\begin{equation} \label{eq:novelty}
+	1-\frac{\sum _{i=1}^{n_{\text{train}}} \sum _{j=1}^{n_{\text{gen}}} \left(
+\begin{array}{cc}
+ \{ &
+\begin{array}{cc}
+ 1 & d\left(s_{\text{train},i},s_{\text{gen},j}\right)\leq \text{tol} \\
+ 0 & d\left(s_{\text{train},i},s_{\text{gen},j}\right)>\text{tol} \\
+\end{array}
+ \\
+\end{array}
+\right)}{n_{\text{gen}}}
+\end{equation}
+where $n_{\text{train}}$, $n_{\text{gen}}$, $d$, $s_{\text{train},i}$, $s_{\text{gen},j}$, and $\text{tol}$ represent number of structures in the training set, number of structures in the generated set, crystallographic distance according to \texttt{StructureMatcher} from \texttt{pymatgen.analysis.structure\_matcher}, $i$-th structure of the training set, $j$-th structure of the generated set, and a tolerance threshold, respectively.

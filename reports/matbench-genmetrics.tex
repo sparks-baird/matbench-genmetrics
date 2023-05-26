@@ -1,0 +1,69 @@
+\subsection{VALIDATION: Assessing Performance}
+\label{sec:validation}
+\textcolor{red}{****STERLING****}
+
+While significant progress has been made to create standardized, easy-to-use benchmarks for molecular discovery \cite{brownGuacaMolBenchmarkingModels2019}, this remains a challenge for solid-state materials \cite{spekCheckCIFValidationALERTS2020, xie_crystal_2022, zhao_physics_2022}. To address this limitation, we propose \texttt{matbench-genmetrics}, an open-source Python library for benchmarking generative models for crystal structures. We incorporate benchmark datasets, splits, and metrics inspired by Crystal Diffusion Variational AutoEncoder (CDVAE) \cite{xieCrystalDiffusionVariational2021}. We provide our own benchmarks using time-series style cross-validation splits from Materials Project via our \texttt{mp-time-split} package and we will also incorporate an automated leaderboard and submission system and provide an easy-to-use example for users to prepare and submit benchmarks for new models.
+
+Here we define the four metrics used in \texttt{matbench-genmetrics}: validity, coverage, novelty, and uniqueness (\cref{fig:matbench-genmetrics}).
+
+\begin{figure}
+	\centering
+	\includegraphics[width=0.48\textwidth]{sections/figs/metrics.png}
+	\caption{The four metrics of \texttt{matbench-genmetrics} for assessing performance of materials generative models are validity, coverage, novelty, and uniqueness. Validity is the comparison of distribution characteristics (space group number) between the generated materials and the training and test sets. Coverage is the number of matches between the generated structures and a held-out test set. Novelty is a comparison between the generated and training structures. Finally, uniqueness is a measure of the number of repeats within the generated structures (i.e., comparing the set of generated structures to itself).}
+	\label{fig:matbench-genmetrics}
+\end{figure}
+
+We define validity as one minus the Wasserstein distance between distribution of space group numbers for train and generated structures divided by the distance of the dummy case between train and the space group number 1:
+
+\begin{equation} \label{eq:validity}
+	1-\frac{w\left(\mathrm{SG}_{\mathrm{train}},\mathrm{SG}_{\mathrm{test}}\right)}{w\left(\mathrm{SG}_{\mathrm{train}},1\right)}
+\end{equation}
+where $w$, $\mathrm{SG}_{\mathrm{train}}$, and $\mathrm{SG}_{\mathrm{test}}$ represent Wasserstein distance, vector of space group numbers for the training data, and vector of space group numbers for the test data, respectively.
+
+Coverage (``predict the future'') is given by the match counts between the held-out test structures and the generated structures divided by the number of test structures:
+
+\begin{equation} \label{eq:coverage}
+	\frac{\sum _{i=1}^{n_{\text{test}}} \sum _{j=1}^{n_{\text{gen}}} \left(
+		\left\{
+		\begin{array}{cc}
+			1 & d\left(s_{\text{test},i},s_{\text{gen},j}\right)\leq \text{tol} \\
+			0 & d\left(s_{\text{test},i},s_{\text{gen},j}\right)>\text{tol} \\
+		\end{array}
+		\\
+		\right.
+		\right)}{n_{\text{test}}}
+\end{equation}
+where $n_{\text{test}}$, $n_{\text{gen}}$, $d$, $s_{\text{test},i}$, $s_{\text{gen},j}$, and $\text{tol}$ represent number of structures in the test set, number of structures in the generated set, crystallographic distance according to \texttt{StructureMatcher} from \texttt{pymatgen.analysis.structure\_matcher}, $i$-th structure of the test set, $j$-th structure of the generated set, and a tolerance threshold, respectively.
+
+Novelty is given by one minus the match counts between train structures and generated structures divided by number of generated structures:
+
+\begin{equation} \label{eq:novelty}
+	1-\frac{\sum _{i=1}^{n_{\text{train}}} \sum _{j=1}^{n_{\text{gen}}} \left(
+		\left\{
+		\begin{array}{cc}
+			1 & d\left(s_{\text{train},i},s_{\text{gen},j}\right)\leq \text{tol} \\
+			0 & d\left(s_{\text{train},i},s_{\text{gen},j}\right)>\text{tol} \\
+		\end{array}
+		\\
+		\right.
+		\right)}{n_{\text{gen}}}
+\end{equation}
+where $n_{\text{train}}$, $n_{\text{gen}}$, $d$, $s_{\text{train},i}$, $s_{\text{gen},j}$, and $\text{tol}$ represent number of structures in the training set, number of structures in the generated set, crystallographic distance according to \texttt{StructureMatcher} from \texttt{pymatgen.analysis.structure\_matcher}, $i$-th structure of the training set, $j$-th structure of the generated set, and a tolerance threshold, respectively.
+
+Uniqueness is given by one minus the non-self-comparing match counts within generated structures divided by total possible number of non-self-comparing matches:
+
+\begin{equation} \label{eq:uniqueness}
+	1-\frac{\sum _{i=1}^{n_{\text{gen}}} \sum _{j=1}^{n_{\text{gen}}} \left(
+		\left\{
+		\begin{array}{cc}
+			0 & i=j \\
+			1 & d\left(s_{\text{gen},i},s_{\text{gen},j}\right)\leq \text{tol}\land i\neq j \\
+			0 & d\left(s_{\text{gen},i},s_{\text{gen},j}\right)>\text{tol}\land i\neq j \\
+		\end{array}
+		\\
+		\right.
+		\right)}{n_{\text{gen}}^2-n_{\text{gen}}}
+\end{equation}
+where $n_{\text{gen}}$, $d$, $s_{\text{gen},i}$, $s_{\text{gen},j}$, and $\text{tol}$ represent number of structures in the generated set, crystallographic distance according to \texttt{StructureMatcher} from \texttt{pymatgen.analysis.structure\_matcher}, $i$-th structure of the generated set, $j$-th structure of the generated set, and a tolerance threshold, respectively.
+
+While useful individually, these metrics can also be used as multi-criteria filtering. One reason this is important is because, standalone, the metrics can be ``hacked'' in some sense. For example, the novelty metric may be made perfect simply by generating a diverse set of nonsensical crystal structures. Likewise, the validity score may be bloated simply by passing in the list of training structures as the generated structures. To combat this, multiple criteria may be considered simultaneously: for example, requiring that a structure must be simultaneously novel, unique, and passing certain filtering criteria such as non-overlapping atoms, stoichiometry rules, or \texttt{checkCIF} criteria \cite{spekCheckCIFValidationALERTS2020}. Additional filters based on maching learning prediction models can be used for properties such as formation energy (i.e., must be negative), energy above hull, ICSD classification, and coordination number. Of particular interest is applying machine-learning based structural relaxation to the structures prior to filtering through universal interatomic potential models such as M3GNet \cite{chen_universal_2022}.
