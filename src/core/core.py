@@ -8,11 +8,6 @@ from pathlib import Path
 from typing import List, Optional
 
 import numpy as np
-from mp_time_split.core import MPTimeSplit
-from pymatgen.core.structure import Structure
-from pystow import ensure_csv
-from scipy.stats import wasserstein_distance
-
 from matbench_genmetrics import __version__
 from matbench_genmetrics.utils.featurize import (
     featurize_comp_struct,
@@ -23,6 +18,10 @@ from matbench_genmetrics.utils.match import (
     cdvae_cov_compstruct_match_matrix,
     get_structure_match_matrix,
 )
+from mp_time_split.core import MPTimeSplit
+from pymatgen.core.structure import Structure
+from pystow import ensure_csv
+from scipy.stats import wasserstein_distance
 
 # causes pytest to fail (tests not found, DLL load error)
 # from matbench_genmetrics.cdvae.metrics import RecEval, GenEval, OptEval
