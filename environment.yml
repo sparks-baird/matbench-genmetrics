@@ -11,15 +11,19 @@ dependencies:
   - numpy
   - scipy
   - pandas
-  - mp-time-split
+  # - tqdm
+  # - click
   - pyxtal
   - pystow
   - pymatgen
-  # - tqdm
-  # - click
+  - scikit-learn
+  - pymatgen
+  - matminer
   - ipython
   # VISUALIZATION
-  # - matplotlib
+  - matplotlib
+  - plotly
+  - python-kaleido
   # - ipympl  # interactive matplotlib plots
   # - seaborn
   # - altair
