@@ -52,5 +52,12 @@ MANIFEST
 .venv*/
 .conda*/
 .python-version
+
 src/matbench_genmetrics/cdvae/utils.py
 matbench-genmetrics/meta.yaml
+
+pytest.ini
+src/matbench_genmetrics/mp_time_split/utils/mp_time_summary.json
+src/matbench_genmetrics/mp_time_split/utils/mp_time_summary.json.gz
+mp_time_split/meta.yaml
+mp-time-split/meta.yaml

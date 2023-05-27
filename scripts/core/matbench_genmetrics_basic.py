@@ -1,7 +1,7 @@
-from mp_time_split.utils.gen import DummyGenerator
 from tqdm import tqdm
 
 from matbench_genmetrics.core.metrics import MPTSMetrics10
+from matbench_genmetrics.mp_time_split.utils.gen import DummyGenerator
 
 mptm = MPTSMetrics10(dummy=True, verbose=True)
 for fold in tqdm(mptm.folds):

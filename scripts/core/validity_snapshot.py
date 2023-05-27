@@ -3,9 +3,9 @@ from pathlib import Path
 from typing import List
 
 import pandas as pd
-from mp_time_split.core import MPTimeSplit
 
 from matbench_genmetrics.core.utils.featurize import mod_petti_contributions
+from matbench_genmetrics.mp_time_split.splitter import MPTimeSplit
 
 mpt = MPTimeSplit(target="energy_above_hull")
 

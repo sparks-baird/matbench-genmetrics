@@ -4,7 +4,6 @@ from typing import Callable, List, Tuple
 import numpy as np
 import numpy.typing as npt
 import pytest
-from mp_time_split.utils.gen import DummyGenerator
 from numpy.testing import assert_array_equal
 from pymatgen.core.lattice import Lattice
 from pymatgen.core.structure import Structure
@@ -14,6 +13,7 @@ from pymatgen.transformations.standard_transformations import (
 
 from matbench_genmetrics.core.metrics import GenMatcher, GenMetrics, MPTSMetrics
 from matbench_genmetrics.core.utils.featurize import cdvae_cov_struct_fingerprints
+from matbench_genmetrics.mp_time_split.utils.gen import DummyGenerator
 
 # from pytest_cases import fixture, parametrize, parametrize_with_cases
 

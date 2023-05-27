@@ -2,9 +2,8 @@ from os import path
 from pathlib import Path
 from typing import List
 
-from mp_time_split.core import MPTimeSplit
-
 from matbench_genmetrics.core.utils.featurize import featurize_comp_struct
+from matbench_genmetrics.mp_time_split.splitter import MPTimeSplit
 
 mpt = MPTimeSplit(target="energy_above_hull")
 
