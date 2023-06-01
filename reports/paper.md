@@ -155,7 +155,8 @@ with other benchmarking metrics, time-based coverage can provide the rigor requi
 to effectively evaluate the performance of generative materials discovery models. In the Materials Project database [@jain_commentary_2013],
 there are records of when experimentally validated compounds were first reported in the
 literature. By using this metadata in the `matbench_genmetrics.mp_time_split` namespace package, we are able to ask: "how well can we predict what will
-be discovered in the future?" `matbench_genmetrics.mp_time_split` acts as a convenient, standardized backend for coverage benchmarking
+be discovered in the future?" `matbench_genmetrics.mp_time_split` acts as a convenient,
+standardized backend for coverage benchmarking
 metrics.
 
 The `matbench_genmetrics.mp_time_split` namespace package provides the following features:
