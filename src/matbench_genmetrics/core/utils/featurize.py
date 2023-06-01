@@ -10,7 +10,7 @@ from matminer.featurizers.site.fingerprint import CrystalNNFingerprint
 from matminer.featurizers.structure.sites import SiteStatsFingerprint
 from pymatgen.core.structure import Structure
 
-from matbench_genmetrics.utils.match import get_tqdm
+from matbench_genmetrics.core.utils.match import get_tqdm
 
 cnnf = CrystalNNFingerprint.from_preset("ops")
 ep = ElementProperty.from_preset("magpie")

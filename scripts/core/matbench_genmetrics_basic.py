@@ -1,9 +1,9 @@
-from mp_time_split.utils.gen import DummyGenerator
 from tqdm import tqdm
 
-from matbench_genmetrics.core import MPTSMetrics100
+from matbench_genmetrics.core.metrics import MPTSMetrics10
+from matbench_genmetrics.mp_time_split.utils.gen import DummyGenerator
 
-mptm = MPTSMetrics100(dummy=False, verbose=True)
+mptm = MPTSMetrics10(dummy=True, verbose=True)
 for fold in tqdm(mptm.folds):
     train_val_inputs = mptm.get_train_and_val_data(fold)
 

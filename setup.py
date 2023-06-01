@@ -2,7 +2,7 @@
     Setup file for matbench-genmetrics.
     Use setup.cfg to configure your project.
 
-    This file was generated with PyScaffold 4.2.2.post1.dev2+ge50b5e1.
+    This file was generated with PyScaffold 4.4.1.
     PyScaffold helps you to put up the scaffold of your new Python project.
     Learn more under: https://pyscaffold.org/
 """

@@ -4,8 +4,8 @@ def main():
 
     from xtal2png import XtalConverter
 
-    from matbench_genmetrics.core import MPTSMetrics10, MPTSMetrics1000
-    from matbench_genmetrics.utils.plotting import plot_structures_2d
+    from matbench_genmetrics.core.metrics import MPTSMetrics10, MPTSMetrics1000
+    from matbench_genmetrics.core.utils.plotting import plot_structures_2d
 
     fold = 0
     dummy = False

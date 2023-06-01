@@ -8,21 +8,21 @@ from pathlib import Path
 from typing import List, Optional
 
 import numpy as np
-from mp_time_split.core import MPTimeSplit
 from pymatgen.core.structure import Structure
 from pystow import ensure_csv
 from scipy.stats import wasserstein_distance
 
-from matbench_genmetrics import __version__
-from matbench_genmetrics.utils.featurize import (
+from matbench_genmetrics.core import __version__
+from matbench_genmetrics.core.utils.featurize import (
     featurize_comp_struct,
     mod_petti_contributions,
 )
-from matbench_genmetrics.utils.match import (
+from matbench_genmetrics.core.utils.match import (
     ALLOWED_MATCH_TYPES,
     cdvae_cov_compstruct_match_matrix,
     get_structure_match_matrix,
 )
+from matbench_genmetrics.mp_time_split.splitter import MPTimeSplit
 
 # causes pytest to fail (tests not found, DLL load error)
 # from matbench_genmetrics.cdvae.metrics import RecEval, GenEval, OptEval
@@ -411,7 +411,6 @@ class MPTSMetrics(object):
         self.recorded_metrics = {}
 
     def load_fingerprints(self, dummy=False):
-
         comp_url = DUMMY_COMP_URL if dummy else FULL_COMP_URL
         struct_url = DUMMY_STRUCT_URL if dummy else FULL_STRUCT_URL
         comp_name = DUMMY_COMP_NAME if dummy else FULL_COMP_NAME
@@ -455,7 +454,6 @@ class MPTSMetrics(object):
         return self.spg_df, self.modpetti_df
 
     def get_train_and_val_data(self, fold, include_val=False):
-
         if self.recorded_metrics == {}:
             self.mpt.load(dummy=self.dummy)
         (
