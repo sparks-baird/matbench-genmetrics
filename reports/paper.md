@@ -37,24 +37,7 @@ bibliography: paper.bib
 
 # Summary
 
-The progress of a machine learning field is both tracked and propelled through the
-development of robust benchmarks. While significant progress has been made to create standardized, easy-to-use benchmarks
-for molecular discovery (e.g., Guacamol \cite{brownGuacaMolBenchmarkingModels2019}), this remains a
-challenge for solid-state material discovery \cite{spekCheckCIFValidationALERTS2020,
-xie_crystal_2022, zhao_physics_2022}. To address this limitation, we propose
-`matbench_genmetrics`, an open-source Python library for benchmarking generative
-models for crystal structures. We incorporate benchmark datasets, splits, and four evaluation
-metrics
-inspired by Guacamol [REF] and Crystal Diffusion Variational AutoEncoder (CDVAE)
-\cite{xieCrystalDiffusionVariational2021}: validity, coverage, novelty, and uniqueness. For the dataset and splits, we implement the `matbench_genmetrics.mp_time_split` namespace
-package. For the dataset, we use Materials Project crystal structures. For the
-data splitting, we use time-series cross-validation splits based on the date each
-material was first reported
-in the literature. We also plan to incorporate an automated leaderboard,
-a submission system, and easy-to-use examples for preparation and submission. We believe that `matbench-genmetrics.core` and
-`matbench_genmetrics.mp_time_split` will provide the standardization and convenience required for rigorous
-benchmarking of crystal structure generative models. A visual overview of the
-`matbench_genmetrics` library is provided in [FIGURE].
+The progress of a machine learning field is both tracked and propelled through the development of robust benchmarks. While significant progress has been made to create standardized, easy-to-use benchmarks for molecular discovery (e.g., Guacamol \cite{brownGuacaMolBenchmarkingModels2019}), this remains a challenge for solid-state material discovery \cite{spekCheckCIFValidationALERTS2020, xie_crystal_2022, zhao_physics_2022}. To address this limitation, we propose `matbench_genmetrics`, an open-source Python library for benchmarking generative models for crystal structures. We incorporate benchmark datasets, splits, and four evaluation metrics inspired by Guacamol [REF] and Crystal Diffusion Variational AutoEncoder (CDVAE) \cite{xieCrystalDiffusionVariational2021}: validity, coverage, novelty, and uniqueness. For the dataset and splits, we implement the `matbench_genmetrics.mp_time_split` namespace package. For the dataset, we use Materials Project crystal structures. For the data splitting, we use time-series cross-validation splits based on the date each material was first reported in the literature. We also plan to incorporate an automated leaderboard, a submission system, and easy-to-use examples for preparation and submission. We believe that `matbench-genmetrics.core` and `matbench_genmetrics.mp_time_split` will provide the standardization and convenience required for rigorous benchmarking of crystal structure generative models. A visual overview of the `matbench_genmetrics` library is provided in [FIGURE].
 
 
 <!-- ![Summary visualization of splitting Materials Project entries into train and test
