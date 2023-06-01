@@ -76,6 +76,8 @@ jobs:
       - name: Retrieve pre-built distribution files
         uses: actions/download-artifact@v3
         with: {name: python-distribution-files, path: dist/}
+      - name: Install mp-api
+        run: pip install mp-api
       - name: Run tests
         env:
           MP_API_KEY: ${{ secrets.MP_API_KEY }}
