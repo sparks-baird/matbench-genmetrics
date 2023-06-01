@@ -1,8 +1,12 @@
 from os import path
 
 from matminer.utils.io import load_dataframe_from_json, store_dataframe_as_json
-from mp_time_split.core import MPTimeSplit, get_data_home
-from mp_time_split.utils.data import DUMMY_SNAPSHOT_NAME, SNAPSHOT_NAME
+
+from matbench_genmetrics.mp_time_split.splitter import MPTimeSplit, get_data_home
+from matbench_genmetrics.mp_time_split.utils.data import (
+    DUMMY_SNAPSHOT_NAME,
+    SNAPSHOT_NAME,
+)
 
 # %% dummy data
 mpt = MPTimeSplit(num_sites=(1, 2), elements=["V"])
