@@ -38,6 +38,7 @@ and submission to the  matbench-genmetrics leaderboard using [pyxtal](https://py
 :maxdepth: 2
 
 Overview <readme>
+Metrics <metrics>
 Contributions & Help <contributing>
 License <license>
 Authors <authors>

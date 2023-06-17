@@ -19,7 +19,7 @@ This repository provides standardized benchmarks for benchmarking generative mod
 crystal structure. Each benchmark has a fixed dataset, a predefined split, and a notion
 of best (i.e. metric) associated with it.
 
-<p align="center"><img src="https://github.com/sparks-baird/matbench-genmetrics/raw/main/reports/figures/metrics.png" width=450></p>
+<p align="center"><img src="https://github.com/sparks-baird/matbench-genmetrics/raw/main/reports/figures/matbench-genmetrics.png" width=450></p>
 
 ## Getting Started
 
@@ -109,7 +109,11 @@ print(mptm.recorded_metrics)
 | Novelty    | One minus (match counts between train structures and generated structures divided by number of generated structures).                                                                                                                                                   |
 | Uniqueness | One minus (non-self-comparing match counts within generated structures divided by total possible non-self-comparing matches).                                                                                                                                           |
 
-A match is when <code><a href="https://pymatgen.org/pymatgen.analysis.structure_matcher.html#pymatgen.analysis.structure_matcher.StructureMatcher">StructureMatcher</a>(stol=0.5, ltol=0.3, angle_tol=10.0).fit(s1, s2)</code> evaluates to `True`.
+A match is when <code><a
+href="https://pymatgen.org/pymatgen.analysis.structure_matcher.html#pymatgen.analysis.structure_matcher.StructureMatcher">StructureMatcher</a>(stol=0.5,
+ltol=0.3, angle_tol=10.0).fit(s1, s2)</code> evaluates to `True`.
+
+Detailed descriptions of the metrics are given in https://self-driving-lab-demo.readthedocs.io/en/latest/metrics.html.
 
 
 
