@@ -20,7 +20,10 @@ from matbench_genmetrics.mp_time_split.utils.data import (
     DUMMY_SNAPSHOT_NAME,
     SNAPSHOT_NAME,
 )
-from matbench_genmetrics.mp_time_split.utils.split import AVAILABLE_MODES, mp_time_split
+from matbench_genmetrics.mp_time_split.utils.split import (
+    AVAILABLE_MODES,
+    mp_time_splitter,
+)
 
 pybtex.errors.set_strict_mode(False)
 
@@ -206,7 +209,7 @@ class MPTimeSplit:
         if not isinstance(self.data, pd.DataFrame):
             raise ValueError("`self.data` is not a `pd.DataFrame`")
 
-        self.trainval_splits, self.test_split = mp_time_split(
+        self.trainval_splits, self.test_split = mp_time_splitter(
             self.data, n_cv_splits=len(FOLDS), mode=self.mode
         )
         self.inputs = self.data.structure
@@ -214,6 +217,39 @@ class MPTimeSplit:
         return self.data
 
     def load(self, url=None, checksum=None, dummy=False, force_download=False):
+        """Load data from an existing snapshot.
+
+        Parameters
+        ----------
+        url : str, optional
+            URL to download the data from, by default None
+        checksum : str, optional
+            Checksum to ensure the validity of the file, by default None
+        dummy : bool, optional
+            Whether to load a dummy snapshot or not, by default False
+        force_download : bool, optional
+            Whether to force download, regardless of whether the data has already been
+            downloaded, by default False
+
+        Returns
+        -------
+        pd.DataFrame
+            DataFrame of Materials Project data containing `structure` and `target`
+            columns. `structure` is of type `pymatgen.core.structure.Structure`.
+
+        Raises
+        ------
+        ValueError
+            url should not be None at this point. url: {url}, type: {type(url)}
+        ValueError
+            checksum from {url} ({checksum}) does not match what was expected
+            {checksum_frozen})
+
+        Examples
+        --------
+        >>> mpts = MPTimeSplit()
+        >>> mpts.load(url=None, checksum=None, dummy=False, force_download=False)
+        """
         name = SNAPSHOT_NAME if not dummy else DUMMY_SNAPSHOT_NAME
         name = name + ".gz"
         data_path = path.join(self.save_dir, name)
@@ -252,7 +288,7 @@ class MPTimeSplit:
 
         expt_df = load_dataframe_from_json(data_path)
         self.data = expt_df
-        self.trainval_splits, self.test_split = mp_time_split(
+        self.trainval_splits, self.test_split = mp_time_splitter(
             self.data, n_cv_splits=len(FOLDS), mode=self.mode
         )
         self.inputs = self.data.structure
@@ -261,6 +297,32 @@ class MPTimeSplit:
         return self.data
 
     def get_train_and_val_data(self, fold):
+        """Get training and validation data for a given fold.
+
+        Parameters
+        ----------
+        fold : int
+            The cross-validation fold to get the data for.
+
+        Returns
+        -------
+        pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.DataFrame
+            Input training data, input validation data, output training data, and output
+            validation data. Note that the input data is a
+            `pymatgen.core.structure.Structure` object.
+
+        Raises
+        ------
+        NameError
+            `fetch_data()` or `load()` must be run first.
+        ValueError
+            fold={fold} should be one of {FOLDS}
+
+        Examples
+        --------
+        >>> mpts = MPTimeSplit()
+        >>> mpts.get_train_and_val_data(0)
+        """
         if self.data is None:
             raise NameError("`fetch_data()` or `load()` must be run first.")
         if fold not in FOLDS:
