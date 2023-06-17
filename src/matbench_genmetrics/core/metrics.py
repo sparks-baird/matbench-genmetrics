@@ -69,13 +69,6 @@ DUMMY_SPG_NAME = "dummy_space_group_number.csv"
 FULL_MODPETTI_NAME = "mod_petti_contributions.csv"
 DUMMY_MODPETTI_NAME = "dummy_mod_petti_contributions.csv"
 
-# FULL_COMP_CHECKSUM_FROZEN = ""
-# DUMMY_COMP_CHECKSUM_FROZEN = ""
-# FULL_STRUCT_CHECKSUM_FROZEN = ""
-# DUMMY_STRUCT_CHECKSUM_FROZEN = ""
-# FULL_SPG_CHECKSUM_FROZEN = ""
-# DUMMY_SPG_CHECKSUM_FROZEN = ""
-
 FULL_COMP_URL = "https://figshare.com/ndownloader/files/36581838"
 DUMMY_COMP_URL = "https://figshare.com/ndownloader/files/36582174"
 FULL_STRUCT_URL = "https://figshare.com/ndownloader/files/36581841"
@@ -89,6 +82,26 @@ DATA_HOME = "matbench-genmetrics"
 
 
 class GenMatcher(object):
+    """
+    A class for matching generated structures to test structures.
+
+    Parameters
+    ----------
+    test_structures : List[pymatgen.Structure]
+        A list of test structures.
+    gen_structures : List[pymatgen.Structure]
+        A list of generated structures.
+    match_type : str, optional
+        The type of matching algorithm to use. Default is "StructureMatcher".
+    match_kwargs : dict, optional
+        Additional keyword arguments to pass to the matching algorithm.
+
+    Attributes
+    ----------
+    match_matrix : numpy.ndarray
+        A matrix of match scores between test and generated structures.
+    """
+
     def __init__(
         self,
         test_structures,
@@ -147,6 +160,39 @@ class GenMatcher(object):
 
     @property
     def match_matrix(self):
+        """A matrix of match scores between test and generated structures.
+
+        match_matrix : numpy.ndarray
+            The element at position (i, j) represents the match score between the ith
+            test structure and the jth generated structure. The match score is
+            calculated using the specified matching algorithm and any additional keyword
+            arguments passed to the `GenMatcher` class.
+
+            Examples
+            --------
+            >>> from pymatgen.core.structure import Structure
+            >>> from pymatgen.core.lattice import Lattice
+            >>> test_structures = [
+            ...     Structure(
+            ...         Lattice.cubic(3.0), ["Si", "Si"], [[0, 0, 0], [0.5, 0.5, 0.5]]
+            ...     ),
+            ...     Structure(
+            ...         Lattice.cubic(3.0), ["Si", "Si"], [[0, 0, 0], [0.5, 0.5, 0.5]]
+            ...     ),
+            ... ]
+            >>> gen_structures = [
+            ...     Structure(
+            ...         Lattice.cubic(3.0), ["Si", "Si"], [[0, 0, 0], [0.5, 0.5, 0.5]]
+            ...     ),
+            ...     Structure(
+            ...         Lattice.cubic(3.0), ["Si", "Si"], [[0, 0, 0], [0.5, 0.5, 0.5]]
+            ...     ),
+            ... ]
+            >>> matcher = GenMatcher(test_structures, gen_structures)
+            >>> matcher.match_matrix
+            array([[1., 1.],
+                [1., 1.]])
+        """
         if self._match_matrix is not None:
             return self._match_matrix
 
@@ -213,11 +259,57 @@ class GenMatcher(object):
 
 
 class GenMetrics(object):
+    """
+    Evaluate the performance of a generative model on a set of training and test data.
+
+    Parameters
+    ----------
+    train_structures : List[pymatgen.Structure]
+        A list of training structures.
+    test_structures : List[pymatgen.Structure]
+        A list of test structures.
+    gen_structures : List[pymatgen.Structure]
+        A list of generated structures.
+    test_pred_structures : List[pymatgen.Structure]
+        A list of test structures predicted by the machine learning model.
+    match_type : str, optional
+        The type of matching algorithm to use. Default is "StructureMatcher".
+    match_kwargs : dict, optional
+        Additional keyword arguments to pass to the matching algorithm.
+
+    Attributes
+    ----------
+    train_test_match_matrix : numpy.ndarray
+        A matrix of match scores between training and test structures. The element at
+        position (i, j) represents the match score between the ith training structure
+        and the jth test structure. The match score is calculated using the specified
+        matching algorithm and any additional keyword arguments passed to the
+        `GenMetrics` class.
+    test_pred_match_matrix : numpy.ndarray
+        A matrix of match scores between test structures and predicted test structures.
+        The element at position (i, j) represents the match score between the ith test
+        structure and the jth predicted test structure. The match score is calculated
+        using the specified matching algorithm and any additional keyword arguments
+        passed to the `GenMetrics` class.
+    train_gen_match_matrix : numpy.ndarray
+        A matrix of match scores between training structures and generated structures.
+        The element at position (i, j) represents the match score between the ith
+        training structure and the jth generated structure. The match score is
+        calculated using the specified matching algorithm and any additional keyword
+        arguments passed to the `GenMetrics` class.
+    test_gen_match_matrix : numpy.ndarray
+        A matrix of match scores between test structures and generated structures. The
+        element at position (i, j) represents the match score between the ith test
+        structure and the jth generated structure. The match score is calculated using
+        the specified matching algorithm and any additional keyword arguments passed to
+        the `GenMetrics` class.
+    """
+
     def __init__(
         self,
-        train_structures,
-        test_structures,
-        gen_structures,
+        train_structures: List[Structure],
+        test_structures: List[Structure],
+        gen_structures: List[Structure],
         train_comp_fingerprints=None,
         test_comp_fingerprints=None,
         train_struct_fingerprints=None,
@@ -250,29 +342,6 @@ class GenMetrics(object):
 
         self._cdvae_metrics = None
         self._mpts_metrics = None
-
-    # @property
-    # def cdvae_metrics(self):
-    #     # FIXME: update with CDVAE structures and handle 3 dataset types
-    #     if self._cdvae_metrics is not None:
-    #         return self._cdvae_metrics
-
-    #     rec_eval = RecEval(self.test_pred_structures, self.test_structures)
-    #     reconstruction_metrics = rec_eval.get_metrics()
-
-    #     gen_eval = GenEval(self.gen_structures, self.test_structures)
-    #     generation_metrics = gen_eval.get_metrics()
-
-    #     opt_eval = OptEval(self.gen_structures, self.test_structures)
-    #     optimization_metrics = opt_eval.get_metrics()
-
-    #     self._cdvae_metrics = (
-    #         reconstruction_metrics,
-    #         generation_metrics,
-    #         optimization_metrics,
-    #     )
-
-    #     return self._cdvae_metrics
 
     @property
     def validity(self):
@@ -387,6 +456,61 @@ class GenMetrics(object):
 
 
 class MPTSMetrics(object):
+    """
+    Evaluate the performance of a crystal generative model using MP Time Split (MPTS).
+
+    Parameters
+    ----------
+    dummy : bool, optional
+        Whether to use dummy data for testing purposes. Default is False.
+    verbose : bool, optional
+        Whether to print out the results of the evaluation. Default is True.
+    num_gen : int, optional
+        The number of generated structures to use for the evaluation. Default is None.
+    save_dir : str, optional
+        The directory to save the generated structures to. Default is "results".
+    match_type : str, optional
+        The type of matching algorithm to use. Default is "StructureMatcher".
+
+    Attributes
+    ----------
+    train_scores : List[Dict[str, float]]
+        A list of dictionaries containing the evaluation results for each fold of the
+        training data.
+    val_scores : List[Dict[str, float]]
+        A list of dictionaries containing the evaluation results for each fold of the
+        validation data.
+    test_scores : List[Dict[str, float]]
+        A list of dictionaries containing the evaluation results for each fold of the
+        test data.
+    gen_scores : List[Dict[str, float]]
+        A list of dictionaries containing the evaluation results for each fold of the
+        generated data.
+    test_pred_scores : List[Dict[str, float]]
+        A list of dictionaries containing the evaluation results for each fold of the
+        predicted test data.
+    **match_kwargs : Dict[str, Any]
+        Keyword arguments passed to GenMetrics.
+
+    Methods
+    -------
+    get_train_and_val_data(fold: int) -> Tuple[List[Structure], List[Structure]]:
+        Get the training and validation data for a given fold.
+    evaluate_and_record(fold: int, gen_structures: List[Structure]) -> None:
+        Evaluate the performance of the model on the generated structures and record the
+        results.
+
+    Notes
+    -----
+    This class assumes that the data is split into training, validation, and test sets
+    using the MP Time Split (MPTS) protocol. The `get_train_and_val_data` method is used
+    to retrieve the training and validation data for a given fold, and the
+    `evaluate_and_record` method is used to evaluate the performance of the model on the
+    generated structures and record the results. The evaluation results are stored in
+    the `train_scores`, `val_scores`, `test_scores`, `gen_scores`, and
+    `test_pred_scores` attributes.
+    """
+
     def __init__(
         self,
         dummy=False,
@@ -411,6 +535,25 @@ class MPTSMetrics(object):
         self.recorded_metrics = {}
 
     def load_fingerprints(self, dummy=False):
+        """Load precalculated fingerprints from FigShare.
+
+        Parameters
+        ----------
+        dummy : bool, optional
+            Whether to load a small, dummy dataset, by default False
+
+        Returns
+        -------
+        DataFrame
+            Compositional fingerprints
+
+        Examples
+        --------
+        >>> mptm = MPTSMetrics()
+        >>> comp_fingerprints_df, struct_fingerprints_df = mptm.load_fingerprints(
+        ...     dummy=False
+        ... )
+        """
         comp_url = DUMMY_COMP_URL if dummy else FULL_COMP_URL
         struct_url = DUMMY_STRUCT_URL if dummy else FULL_STRUCT_URL
         comp_name = DUMMY_COMP_NAME if dummy else FULL_COMP_NAME
@@ -434,6 +577,25 @@ class MPTSMetrics(object):
         return self.comp_fingerprints_df, self.struct_fingerprints_df
 
     def load_space_group_and_mod_petti(self, dummy=False):
+        """Load space groups and modified pettifor encodings from FigShare.
+
+        Parameters
+        ----------
+        dummy : bool, optional
+            Whether to load a small, dummy dataset, by default False
+
+        Returns
+        -------
+        DataFrame
+            space group numbers
+        DataFrame
+            modified pettifor encodings
+
+        Examples
+        --------
+        >>> mptm = MPTSMetrics()
+        >>> spg_df, modpetti_df = mptm.load_space_group_and_mod_petti(dummy=False)
+        """
         spg_name = DUMMY_SPG_NAME if dummy else FULL_SPG_NAME
         spg_url = DUMMY_SPG_URL if dummy else FULL_SPG_URL
         modpetti_name = DUMMY_MODPETTI_NAME if dummy else FULL_MODPETTI_NAME
@@ -453,7 +615,32 @@ class MPTSMetrics(object):
         )
         return self.spg_df, self.modpetti_df
 
-    def get_train_and_val_data(self, fold, include_val=False):
+    def get_train_and_val_data(self, fold: int, include_val=False):
+        """Get the MPTimeSplit fingerprints, sp.grp numbers, and modPetti info.
+
+
+
+        Parameters
+        ----------
+        fold : int
+            Which of the 5 folds to use for training and validation (0-4)
+        include_val : bool, optional
+            Whether to return the validation data in addition to the training data, by
+            default False
+
+        Returns
+        -------
+        DataFrame
+            Training inputs
+        DataFrame
+            Validation inputs. Only returned if `include_val` is True.
+
+
+        Examples
+        --------
+        >>> mptm = MPTSMetrics()
+        >>> train_inputs = mptm.get_train_and_val_data(fold, include_val=False)
+        """
         if self.recorded_metrics == {}:
             self.mpt.load(dummy=self.dummy)
         (
@@ -466,9 +653,6 @@ class MPTSMetrics(object):
         spg_df, modpetti_df = self.load_space_group_and_mod_petti(dummy=self.dummy)
         self.spg = spg_df.space_group_number.values
         self.modpetti_df = modpetti_df
-        # self.train_spg, self.val_spg = [
-        #     spg.iloc[tvs].values for tvs in self.mpt.trainval_splits[fold]
-        # ]
 
         if self.match_type == "cdvae_coverage":
             comp_fps, struct_fps = self.load_fingerprints(dummy=self.dummy)
@@ -491,7 +675,19 @@ class MPTSMetrics(object):
 
         return self.train_inputs
 
-    def evaluate_and_record(self, fold, gen_structures, test_pred_structures=None):
+    def evaluate_and_record(self, fold: int, gen_structures, test_pred_structures=None):
+        """Evaluate generated structures and record metrics.
+
+        Parameters
+        ----------
+        fold : int
+            Fold number.
+        gen_structures : list of pymatgen Structure
+        List of generated structures.
+        test_pred_structures : list of pymatgen Structure, optional
+            List of predicted structures for the test set. If not provided, the
+            test set is assumed to be the same as the validation set.
+        """
         if self.num_gen is not None and self.num_gen != len(gen_structures):
             raise ValueError(
                 f"Number of generated structures ({len(gen_structures)}) does not match expected number ({self.num_gen})."  # noqa: E501
@@ -531,6 +727,8 @@ class MPTSMetrics(object):
 
 
 class MPTSMetrics10(MPTSMetrics):
+    """Benchmark class for MPTSMetrics with 10 generated structures."""
+
     def __init__(self, dummy=False, verbose=True):
         MPTSMetrics.__init__(
             self, dummy=dummy, verbose=verbose, num_gen=10, match_type="cdvae_coverage"
@@ -538,6 +736,8 @@ class MPTSMetrics10(MPTSMetrics):
 
 
 class MPTSMetrics100(MPTSMetrics):
+    """Benchmark class for MPTSMetrics with 100 generated structures."""
+
     def __init__(self, dummy=False, verbose=True):
         MPTSMetrics.__init__(
             self, dummy=dummy, verbose=verbose, num_gen=100, match_type="cdvae_coverage"
@@ -545,6 +745,8 @@ class MPTSMetrics100(MPTSMetrics):
 
 
 class MPTSMetrics1000(MPTSMetrics):
+    """Benchmark class for MPTSMetrics with 1000 generated structures."""
+
     def __init__(self, dummy=False, verbose=True):
         MPTSMetrics.__init__(
             self,
@@ -556,6 +758,8 @@ class MPTSMetrics1000(MPTSMetrics):
 
 
 class MPTSMetrics10000(MPTSMetrics):
+    """Benchmark class for MPTSMetrics with 10000 generated structures."""
+
     def __init__(self, dummy=False, verbose=True):
         MPTSMetrics.__init__(
             self,
@@ -565,14 +769,6 @@ class MPTSMetrics10000(MPTSMetrics):
             match_type="cdvae_coverage",
         )
 
-
-# def get_rms_dist(gen_structures, test_structures):
-#     rms_dist = np.zeros((len(gen_structures), len(test_structures)))
-#     for i, gs in enumerate(tqdm(gen_structures)):
-#         for j, ts in enumerate(tqdm(test_structures)):
-#             rms_dist[i, j] = sm.get_rms_dist(gs, ts)[0]
-
-#     return rms_dist
 
 # ---- CLI ----
 # The functions defined in this section are wrappers around the main Python
@@ -746,3 +942,47 @@ if __name__ == "__main__":
 #     print(i)
 #     spg_tmp = gs.get_space_group_info()
 #     gen_spg.append(spg_tmp[1] if spg_tmp is not None else 1)
+
+
+# @property
+# def cdvae_metrics(self):
+#     # FIXME: update with CDVAE structures and handle 3 dataset types
+#     if self._cdvae_metrics is not None:
+#         return self._cdvae_metrics
+
+#     rec_eval = RecEval(self.test_pred_structures, self.test_structures)
+#     reconstruction_metrics = rec_eval.get_metrics()
+
+#     gen_eval = GenEval(self.gen_structures, self.test_structures)
+#     generation_metrics = gen_eval.get_metrics()
+
+#     opt_eval = OptEval(self.gen_structures, self.test_structures)
+#     optimization_metrics = opt_eval.get_metrics()
+
+#     self._cdvae_metrics = (
+#         reconstruction_metrics,
+#         generation_metrics,
+#         optimization_metrics,
+#     )
+
+#     return self._cdvae_metrics
+
+# def get_rms_dist(gen_structures, test_structures):
+#     rms_dist = np.zeros((len(gen_structures), len(test_structures)))
+#     for i, gs in enumerate(tqdm(gen_structures)):
+#         for j, ts in enumerate(tqdm(test_structures)):
+#             rms_dist[i, j] = sm.get_rms_dist(gs, ts)[0]
+
+#     return rms_dist
+
+# self.train_spg, self.val_spg = [
+#     spg.iloc[tvs].values for tvs in self.mpt.trainval_splits[fold]
+# ]
+
+
+# FULL_COMP_CHECKSUM_FROZEN = ""
+# DUMMY_COMP_CHECKSUM_FROZEN = ""
+# FULL_STRUCT_CHECKSUM_FROZEN = ""
+# DUMMY_STRUCT_CHECKSUM_FROZEN = ""
+# FULL_SPG_CHECKSUM_FROZEN = ""
+# DUMMY_SPG_CHECKSUM_FROZEN = ""
