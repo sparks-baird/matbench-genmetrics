@@ -1,9 +1,21 @@
+@article{alverson_generative_2022,
+  title = {Generative Adversarial Networks and Diffusion Models in Material Discovery},
+  author = {Alverson, Michael and Baird, Sterling and Murdock, Ryan and Sparks, Taylor},
+  year = {2022},
+  month = nov,
+  doi = {10.26434/chemrxiv-2022-6l4pm},
+  urldate = {2022-11-17},
+  abstract = {The idea of materials discovery has excited and perplexed research scientists for centuries. Several different methods have been employed to find new types of materials, ranging from the arbitrary replacement of atoms in a crystal structure to advanced machine learning methods for predicting entirely new crystal structures. In this work, we pursue three primary objectives. I) Introduce CrysTens, a crystal encoding that can be used in a wide variety of deep-learning generative models. II) Investigate and analyze the performance of Generative Adversarial Networks (GANs) and Diffusion Models to find an innovative and effective way of generating theoretical crystal structures that are synthesizable and stable. III) Show that the models that have a better ``understanding'' of the structure of CrysTens produce more symmetrical and realistic crystals and exhibit a better apprehension of the dataset as a whole. We accomplish these objectives using over fifty thousand Crystallographic Information Files (CIFs) from Pearson's Crystal Database.},
+  langid = {english},
+  file = {C\:\\Users\\sterg\\Zotero\\storage\\P7XV339N\\Alverson et al_2022_Generative adversarial networks and diffusion models in material discovery.pdf;C\:\\Users\\sterg\\Zotero\\storage\\L4XKUD4K\\63694d64fbfd387c25d2d395.html}
+}
+
 @article{aykol_network_2019,
   title = {Network Analysis of Synthesizable Materials Discovery},
   author = {Aykol, Muratahan and Hegde, Vinay I. and Hung, Linda and Suram, Santosh and Herring, Patrick and Wolverton, Chris and Hummelsh{\o}j, Jens S.},
   year = {2019},
   month = may,
-  journal = {Nat Commun},
+  journal = {Nature Communications},
   volume = {10},
   number = {1},
   pages = {2018},
@@ -24,7 +36,7 @@
   author = {Baird, Sterling G. and Jablonka, Kevin M. and Alverson, Michael D. and Sayeed, Hasan M. and Khan, Mohammed Faris and Seegmiller, Colton and Smit, Berend and Sparks, Taylor D.},
   year = {2022},
   month = aug,
-  journal = {JOSS},
+  journal = {Journal of Open Source Software},
   volume = {7},
   number = {76},
   pages = {4528},
@@ -34,6 +46,44 @@
   abstract = {The latest advances in machine learning are often in natural language processing such as with long short-term memory networks (LSTMs) and Transformers, or image processing such as with generative adversarial networks (GANs), variational autoencoders (VAEs), and guided diffusion models. xtal2png encodes and decodes crystal structures via PNG images (see e.g. Figure 1) by writing and reading the necessary information for crystal reconstruction (unit cell, atomic elements, atomic coordinates) as a square matrix of numbers. This is akin to making/reading a QR code for crystal structures, where the xtal2png representation is an invertible representation. The ability to feed these images directly into image-based pipelines allows you, as a materials informatics practitioner, to get streamlined results for new state-of-the-art image-based machine learning models applied to crystal structures.},
   langid = {english},
   file = {C\:\\Users\\sterg\\Zotero\\storage\\CGJ99564\\Baird et al_2022_xtal2png.pdf}
+}
+
+@article{brown_guacamol_2019,
+  title = {{{GuacaMol}}: {{Benchmarking Models}} for de {{Novo Molecular Design}}},
+  shorttitle = {{{GuacaMol}}},
+  author = {Brown, Nathan and Fiscato, Marco and Segler, Marwin H.S. and Vaucher, Alain C.},
+  year = {2019},
+  month = mar,
+  journal = {Journal of Chemical Information and Modeling},
+  volume = {59},
+  number = {3},
+  pages = {1096--1108},
+  issn = {1549-9596, 1549-960X},
+  doi = {10.1021/acs.jcim.8b00839},
+  urldate = {2022-06-25},
+  abstract = {De novo design seeks to generate molecules with required property profiles by virtual design-make-test cycles. With the emergence of deep learning and neural generative models in many application areas, models for molecular design based on neural networks appeared recently and show promising results. However, the new models have not been profiled on consistent tasks, and comparative studies to wellestablished algorithms have only seldom been performed. To standardize the assessment of both classical and neural models for de novo molecular design, we propose an evaluation framework, GuacaMol, based on a suite of standardized benchmarks. The benchmark tasks encompass measuring the fidelity of the models to reproduce the property distribution of the training sets, the ability to generate novel molecules, the exploration and exploitation of chemical space, and a variety of single and multiobjective optimization tasks. The benchmarking open-source Python code and a leaderboard can be found on https://benevolent.ai/guacamol.},
+  langid = {english},
+  file = {C\:\\Users\\sterg\\Zotero\\storage\\8PQWX2HE\\Brown et al. - 2019 - GuacaMol Benchmarking Models for de Novo Molecula.pdf}
+}
+
+@article{chen_universal_2022,
+  title = {A Universal Graph Deep Learning Interatomic Potential for the Periodic Table},
+  author = {Chen, Chi and Ong, Shyue Ping},
+  year = {2022},
+  month = nov,
+  journal = {Nature Computational Science},
+  volume = {2},
+  number = {11},
+  pages = {718--728},
+  publisher = {{Nature Publishing Group}},
+  issn = {2662-8457},
+  doi = {10.1038/s43588-022-00349-3},
+  urldate = {2023-02-17},
+  abstract = {Interatomic potentials (IAPs), which describe the potential energy surface of atoms, are a fundamental input for atomistic simulations. However, existing IAPs are either fitted to narrow chemistries or too inaccurate for general applications. Here we report a universal IAP for materials based on graph neural networks with three-body interactions (M3GNet). The M3GNet IAP was trained on the massive database of structural relaxations performed by the Materials Project over the past ten years and has broad applications in structural relaxation, dynamic simulations and property prediction of materials across diverse chemical spaces. About 1.8 million materials from a screening of 31 million hypothetical crystal structures were identified to be potentially stable against existing Materials Project crystals based on M3GNet energies. Of the top 2,000 materials with the lowest energies above the convex hull, 1,578 were verified to be stable using density functional theory calculations. These results demonstrate a machine learning-accelerated pathway to the discovery of synthesizable materials with exceptional properties.},
+  copyright = {2022 The Author(s), under exclusive licence to Springer Nature America, Inc.},
+  langid = {english},
+  keywords = {Atomistic models,Computational methods,Materials science},
+  file = {C\:\\Users\\sterg\\Zotero\\storage\\MEMIWFDT\\Chen_Ong_2022_A universal graph deep learning interatomic potential for the periodic table.pdf}
 }
 
 @article{jain_commentary_2013,
@@ -58,7 +108,7 @@
   author = {Palizhati, Aini and Torrisi, Steven B. and Aykol, Muratahan and Suram, Santosh K. and Hummelsh{\o}j, Jens S. and Montoya, Joseph H.},
   year = {2022},
   month = mar,
-  journal = {Sci Rep},
+  journal = {Scientific Reports},
   volume = {12},
   number = {1},
   pages = {4694},
@@ -88,7 +138,54 @@
   file = {C\:\\Users\\sterg\\Zotero\\storage\\AT4FWI28\\Pedregosa et al_2011_Scikit-learn.pdf}
 }
 
-@article{tshitoyanUnsupervisedWordEmbeddings2019,
+@article{polykovskiy_molecular_2020,
+  title = {Molecular Sets ({{MOSES}}): {{A}} Benchmarking Platform for Molecular Generation Models},
+  author = {Polykovskiy, Daniil and Zhebrak, Alexander and {Sanchez-Lengeling}, Benjamin and Golovanov, Sergey and Tatanov, Oktai and Belyaev, Stanislav and Kurbanov, Rauf and Artamonov, Aleksey and Aladinskiy, Vladimir and Veselov, Mark and Kadurin, Artur and Johansson, Simon and Chen, Hongming and Nikolenko, Sergey and {Aspuru-Guzik}, Al{\'a}n and Zhavoronkov, Alex},
+  year = {2020},
+  journal = {Frontiers in Pharmacology},
+  volume = {11},
+  issn = {1663-9812},
+  doi = {10.3389/fphar.2020.565644},
+  abstract = {Generative models are becoming a tool of choice for exploring the molecular space. These models learn on a large training dataset and produce novel molecular structures with similar properties. Generated structures can be utilized for virtual screening or training semi-supervized predictive models in the downstream tasks. While there are plenty of generative models, it is unclear how to compare and rank them. In this work, we introduce a benchmarking platform called Molecular Sets (MOSES) to standardize training and comparison of molecular generative models. MOSES provides training and testing datasets, and a set of metrics to evaluate the quality and diversity of generated structures. We have implemented and compared several molecular generation models and suggest to use our results as reference points for further advancements in generative chemistry research. The platform and source code are available at \textexclamdown ext-link ext-link-type="uri" xlink:href="https://github.com/molecularsets/moses" xmlns:xlink="http://www.w3.org/1999/xlink"\textquestiondown https://github.com/molecularsets/moses\textexclamdown/ext-link\textquestiondown.}
+}
+
+@article{ren_invertible_2022,
+  title = {An Invertible Crystallographic Representation for General Inverse Design of Inorganic Crystals with Targeted Properties},
+  author = {Ren, Zekun and Tian, Siyu Isaac Parker and Noh, Juhwan and Oviedo, Felipe and Xing, Guangzong and Li, Jiali and Liang, Qiaohao and Zhu, Ruiming and Aberle, Armin G. and Sun, Shijing and Wang, Xiaonan and Liu, Yi and Li, Qianxiao and Jayavelu, Senthilnath and Hippalgaonkar, Kedar and Jung, Yousung and Buonassisi, Tonio},
+  year = {2022},
+  month = jan,
+  journal = {Matter},
+  volume = {5},
+  number = {1},
+  pages = {314--335},
+  issn = {2590-2385},
+  doi = {10.1016/j.matt.2021.11.032},
+  urldate = {2022-03-26},
+  abstract = {Realizing general inverse design could greatly accelerate the discovery of new materials with user-defined properties. However, state-of-the-art generative models tend to be limited to a specific composition or crystal structure. Herein, we present a framework capable of general inverse design (not limited to a given set of elements or crystal structures), featuring a generalized invertible representation that encodes crystals in both real and reciprocal space, and a property-structured latent space from a variational autoencoder (VAE). In three design cases, the framework generates 142 new crystals with user-defined formation energies, bandgap, thermoelectric (TE) power factor, and combinations thereof. These generated crystals, absent in the training database, are validated by first-principles calculations. The success rates (number of first-principles-validated target-satisfying crystals/number of designed crystals) ranges between 7.1\% and 38.9\%. These results represent a significant step toward property-driven general inverse design using generative models, although practical challenges remain when coupled with experimental synthesis.},
+  langid = {english},
+  keywords = {general inverse design,generalized crystallographic representation,generative model,invertible crystallographic representation,machine learning,property-structured latent space,solid-state materials,thermoelectrics,variational autoencoder},
+  file = {C\:\\Users\\sterg\\Zotero\\storage\\NSZUVJJU\\Ren et al_2022_An invertible crystallographic representation for general inverse design of.pdf;C\:\\Users\\sterg\\Zotero\\storage\\XV7WD2KA\\1756085.pdf;C\:\\Users\\sterg\\Zotero\\storage\\Q8M8Z68M\\S2590238521006251.html}
+}
+
+@article{spek_checkcif_2020,
+  title = {{{{\emph{checkCIF}}}} Validation {{ALERTS}}: What They Mean and How to Respond},
+  shorttitle = {{{{\emph{checkCIF}}}} Validation {{ALERTS}}},
+  author = {Spek, Anthony L.},
+  year = {2020},
+  month = jan,
+  journal = {Acta Crystallographica Section E Crystallographic Communications},
+  volume = {76},
+  number = {1},
+  pages = {1--11},
+  issn = {2056-9890},
+  doi = {10.1107/S2056989019016244},
+  urldate = {2022-06-11},
+  abstract = {Authors of a paper that includes a new crystal-structure determination are expected to not only report the structural results of interest and their interpretation, but are also expected to archive in computer-readable CIF format the experimental data on which the crystal-structure analysis is based. Additionally, an IUCr/               checkCIF               validation report will be required for the review of a submitted paper. Such a validation report, automatically created from the deposited CIF file, lists as ALERTS not only potential errors or unusual findings, but also suggestions for improvement along with interesting information on the structure at hand. Major ALERTS for issues are expected to have been acted on already before the submission for publication or discussed in the associated paper and/or commented on in the CIF file. In addition, referees, readers and users of the data should be able to make their own judgment and interpretation of the underlying experimental data or perform their own calculations with the archived data. All the above is consistent with the FAIR (findable, accessible, interoperable, and reusable) initiative [Helliwell (2019).               Struct. Dyn.               6               , 05430]. Validation can also be helpful for less experienced authors in pointing to and avoiding of crystal-structure determination and interpretation pitfalls. The IUCr web-based               checkCIF               server provides such a validation report, based on data uploaded in CIF format. Alternatively, a locally installable               checkCIF               version is available to be used iteratively during the structure-determination process. ALERTS come mostly as short single-line messages. There is also a short explanation of the ALERTS available through the IUCr web server or with the locally installed               PLATON               /               checkCIF               version. This paper provides additional background information on the               checkCIF               procedure and additional details for a number of ALERTS along with options for how to act on them.},
+  langid = {english},
+  file = {C\:\\Users\\sterg\\Zotero\\storage\\RCPE3LU8\\Spek - 2020 - checkCIF validation ALERTS what they mean .pdf}
+}
+
+@article{tshitoyan_unsupervised_2019,
   title = {Unsupervised Word Embeddings Capture Latent Knowledge from Materials Science Literature},
   author = {Tshitoyan, Vahe and Dagdelen, John and Weston, Leigh and Dunn, Alexander and Rong, Ziqin and Kononova, Olga and Persson, Kristin A. and Ceder, Gerbrand and Jain, Anubhav},
   year = {2019},
@@ -102,6 +199,42 @@
   urldate = {2022-08-06},
   langid = {english},
   file = {C\:\\Users\\sterg\\Zotero\\storage\\5UP8VYLB\\Tshitoyan et al. - 2019 - Unsupervised word embeddings capture latent knowle.pdf}
+}
+
+@article{xie_crystal_2022,
+  title = {Crystal {{Diffusion Variational Autoencoder}} for {{Periodic Material Generation}}},
+  author = {Xie, Tian and Fu, Xiang and Ganea, Octavian-Eugen and Barzilay, Regina and Jaakkola, Tommi},
+  year = {2022},
+  month = mar,
+  journal = {arXiv:2110.06197 [cond-mat, physics:physics]},
+  eprint = {2110.06197},
+  primaryclass = {cond-mat, physics:physics},
+  urldate = {2022-04-15},
+  abstract = {Generating the periodic structure of stable materials is a long-standing challenge for the material design community. This task is difficult because stable materials only exist in a low-dimensional subspace of all possible periodic arrangements of atoms: 1) the coordinates must lie in the local energy minimum defined by quantum mechanics, and 2) global stability also requires the structure to follow the complex, yet specific bonding preferences between different atom types. Existing methods fail to incorporate these factors and often lack proper invariances. We propose a Crystal Diffusion Variational Autoencoder (CDVAE) that captures the physical inductive bias of material stability. By learning from the data distribution of stable materials, the decoder generates materials in a diffusion process that moves atomic coordinates towards a lower energy state and updates atom types to satisfy bonding preferences between neighbors. Our model also explicitly encodes interactions across periodic boundaries and respects permutation, translation, rotation, and periodic invariances. We significantly outperform past methods in three tasks: 1) reconstructing the input structure, 2) generating valid, diverse, and realistic materials, and 3) generating materials that optimize a specific property. We also provide several standard datasets and evaluation metrics for the broader machine learning community.},
+  archiveprefix = {arxiv},
+  langid = {english},
+  keywords = {Computer Science - Machine Learning,Condensed Matter - Materials Science,Physics - Computational Physics},
+  file = {C\:\\Users\\sterg\\Zotero\\storage\\VBQ9U4WF\\Xie et al_2022_Crystal Diffusion Variational Autoencoder for Periodic Material Generation.pdf}
+}
+
+@article{zhao_high-throughput_2021,
+  title = {High-Throughput Discovery of Novel Cubic Crystal Materials Using Deep Generative Neural Networks},
+  author = {Zhao, Yong and {Al-Fahdi}, Mohammed and Hu, Ming and Siriwardane, Edirisuriya MD and Song, Yuqi and Nasiri, Alireza and Hu, Jianjun},
+  year = {2021},
+  month = oct,
+  journal = {Advanced Science},
+  volume = {8},
+  number = {20},
+  eprint = {2102.01880},
+  primaryclass = {cond-mat},
+  pages = {2100566},
+  issn = {2198-3844, 2198-3844},
+  doi = {10.1002/advs.202100566},
+  urldate = {2023-03-17},
+  abstract = {High-throughput screening has become one of the major strategies for the discovery of novel functional materials. However, its effectiveness is severely limited by the lack of quantity and diversity of known materials deposited in the current materials repositories such as ICSD and OQMD. Recent progress in machine learning and especially deep learning have enabled a generative strategy that learns implicit chemical rules for creating chemically valid hypothetical materials with new compositions and structures. However, current materials generative models have difficulty in generating structurally diverse, chemically valid, and stable materials. Here we propose CubicGAN, a generative adversarial network (GAN) based deep neural network model for large scale generation of novel cubic crystal structures. When trained on 375,749 ternary crystal materials from the OQMD database, we show that our model is able to not only rediscover most of the currently known cubic materials but also generate hypothetical materials of new structure prototypes. A total of 506 such new materials (all of them are either ternary or quarternary) have been verified by DFT based phonon dispersion stability check, several of which have been found to potentially have exceptional functional properties. Considering the importance of cubic materials in wide applications such as solar cells and lithium batteries, our GAN model provides a promising approach to significantly expand the current repository of materials, enabling the discovery of new functional materials via screening. The new crystal structures finally verified by DFT are freely accessible at our Carolina Materials Database http://www.carolinamatdb.org.},
+  archiveprefix = {arxiv},
+  keywords = {Condensed Matter - Materials Science},
+  file = {C\:\\Users\\sterg\\Zotero\\storage\\6FVKGSSL\\Zhao et al_2021_High-throughput discovery of novel cubic crystal materials using deep.pdf;C\:\\Users\\sterg\\Zotero\\storage\\Y85RKTCF\\2102.html}
 }
 
 @misc{zhao_physics_2022,
