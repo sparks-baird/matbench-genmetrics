@@ -91,6 +91,10 @@ def fetch_data(
         Whether to return both the full DataFrame containing theoretical+experimental
         (`df`) and the experimental-only DataFrame (`expt_df`) or only `expt_df`, by
         default False. This is only applicable if `use_theoretical` is False.
+    one_by_one: bool, optional
+        Whether to retrieve data one-by-one instead of in bulk. This is useful for
+        testing with a small number or in case the mp-api search is malfunctioning
+        (since need provenance attributes). By default False.
     search_kwargs : dict, optional
         kwargs: Supported search terms, e.g. nelements_max=3 for the "materials" search
         API. Consult the specific API route for valid search terms,
@@ -114,16 +118,16 @@ def fetch_data(
     >>> api_key = "abc123def456"
     >>> num_sites = (1, 52)
     >>> elements = ["V"]
-    >>> expt_df = retrieve_data(api_key, num_sites=num_sites, elements=elements)
+    >>> expt_df = fetch_data(api_key, num_sites=num_sites, elements=elements)
 
-    >>> df = retrieve_data(
+    >>> df = fetch_data(
             api_key,
             num_sites=num_sites,
             elements=elements,
             use_theoretical=True
         )
 
-    >>> expt_df, df = retrieve_data(
+    >>> expt_df, df = fetch_data(
             api_key,
             num_sites=num_sites,
             elements=elements,
