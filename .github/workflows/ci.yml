@@ -99,8 +99,8 @@ jobs:
     needs: test
     runs-on: ubuntu-latest
 
-    permissions:
-      contents: write
+    # permissions:
+    #   contents: write
 
     steps:
       - name: Finalize coverage report
@@ -114,9 +114,9 @@ jobs:
         id: badge
         with:
           debug: true
-          directory: ./
+          directory: ./src/matbench-genmetrics/
           badge: ./output/badge.svg
-          patterns: '*.py'  # Patterns in the format of a '.gitignore' file, separated by pipes.
+          patterns: '**/*.py'  # Patterns in the format of a '.gitignore' file, separated by pipes.
           ignore: ''
 
       - name: Print the output
@@ -124,14 +124,14 @@ jobs:
           echo "Scanned: ${{ steps.badge.outputs.counted_files }}";
           echo "Line Count: ${{ steps.badge.outputs.total_lines }}";
 
-      - name: Deploy to image-data branch
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          publish_dir: ./output
-          publish_branch: image-data
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          user_name: 'github-actions[bot]'
-          user_email: 'github-actions[bot]@users.noreply.github.com'
+      # - name: Deploy to image-data branch
+      #   uses: peaceiris/actions-gh-pages@v3
+      #   with:
+      #     publish_dir: ./output
+      #     publish_branch: image-data
+      #     github_token: ${{ secrets.GITHUB_TOKEN }}
+      #     user_name: 'github-actions[bot]'
+      #     user_email: 'github-actions[bot]@users.noreply.github.com'
 
   publish:
     needs: finalize
