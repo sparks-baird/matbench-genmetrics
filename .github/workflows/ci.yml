@@ -98,6 +98,10 @@ jobs:
   finalize:
     needs: test
     runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
     steps:
       - name: Finalize coverage report
         uses: coverallsapp/github-action@master
