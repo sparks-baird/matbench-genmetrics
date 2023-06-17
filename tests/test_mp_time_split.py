@@ -63,8 +63,10 @@ def test_mp_time_splitter():
     """ """
     mpt = MPTimeSplit(num_sites=num_sites, elements=elements)
     data = mpt.load(dummy=True)
-    mp_time_splitter(data, use_trainval_test=True)
-    mp_time_splitter(data, use_trainval_test=False)
+    trainval_splits, test_split = mp_time_splitter(data, use_trainval_test=True)
+    trainval_splits = mp_time_splitter(data, use_trainval_test=False)
+    trainval_splits
+    test_split
 
 
 if __name__ == "__main__":
