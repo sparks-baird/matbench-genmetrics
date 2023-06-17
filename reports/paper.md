@@ -1,5 +1,5 @@
 ---
-title: 'matbench_genmetrics: A Python library for benchmarking crystal structure generative models using time-based splits of Materials Project structures'
+title: 'matbench-genmetrics: A Python library for benchmarking crystal structure generative models using time-based splits of Materials Project structures'
 tags:
   - Python
   - materials informatics
