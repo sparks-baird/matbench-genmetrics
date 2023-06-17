@@ -99,39 +99,12 @@ jobs:
     needs: test
     runs-on: ubuntu-latest
 
-    # permissions:
-    #   contents: write
-
     steps:
       - name: Finalize coverage report
         uses: coverallsapp/github-action@master
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           parallel-finished: true
-
-      - name: Make Code Badge
-        uses: shadowmoose/GHA-LoC-Badge@1.0.0
-        id: badge
-        with:
-          debug: true
-          directory: ./src/matbench-genmetrics/
-          badge: ./output/badge.svg
-          patterns: '**/*.py'  # Patterns in the format of a '.gitignore' file, separated by pipes.
-          ignore: ''
-
-      - name: Print the output
-        run: |
-          echo "Scanned: ${{ steps.badge.outputs.counted_files }}";
-          echo "Line Count: ${{ steps.badge.outputs.total_lines }}";
-
-      # - name: Deploy to image-data branch
-      #   uses: peaceiris/actions-gh-pages@v3
-      #   with:
-      #     publish_dir: ./output
-      #     publish_branch: image-data
-      #     github_token: ${{ secrets.GITHUB_TOKEN }}
-      #     user_name: 'github-actions[bot]'
-      #     user_email: 'github-actions[bot]@users.noreply.github.com'
 
   publish:
     needs: finalize
