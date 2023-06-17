@@ -54,8 +54,6 @@ In this work, we introduce `matbench-genmetrics`, a materials benchmarking platf
 - Novelty: generating structures which are close matches to examples in the training set are penalized
 - Uniqueness: the number of repeats within the generated structures
 
-<!-- Mention or include M3GNet? -->
-
 The `matbench_genmetrics.core` namespace package provides the following features:
 - GenMatcher: A class for calculating matches between two sets of structures
 - GenMetrics: A class for calculating validity, coverage, novelty, and uniqueness metrics
