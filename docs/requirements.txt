@@ -1,3 +1,4 @@
+element-coder
 # Requirements file for ReadTheDocs, check .readthedocs.yml.
 # To build the module reference correctly, make sure every external package
 # under `install_requires` in `setup.cfg` is also listed here!
@@ -8,6 +9,8 @@ myst-parser[linkify]
 nbsphinx
 nbsphinx-link
 pymatgen
+pymatviz
+pystow
 pyxtal
 scikit-learn
 sphinx>=3.2.1
