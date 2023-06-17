@@ -8,7 +8,7 @@ $$
 $$
 where $w$, $\mathrm{SG}_{\mathrm{train}}$, and $\mathrm{SG}_{\mathrm{test}}$ represent Wasserstein distance, vector of space group numbers for the training data, and vector of space group numbers for the test data, respectively.
 
-Coverage (``predict the future'') is given by the match counts between the held-out test structures and the generated structures divided by the number of test structures:
+Coverage ("predict the future") is given by the match counts between the held-out test structures and the generated structures divided by the number of test structures:
 
 $$
     \frac{\sum _{i=1}^{n_{\text{test}}} \sum _{j=1}^{n_{\text{gen}}} \left(
