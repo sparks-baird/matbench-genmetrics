@@ -1,3 +1,4 @@
+"""Create Materials Project time-based cross-validation splits"""
 import sys
 
 if sys.version_info[:2] >= (3, 8):

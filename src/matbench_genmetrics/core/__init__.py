@@ -1,3 +1,4 @@
+"""Benchmark models using validity, coverage, novelty, and uniqueness metrics"""
 import sys
 
 if sys.version_info[:2] >= (3, 8):
