@@ -9,7 +9,7 @@ from sklearn.utils.validation import _num_samples
 AVAILABLE_MODES = ["TimeSeriesSplit", "TimeSeriesOverflowSplit", "TimeKFold"]
 
 
-def mp_time_split(
+def mp_time_splitter(
     X,
     mode="TimeSeriesSplit",
     use_trainval_test: bool = True,
@@ -18,28 +18,87 @@ def mp_time_split(
     test_size=None,
     gap=0,
 ):
+    """Split into trainval and test sets, and optionally return test_sets.
+
+    Parameters
+    ----------
+    X : pd.DataFrame
+        DataFrame of Materials Project data to be split.
+    mode : str, optional
+        One of {"TimeSeriesSplit", "TimeSeriesOverflowSplit", "TimeKFold"}, by default
+        "TimeSeriesSplit"
+    use_trainval_test : bool, optional
+        Whether to use a trainval-test split vs. just a train-test split. The idea is
+        that you should tune your hyperparameters using training and validation sets
+        and then keep a held-out test set that you "only ever touch once" (e.g., run
+        immediately before and only once prior to manuscript submission). By default
+        True.
+    n_cv_splits : int, optional
+        Number of cross-validation splits to perform, by default 5
+    max_train_size : int, optional
+        Maximum size for a single training set, by default None
+    test_size : int, optional
+        Used to limit the size of the test set, by default None
+    gap : int, optional
+         Number of samples to exclude from the end of each training set before the test
+         set, by default 0
+
+    Returns
+    -------
+    list of (tuples of arrays)
+        The training and test indices for that split.
+    list of (tuples of arrays), 2-element tuple of arrays
+        Returned when use_trainval_test is True. The (training and validation) and test
+        indices for that split.
+
+    Raises
+    ------
+    NotImplementedError
+        mode={mode} not implemented. Use one of {AVAILABLE_MODES}
+    NotImplementedError
+        non-zero `gap` specified, not implemented for TimeKFold
+    NotImplementedError
+        non-None `max_train_size` specified, not implemented for TimeKFold
+    NotImplementedError
+        non-None `test_size` specified, not implemented for TimeKFold
+
+    Examples
+    --------
+    >>> mpt = MPTimeSplit(num_sites=num_sites, elements=elements)
+    >>> data = mpt.load(dummy=True)
+    >>> trainval_splits, test_split = mp_time_split(data, use_trainval_test=True)
+    >>> print(trainval_splits)
+    [
+        (array([0]), array([1])),
+        (array([0, 1]), array([2])),
+        (array([0, 1, 2]), array([3])),
+        (array([0, 1, 2, 3]), array([4])),
+        (array([0, 1, 2, 3, 4]), array([5])),
+    ]
+    >>> print(test_split)
+    (array([0, 1, 2, 3, 4, 5]), array([6, 7]))
+    >>>
+    >>> # **no held-out test set**
+    >>> trainval_splits = mp_time_split(data, use_trainval_test=False)
+    >>> print(trainval_splits)
+    [
+        (array([0, 1, 2]), array([3])),
+        (array([0, 1, 2, 3]), array([4])),
+        (array([0, 1, 2, 3, 4]), array([5])),
+        (array([0, 1, 2, 3, 4, 5]), array([6])),
+        (array([0, 1, 2, 3, 4, 5, 6]), array([7])),
+    ]
+    """
     if mode not in AVAILABLE_MODES:
         raise NotImplementedError(
             f"mode={mode} not implemented. Use one of {AVAILABLE_MODES}"
         )
 
     if use_trainval_test:
+        # NOTE: the test indices get assigned later using `np.arange`
         X_trainval, _ = train_test_split(X, shuffle=False, test_size=0.2)
-        # ss = ShuffleSplit(n_splits=1, test_size=0.2)
-        # trainval_index, test_index = ss.split(X)
-        # if y is None:
-        # X_trainval, X_test = train_test_split(X, shuffle=False)
-        # y_trainval = None
-        # y_test = None
-        # else:
-        # X_trainval, X_test, y_trainval, y_test = train_test_split(
-        #     X, y, shuffle=False
-        # )
     else:
-        # trainval_index = np.array(list(range(X.shape[0])))
-        # test_index = np.array([])
         X_trainval = X
-        # y_trainval = y
 
     if mode == "TimeSeriesSplit":
         splitter = TimeSeriesSplit(
@@ -81,96 +140,7 @@ def mp_time_split(
 
 
 class TimeSeriesOverflowSplit(_BaseKFold):
-    """Time Series cross-validator
-
-    TODO: update docstring
-
-    Provides train/test indices to split time series data samples
-    that are observed at fixed time intervals, in train/test sets.
-    In each split, test indices must be higher than before, and thus shuffling
-    in cross validator is inappropriate.
-
-    This cross-validation object is a variation of :class:`KFold`.
-    In the kth split, it returns first k folds as train set and the
-    (k+1)th fold as test set.
-
-    Note that unlike standard cross-validation methods, successive
-    training sets are supersets of those that come before them.
-
-    Read more in the :ref:`User Guide <time_series_split>`.
-
-    .. versionadded:: 0.18
-
-    Parameters
-    ----------
-    n_splits : int, default=5
-        Number of splits. Must be at least 2.
-
-        .. versionchanged:: 0.22
-            ``n_splits`` default value changed from 3 to 5.
-
-    max_train_size : int, default=None
-        Maximum size for a single training set.
-
-    test_size : int, default=None
-        Used to limit the size of the test set. Defaults to
-        ``n_samples // (n_splits + 1)``, which is the maximum allowed value
-        with ``gap=0``.
-
-        .. versionadded:: 0.24
-
-    gap : int, default=0
-        Number of samples to exclude from the end of each train set before
-        the test set.
-
-        .. versionadded:: 0.24
-
-    Examples
-    --------
-    >>> import numpy as np
-    >>> from sklearn.model_selection import TimeSeriesSplit
-    >>> X = np.array([[1, 2], [3, 4], [1, 2], [3, 4], [1, 2], [3, 4]])
-    >>> y = np.array([1, 2, 3, 4, 5, 6])
-    >>> tscv = TimeSeriesSplit()
-    >>> print(tscv)
-    TimeSeriesSplit(gap=0, max_train_size=None, n_splits=5, test_size=None)
-    >>> for train_index, test_index in tscv.split(X):
-    ...     print("TRAIN:", train_index, "TEST:", test_index)
-    ...     X_train, X_test = X[train_index], X[test_index]
-    ...     y_train, y_test = y[train_index], y[test_index]
-    TRAIN: [0] TEST: [1]
-    TRAIN: [0 1] TEST: [2]
-    TRAIN: [0 1 2] TEST: [3]
-    TRAIN: [0 1 2 3] TEST: [4]
-    TRAIN: [0 1 2 3 4] TEST: [5]
-    >>> # Fix test_size to 2 with 12 samples
-    >>> X = np.random.randn(12, 2)
-    >>> y = np.random.randint(0, 2, 12)
-    >>> tscv = TimeSeriesSplit(n_splits=3, test_size=2)
-    >>> for train_index, test_index in tscv.split(X):
-    ...    print("TRAIN:", train_index, "TEST:", test_index)
-    ...    X_train, X_test = X[train_index], X[test_index]
-    ...    y_train, y_test = y[train_index], y[test_index]
-    TRAIN: [0 1 2 3 4 5] TEST: [6 7]
-    TRAIN: [0 1 2 3 4 5 6 7] TEST: [8 9]
-    TRAIN: [0 1 2 3 4 5 6 7 8 9] TEST: [10 11]
-    >>> # Add in a 2 period gap
-    >>> tscv = TimeSeriesSplit(n_splits=3, test_size=2, gap=2)
-    >>> for train_index, test_index in tscv.split(X):
-    ...    print("TRAIN:", train_index, "TEST:", test_index)
-    ...    X_train, X_test = X[train_index], X[test_index]
-    ...    y_train, y_test = y[train_index], y[test_index]
-    TRAIN: [0 1 2 3] TEST: [6 7]
-    TRAIN: [0 1 2 3 4 5] TEST: [8 9]
-    TRAIN: [0 1 2 3 4 5 6 7] TEST: [10 11]
-
-    Notes
-    -----
-    The training set has size ``i * n_samples // (n_splits + 1)
-    + n_samples % (n_splits + 1)`` in the ``i`` th split,
-    with a test set of size ``n_samples//(n_splits + 1)`` by default,
-    where ``n_samples`` is the number of samples.
-    """
+    """Time Series cross-validator that always uses remainder of data as test data."""
 
     def __init__(self, n_splits=5, *, max_train_size=None, test_size=None, gap=0):
         super().__init__(n_splits, shuffle=False, random_state=None)
@@ -335,3 +305,23 @@ class TimeKFold(_BaseKFold):
             train_index = running_index
             test_index = np.setdiff1d(all_index, running_index)
             yield train_index, test_index
+
+
+# %% Code Graveyard
+# if use_trainval_test:
+#     X_trainval, _ = train_test_split(X, shuffle=False, test_size=0.2)
+#     # ss = ShuffleSplit(n_splits=1, test_size=0.2)
+#     # trainval_index, test_index = ss.split(X)
+#     # if y is None:
+#     # X_trainval, X_test = train_test_split(X, shuffle=False)
+#     # y_trainval = None
+#     # y_test = None
+#     # else:
+#     # X_trainval, X_test, y_trainval, y_test = train_test_split(
+#     #     X, y, shuffle=False
+#     # )
+# else:
+#     # trainval_index = np.array(list(range(X.shape[0])))
+#     # test_index = np.array([])
+#     X_trainval = X
+#     # y_trainval = y
