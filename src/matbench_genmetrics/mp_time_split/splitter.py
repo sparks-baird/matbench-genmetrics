@@ -96,8 +96,6 @@ class MPTimeSplit:
     ) -> None:
         """Top-level class for Materials Project time-based train/test splitting.
 
-
-
         Parameters
         ----------
         num_sites : Optional[Tuple[int, int]], optional
@@ -117,14 +115,15 @@ class MPTimeSplit:
             The splitter type, can be one of "TimeSeriesSplit",
             "TimeSeriesOverflowSplit", "TimeKFold", by default "TimeSeriesSplit"
         target : str, optional
-            _description_, by default "energy_above_hull"
-        save_dir : _type_, optional
-            _description_, by default None
+            a property to also include in the DataFrame, by default "energy_above_hull"
+        save_dir : str, optional
+            The directory to save the data to. If None, then uses get_data_home(). By
+            default None.
 
         Raises
         ------
         NotImplementedError
-            _description_
+            "mode={mode} not implemented. Use one of {AVAILABLE_MODES}
 
         Examples
         --------
