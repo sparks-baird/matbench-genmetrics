@@ -77,6 +77,6 @@ We believe that the `matbench-genmetrics` ecosystem is a robust and easy-to-use 
 
 # Acknowledgements
 
-We acknowledge contributions from Kevin M. Jablonka (<a href="https://github.com/kjappelbaum">\@kjappelbaum</a>), Matthew K. Horton (<a href="https://github.com/mkhorton">\@mkhorton</a>), Kyle D. Miller (<a href="https://github.com/kyledmiller">\@kyledmiller</a>), and Janosh Riebesell (<a href="https://github.com/janosh">\@janosh</a>). S.G.B. and T.D.S. acknowledge support by the National Science Foundation, USA under Grant No. DMR-1651668.
+We acknowledge contributions from Kevin M. Jablonka ([\@kjappelbaum](https://github.com/kjappelbaum)), Matthew K. Horton ([\@mkhorton](https://github.com/mkhorton)), Kyle D. Miller ([\@kyledmiller](https://github.com/kyledmiller)), and Janosh Riebesell ([\@janosh](https://github.com/janosh)). S.G.B. and T.D.S. acknowledge support by the National Science Foundation, USA under Grant No. DMR-1651668.
 
 # References
