@@ -48,7 +48,6 @@ change this to e.g. `python==3.8.*`. See [Advanced Installation](##Advanced-Inst
 > intended for fast prototyping and debugging, as it assumes only 10 generated structures.
 
 ```python
->>> from tqdm import tqdm
 >>> from mp_time_split.utils.gen import DummyGenerator
 >>> from matbench_genmetrics.core import MPTSMetrics10, MPTSMetrics100, MPTSMetrics1000, MPTSMetrics10000
 >>> mptm = MPTSMetrics10(dummy=True)
