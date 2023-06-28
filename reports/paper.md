@@ -49,10 +49,10 @@ In materials informatics, benchmarks typically focus on property prediction usin
 
 In this work, we introduce `matbench-genmetrics`, a materials benchmarking platform for crystal structure generative models. We use concepts from molecular generative modeling benchmarking to create a set of evaluation metrics---validity, coverage, novelty, and uniqueness---which are broadly defined as follows:
 
-- Validity: a measure of how well the generated materials match the distribution of the training dataset
-- Coverage: the ability to successfully predict known materials which have been held out
-- Novelty: generating structures which are close matches to examples in the training set are penalized
-- Uniqueness: the number of repeats within the generated structures
+- **Validity**: a measure of how well the generated materials match the distribution of the training dataset
+- **Coverage**: the ability to successfully predict known materials which have been held out
+- **Novelty**: generating structures which are close matches to examples in the training set are penalized
+- **Uniqueness**: the number of repeats within the generated structures
 
 The `matbench_genmetrics.core` namespace package provides the following features:
 
