@@ -54,14 +54,14 @@ In this work, we introduce `matbench-genmetrics`, a materials benchmarking platf
 - **Novelty**: generating structures which are close matches to examples in the training set are penalized
 - **Uniqueness**: the number of repeats within the generated structures
 
-The `matbench_genmetrics.core` namespace package provides the following features:
+`matbench-genmetrics` is comprised of two namespace packages. The first is `matbench_genmetrics.core`, which provides the following features:
 
-- GenMatcher: A class for calculating matches between two sets of structures
-- GenMetrics: A class for calculating validity, coverage, novelty, and uniqueness metrics
-- MPTSMetrics: class for loading `mp_time_split` data, calculating time-series cross-validation metrics, and saving results
+- `GenMatcher`: A class for calculating matches between two sets of structures
+- `GenMetrics`: A class for calculating validity, coverage, novelty, and uniqueness metrics
+- `MPTSMetrics`: class for loading `mp_time_split` data, calculating time-series cross-validation metrics, and saving results
 - Fixed benchmark classes for 10, 100, 1000, and 10000 generated structures
 
-We introduce the `matbench_genmetrics.mp_time_split` namespace package as a complement to `matbench_genmetrics.core`. It provides a standardized dataset and cross-validation splits for evaluating the mentioned four metrics. Time-based splits have been utilized in materials informatics model validation, such as predicting future thermoelectric materials via word embeddings [@tshitoyan_unsupervised_2019], searching for efficient solar photoabsorption materials through multi-fidelity optimization [@palizhati_agents_2022], and predicting future materials stability trends via network models [@aykol_network_2019]. Recently, Hu et al. [@zhao_physics_2022] used what they call a rediscovery metric (we refer to this as a coverage metric in line with molecular benchmarking terminology) to evaluate crystal structure generative models, though without time-series splitting. They showed that after generating millions of structures, only a small percentage of held-out structures had matches, highlighting the difficulty of coverage tasks. By leveraging timeline metadata from the Materials Project database [@jain_commentary_2013] and creating a standard time-series splitting of data, `matbench_genmetrics.mp_time_split` enables rigorous evaluation of future discovery performance.
+We also introduce the `matbench_genmetrics.mp_time_split` namespace package as a complement to `matbench_genmetrics.core`. It provides a standardized dataset and cross-validation splits for evaluating the mentioned four metrics. Time-based splits have been utilized in materials informatics model validation, such as predicting future thermoelectric materials via word embeddings [@tshitoyan_unsupervised_2019], searching for efficient solar photoabsorption materials through multi-fidelity optimization [@palizhati_agents_2022], and predicting future materials stability trends via network models [@aykol_network_2019]. Recently, Hu et al. [@zhao_physics_2022] used what they call a rediscovery metric (we refer to this as a coverage metric in line with molecular benchmarking terminology) to evaluate crystal structure generative models, though without time-series splitting. They showed that after generating millions of structures, only a small percentage of held-out structures had matches, highlighting the difficulty of coverage tasks. By leveraging timeline metadata from the Materials Project database [@jain_commentary_2013] and creating a standard time-series splitting of data, `matbench_genmetrics.mp_time_split` enables rigorous evaluation of future discovery performance.
 
 The `matbench_genmetrics.mp_time_split` namespace package provides the following features:
 
