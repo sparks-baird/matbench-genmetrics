@@ -17,8 +17,8 @@
 > Generative materials benchmarking metrics, inspired by [guacamol](https://www.benevolent.com/guacamol) and [CDVAE](https://github.com/txie-93/cdvae).
 
 This repository provides standardized benchmarks for benchmarking generative models for
-crystal structure. Each benchmark has a fixed dataset, a predefined split, and a notion
-of best (i.e. metric) associated with it.
+crystal structure. Each benchmark has a fixed dataset, a predefined split, and notions
+of best (i.e. metrics) associated with it.
 
 <p align="center"><img src="https://github.com/sparks-baird/matbench-genmetrics/raw/main/reports/figures/matbench-genmetrics.png" width=450></p>
 
