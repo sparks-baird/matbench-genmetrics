@@ -17,8 +17,8 @@
 > Generative materials benchmarking metrics, inspired by [guacamol](https://www.benevolent.com/guacamol) and [CDVAE](https://github.com/txie-93/cdvae).
 
 This repository provides standardized benchmarks for benchmarking generative models for
-crystal structure. Each benchmark has a fixed dataset, a predefined split, and a notion
-of best (i.e. metric) associated with it.
+crystal structure. Each benchmark has a fixed dataset, a predefined split, and notions
+of best (i.e. metrics) associated with it.
 
 <p align="center"><img src="https://github.com/sparks-baird/matbench-genmetrics/raw/main/reports/figures/matbench-genmetrics.png" width=450></p>
 
@@ -48,7 +48,6 @@ change this to e.g. `python==3.8.*`. See [Advanced Installation](##Advanced-Inst
 > intended for fast prototyping and debugging, as it assumes only 10 generated structures.
 
 ```python
->>> from tqdm import tqdm
 >>> from mp_time_split.utils.gen import DummyGenerator
 >>> from matbench_genmetrics.core import MPTSMetrics10, MPTSMetrics100, MPTSMetrics1000, MPTSMetrics10000
 >>> mptm = MPTSMetrics10(dummy=True)
