@@ -13,7 +13,7 @@
 <!--- > **NOTE: This is a WIP repository (as of 2022-08-06) being developed in parallel with [`xtal2png`](https://github.com/sparks-baird/xtal2png) and [`mp-time-split`](https://github.com/sparks-baird/mp-time-split). Feedback and contributions welcome!** --->
 > **This is not an official repository of Matbench, but eventually, it may be [incorporated into Matbench](https://github.com/materialsproject/matbench/issues/150)**
 
-# matbench-genmetrics [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/sparks-baird/matbench-genmetrics/blob/main/core/notebooks/1.0-matbench-genmetrics-basic.ipynb)
+# matbench-genmetrics [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/sparks-baird/matbench-genmetrics/blob/main/notebooks/core/1.0-matbench-genmetrics-basic.ipynb)
 > Generative materials benchmarking metrics, inspired by [guacamol](https://www.benevolent.com/guacamol) and [CDVAE](https://github.com/txie-93/cdvae).
 
 This repository provides standardized benchmarks for benchmarking generative models for
