@@ -26,6 +26,49 @@ def featurize_comp_struct(
     include_pmg_object=False,
     keep_as_df=False,
 ):
+    """
+    This function takes a list of structures and optional material IDs, and
+    generates composition and structure fingerprints using different types of
+    featurizers.
+
+    The composition fingerprints are generated using the ElementProperty
+    featurizer from the matminer library, which uses a preset of "magpie" to
+    generate a set of element property features. The structure fingerprints are
+    generated using matminer's SiteStatsFingerprint featurizer, which uses a
+    CrystalNNFingerprint instance (with a preset of "ops") to generate site
+    fingerprints, and then calculates the mean of these fingerprints.
+
+    The function also allows for customization of the names of the composition,
+    structure, and material ID columns. It can optionally include the pymatgen
+    object in the output and can return the data as a dataframe or as a numpy
+    array.
+
+    Parameters
+    ----------
+    structures : List[Structure]
+        List of pymatgen Structure objects to be featurized.
+    material_ids : Optional[List], optional
+        List of material IDs corresponding to the structures, by default None.
+    comp_name : str, optional
+        Name to use for the composition column, by default "composition".
+    struct_name : str, optional
+        Name to use for the structure column, by default "structure".
+    material_id_name : str, optional
+        Name to use for the material ID column, by default "material_id".
+    include_pmg_object : bool, optional
+        Whether to include the pymatgen object in the output, by default False.
+    keep_as_df : bool, optional
+        Whether to keep the output as a dataframe, by default False. If False, the output will be a numpy array.
+
+    Returns
+    -------
+    Tuple[pd.DataFrame, pd.DataFrame]
+        A tuple of two dataframes: the first contains the composition fingerprints, and the second contains the structure fingerprints.
+
+    Examples
+    --------
+    >>> comp_fingerprints, struct_fingerprints = featurize_comp_struct(structures, material_ids=None, comp_name="composition", struct_name="structure", material_id_name="material_id", include_pmg_object=False, keep_as_df=False)
+    """
     S = pd.Series(structures)
     compositions = S.apply(lambda s: s.composition)
 
@@ -53,7 +96,29 @@ def featurize_comp_struct(
     return comp_fingerprints, struct_fingerprints
 
 
-def mod_petti_contributions(structures):
+def mod_petti_contributions(structures: List[Structure]):
+    """
+    This function takes a list of pymatgen Structure objects and calculates the
+    modified Pettifor number contributions for each element in the structures.
+
+    The modified Pettifor number is a measure of the electronegativity of an
+    element in a specific structure. The function returns a dataframe sorted by
+    the modified Pettifor number.
+
+    Parameters
+    ----------
+    structures : List[Structure]
+        List of pymatgen Structure objects for which to calculate the modified Pettifor number contributions.
+
+    Returns
+    -------
+    pd.DataFrame
+        A dataframe with two columns: 'mod_petti', which contains the modified Pettifor numbers, and 'contribution', which contains the corresponding contributions of each element in the structures. The dataframe is sorted by the 'mod_petti' column.
+
+    Examples
+    --------
+    >>> mod_petti_df = mod_petti_contributions(structures)
+    """
     compositions = pd.Series(structures).apply(
         lambda s: s.composition.fractional_composition
     )
@@ -68,7 +133,34 @@ def mod_petti_contributions(structures):
     return mod_petti_df
 
 
-def cdvae_cov_comp_fingerprints(structures, verbose=False):
+def cdvae_cov_comp_fingerprints(structures: List[Structure], verbose: bool = False):
+    """
+    This function takes a list of pymatgen Structure objects and generates
+    composition fingerprints for each structure using the ElementProperty
+    featurizer from the matminer library.
+
+    The featurizer uses a preset of "magpie" to generate a set of element
+    property features. The function also has a verbose mode that, when enabled,
+    provides a running progress bar.
+
+    Parameters
+    ----------
+    structures : List[Structure]
+        List of pymatgen Structure objects to be featurized.
+    verbose : bool, optional
+        If True, the function will provide more detailed output, by default
+        False.
+
+    Returns
+    -------
+    List[List[float]]
+        A list of lists, where each inner list contains the composition
+        fingerprints for a structure.
+
+    Examples
+    --------
+    >>> fingerprints = cdvae_cov_comp_fingerprints(structures, verbose=False)
+    """
     my_tqdm = get_tqdm(verbose)
     CompFP = ElementProperty.from_preset("magpie")
     return [CompFP.featurize(s.composition) for s in my_tqdm(structures)]
@@ -87,9 +179,40 @@ warnings.filterwarnings(
 logger = logging.getLogger(__name__)
 
 
-def cdvae_cov_struct_fingerprints(structures, verbose=False):
+def cdvae_cov_struct_fingerprints(structures: List[Structure], verbose: bool = False):
+    """
+    This function takes a list of pymatgen Structure objects and generates
+    structure fingerprints for each structure using the CrystalNNFingerprint
+    featurizer from the matminer library.
+
+    The featurizer uses a preset of "ops" to generate a set of site
+    fingerprints, and then calculates the mean of these fingerprints. The
+    function also has a verbose mode that, when enabled, provides more detailed
+    output. If a structure fails to featurize, it is replaced with NaN values.
+
+
+    The function is based on an implementation in CDVAE: https://github.com/txie-93/cdvae.
+
+    Parameters
+    ----------
+    structures : List[Structure]
+        List of pymatgen Structure objects to be featurized.
+    verbose : bool, optional
+        If True, the function will provide more detailed output, by default
+        False.
+
+    Returns
+    -------
+    List[List[float]]
+        A list of lists, where each inner list contains the structure
+        fingerprints for a structure.
+
+    Examples
+    --------
+    >>> fingerprints = cdvae_cov_struct_fingerprints(structures, verbose=False)
+    """
+    # Aside: Use SiteStatsFingerprint if OK with NaN rows upon partial site failures.
     CrystalNNFP = CrystalNNFingerprint.from_preset("ops")
-    """Use SiteStatsFingerprint if OK with NaN rows upon partial site failures."""
     my_tqdm = get_tqdm(verbose)
     struct_fps = []
     num_sites = []
@@ -139,18 +262,3 @@ def cdvae_cov_struct_fingerprints(structures, verbose=False):
         )
 
     return struct_fps
-
-
-# %% Code Graveyard
-# structures = pd.DataFrame({struct_name: structures})
-# compositions = pd.DataFrame({comp_name: compositions})
-
-# pd.DataFrame(
-# dict(
-#     # symbol=list(_data.keys()), # mod_petti lacking 118 unique mappings
-#     mod_petti=mod_petti_comp.keys(),
-#     contribution=mod_petti_comp.values(),
-# )
-# )
-
-# mod_petti_df = pd.DataFrame(mod_petti_comp, index=[0]).sort_values("mod_petti")

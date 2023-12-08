@@ -15,6 +15,25 @@ class DummyGenerator:
         inputs
 
     def gen(self, n=100):
+        """
+        This function generates a list of pymatgen Structure objects by creating
+        random crystals using the pyxtal library. Each crystal is composed of
+        Ba, Ti, and O in a 1:1:3 ratio.
+
+        Parameters
+        ----------
+        n : int, optional
+            The number of structures to generate, by default 100.
+
+        Returns
+        -------
+        List[Structure]
+            A list of pymatgen Structure objects.
+
+        Examples
+        --------
+        >>> structures = DummyGenerator().gen(n=100)
+        """
         crystal = pyxtal()
         structures = []
         for _ in range(n):
