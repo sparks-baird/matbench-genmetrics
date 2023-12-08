@@ -12,6 +12,14 @@
 FROM condaforge/mambaforge AS builder
 WORKDIR /root
 
+RUN apk add build-base
+
+# # Install necessary tools and gcc
+# RUN apt-get update --fix-missing && apt-get install -y build-essential gcc
+
+# # Install gcc
+# RUN apt-get update && apt-get install -y gcc
+
 COPY . /root
 RUN rm -rf dist build
 
@@ -25,6 +33,9 @@ RUN mamba env export -n matbench-genmetrics -f environment.docker.yml
 
 
 FROM  condaforge/mambaforge AS runner
+
+# Install gcc
+RUN apt-get update && apt-get install -y gcc
 
 # Create default pip.conf.
 # Replace value of `index-url` with your artifact store if needed.
