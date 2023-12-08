@@ -58,16 +58,18 @@ def featurize_comp_struct(
     include_pmg_object : bool, optional
         Whether to include the pymatgen object in the output, by default False.
     keep_as_df : bool, optional
-        Whether to keep the output as a dataframe, by default False. If False, the output will be a numpy array.
+        Whether to keep the output as a dataframe, by default False. If False,
+        the output will be a numpy array.
 
     Returns
     -------
     Tuple[pd.DataFrame, pd.DataFrame]
-        A tuple of two dataframes: the first contains the composition fingerprints, and the second contains the structure fingerprints.
+        A tuple of two dataframes: the first contains the composition
+        fingerprints, and the second contains the structure fingerprints.
 
     Examples
     --------
-    >>> comp_fingerprints, struct_fingerprints = featurize_comp_struct(structures, material_ids=None, comp_name="composition", struct_name="structure", material_id_name="material_id", include_pmg_object=False, keep_as_df=False)
+    >>> comp_fingerprints, struct_fingerprints = featurize_comp_struct(structures, material_ids=None, comp_name="composition", struct_name="structure", material_id_name="material_id", include_pmg_object=False, keep_as_df=False) # noqa: E501
     """
     S = pd.Series(structures)
     compositions = S.apply(lambda s: s.composition)
@@ -108,12 +110,16 @@ def mod_petti_contributions(structures: List[Structure]):
     Parameters
     ----------
     structures : List[Structure]
-        List of pymatgen Structure objects for which to calculate the modified Pettifor number contributions.
+        List of pymatgen Structure objects for which to calculate the modified
+        Pettifor number contributions.
 
     Returns
     -------
     pd.DataFrame
-        A dataframe with two columns: 'mod_petti', which contains the modified Pettifor numbers, and 'contribution', which contains the corresponding contributions of each element in the structures. The dataframe is sorted by the 'mod_petti' column.
+        A dataframe with two columns: 'mod_petti', which contains the modified
+        Pettifor numbers, and 'contribution', which contains the corresponding
+        contributions of each element in the structures. The dataframe is sorted
+        by the 'mod_petti' column.
 
     Examples
     --------
@@ -191,7 +197,8 @@ def cdvae_cov_struct_fingerprints(structures: List[Structure], verbose: bool = F
     output. If a structure fails to featurize, it is replaced with NaN values.
 
 
-    The function is based on an implementation in CDVAE: https://github.com/txie-93/cdvae.
+    The function is based on an implementation in CDVAE:
+    https://github.com/txie-93/cdvae.
 
     Parameters
     ----------
@@ -211,7 +218,8 @@ def cdvae_cov_struct_fingerprints(structures: List[Structure], verbose: bool = F
     --------
     >>> fingerprints = cdvae_cov_struct_fingerprints(structures, verbose=False)
     """
-    # Aside: Use SiteStatsFingerprint if OK with NaN rows upon partial site failures.
+    # Aside: Use SiteStatsFingerprint if OK with NaN rows upon partial site
+    # failures.
     CrystalNNFP = CrystalNNFingerprint.from_preset("ops")
     my_tqdm = get_tqdm(verbose)
     struct_fps = []

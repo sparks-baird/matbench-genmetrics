@@ -10,8 +10,9 @@ from pymatviz.structure_viz import plot_structure_2d
 
 def plot_structures_2d(structures, nrows, ncols, seed=10, formula_as_title=True):
     """
-    This function plots 2D representations of a list of pymatgen Structure objects.
-    If the number of structures is greater than the number of subplots, it randomly selects a subset of structures to plot.
+    This function plots 2D representations of a list of pymatgen Structure
+    objects. If the number of structures is greater than the number of subplots,
+    it randomly selects a subset of structures to plot.
 
     Parameters
     ----------
@@ -24,12 +25,14 @@ def plot_structures_2d(structures, nrows, ncols, seed=10, formula_as_title=True)
     seed : int, optional
         Seed for the random number generator, by default 10.
     formula_as_title : bool, optional
-        If True, the reduced formula of the structure is used as the title of the subplot, by default True.
+        If True, the reduced formula of the structure is used as the title of
+        the subplot, by default True.
 
     Returns
     -------
     Tuple[plt.Figure, np.ndarray]
-        A tuple containing the matplotlib Figure object and an array of Axes objects.
+        A tuple containing the matplotlib Figure object and an array of Axes
+        objects.
     """
     if len(structures) > nrows * ncols:
         # get random structures
@@ -54,8 +57,8 @@ def plot_structures_2d(structures, nrows, ncols, seed=10, formula_as_title=True)
 
 def plot_images(images, nrows, ncols, seed=10, formula_as_title=True):
     """
-    This function plots a list of images.
-    If the number of images is greater than the number of subplots, it randomly selects a subset of images to plot.
+    This function plots a list of images. If the number of images is greater
+    than the number of subplots, it randomly selects a subset of images to plot.
 
     Parameters
     ----------
@@ -68,12 +71,14 @@ def plot_images(images, nrows, ncols, seed=10, formula_as_title=True):
     seed : int, optional
         Seed for the random number generator, by default 10.
     formula_as_title : bool, optional
-        If True, the reduced formula of the structure corresponding to the image is used as the title of the subplot, by default True.
+        If True, the reduced formula of the structure corresponding to the image
+        is used as the title of the subplot, by default True.
 
     Returns
     -------
     Tuple[plt.Figure, np.ndarray]
-        A tuple containing the matplotlib Figure object and an array of Axes objects.
+        A tuple containing the matplotlib Figure object and an array of Axes
+        objects.
     """
     if len(images) > nrows * ncols:
         # get random structures

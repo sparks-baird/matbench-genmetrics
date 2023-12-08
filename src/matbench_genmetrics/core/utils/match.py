@@ -1,5 +1,6 @@
 import logging
 import warnings
+from typing import List
 
 import numpy as np
 from matminer.featurizers.site.fingerprint import CrystalNNFingerprint
@@ -9,7 +10,6 @@ from pymatgen.core.structure import Structure
 from scipy.spatial.distance import cdist, pdist, squareform
 from tqdm import tqdm
 from tqdm.notebook import tqdm as ipython_tqdm
-from typing import List
 
 warnings.filterwarnings(
     "ignore",
@@ -39,7 +39,8 @@ def dummy_tqdm(x, **kwargs):  # noqa: E731
 
 def get_tqdm(verbose):
     """
-    Returns the appropriate tqdm function based on the environment and verbosity. If verbose is False, returns a dummy function that does nothing.
+    Returns the appropriate tqdm function based on the environment and
+    verbosity. If verbose is False, returns a dummy function that does nothing.
 
     Parameters
     ----------

@@ -1,5 +1,4 @@
 """Core functionality for matbench-genmetrics (generative materials benchmarking)"""
-import argparse
 import json
 import logging
 import pickle
@@ -12,7 +11,6 @@ from pymatgen.core.structure import Structure
 from pystow import ensure_csv
 from scipy.stats import wasserstein_distance
 
-from matbench_genmetrics.core import __version__
 from matbench_genmetrics.core.utils.featurize import (
     featurize_comp_struct,
     mod_petti_contributions,
