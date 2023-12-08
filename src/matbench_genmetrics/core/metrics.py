@@ -589,22 +589,22 @@ class MPTSMetrics(object):
         ----------
         fold : int
             Which of the 5 folds to use for training and validation (0-4)
-        include_test : bool, optional
+        return_test : bool, optional
             Whether to return the test data in addition to the training and
             validation data, by default False
 
         Returns
         -------
         DataFrame
-            Training inputs
+            Training and validation inputs
         DataFrame
-            Validation inputs. Only returned if `include_val` is True.
+            Test inputs. Only returned if `return_test` is True.
 
 
         Examples
         --------
         >>> mptm = MPTSMetrics()
-        >>> train_inputs = mptm.get_train_and_val_data(fold, include_val=False)
+        >>> train_and_val_inputs = mptm.get_train_and_val_data(fold, return_test=False)
         """
         if self.recorded_metrics == {}:
             self.mpt.load(dummy=self.dummy)
