@@ -305,23 +305,3 @@ class TimeKFold(_BaseKFold):
             train_index = running_index
             test_index = np.setdiff1d(all_index, running_index)
             yield train_index, test_index
-
-
-# %% Code Graveyard
-# if use_trainval_test:
-#     X_trainval, _ = train_test_split(X, shuffle=False, test_size=0.2)
-#     # ss = ShuffleSplit(n_splits=1, test_size=0.2)
-#     # trainval_index, test_index = ss.split(X)
-#     # if y is None:
-#     # X_trainval, X_test = train_test_split(X, shuffle=False)
-#     # y_trainval = None
-#     # y_test = None
-#     # else:
-#     # X_trainval, X_test, y_trainval, y_test = train_test_split(
-#     #     X, y, shuffle=False
-#     # )
-# else:
-#     # trainval_index = np.array(list(range(X.shape[0])))
-#     # test_index = np.array([])
-#     X_trainval = X
-#     # y_trainval = y

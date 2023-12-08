@@ -32,25 +32,6 @@ __copyright__ = "sgbaird"
 __license__ = "MIT"
 _logger = logging.getLogger(__name__)
 
-# ---- Python API ---- The functions defined in this section can be imported by users in
-# their Python scripts/interactive interpreter, e.g. via `from ${qual_pkg}.skeleton
-# import fib`, when using this Python module as a library.
-
-
-def fib(n):
-    """Fibonacci example function
-
-    Args:
-      n (int): integer
-    Returns:
-      int: n-th Fibonacci number
-    """
-    assert n > 0
-    a, b = 1, 1
-    for _i in range(n - 1):
-        a, b = b, a + b
-    return a
-
 
 FOLDS = [0, 1, 2, 3, 4]
 dummy_checksum_frozen = "6bf42266bd71477a06b24153d4ff7889"
@@ -408,8 +389,7 @@ def setup_logging(loglevel):
 
 
 def main(args):
-    """Wrapper allowing :func:`fib` to be called with string arguments in a CLI fashion
-    Instead of returning the value from :func:`fib`, it prints the result to the
+    """Wrapper allowing calls with string arguments in a CLI fashion
     ``stdout`` in a nicely formatted message. Args:
       args (List[str]): command line parameters as list of strings
           (for example  ``["--verbose", "./data"]``).
@@ -439,59 +419,3 @@ if __name__ == "__main__":
     #     python -m mp_time_split.core 42
     #
     run()
-
-# %% Code Graveyard doi_results = mpr.doi.search(nsites=nsites, elements=elements,
-# fields=doi_fields) https://github.com/materialsproject/api/issues/612 doi_results =
-# [mpr.doi.get_data_by_id(mid) for mid in material_id] dict(material_id=material_id,
-# structure=structure, theoretical=theoretical), dict(f"{field}"=) material_id = []
-# structure = [] theoretical = [] material_id.append(str(r.material_id))
-# structure.append(r.structure) theoretical.append(r.theoretical)
-
-# mpr.provenance.search(nsites=nsites, elements=elements)
-
-# download MP entries doi_fields = ["doi", "bibtex", "task_id"]
-
-
-# n_compounds = df.shape[0]
-
-# n_splits = 5 split_type = "TimeSeriesSplit"
-
-# def split(df, n_compounds, n_splits, split_type): if split_type == "TimeSeriesSplit":
-#     # TimeSeriesSplit tscv = TimeSeriesSplit(gap=0, n_splits=n_splits + 1) splits =
-#     list(tscv.split(df))
-
-#     elif split_type == "TimeSeriesOverflow": all_index = list(range(n_compounds)) tscv
-#         = TimeSeriesSplit(gap=0, n_splits=n_splits + 1) train_indices = []
-#         test_indices = [] for tri, _ in tscv.split(df): train_indices.append(tri) #
-#         use remainder of data rather than default `test_index`
-#         test_indices.append(np.setdiff1d(all_index, tri))
-
-#         splits = list(zip(train_indices, test_indices))
-
-#     elif split_type == "TimeKFold": kf = KFold(n_splits=n_splits + 2) splits =
-#         [indices[1] for indices in kf.split(df)] splits.pop(-1)
-
-#         running_index = np.empty(0, dtype=int) train_indices = [] test_indices = []
-#         all_index = list(range(n_compounds)) for s in splits: running_index =
-#         np.concatenate((running_index, s)) train_indices.append(running_index)
-#         test_indices.append(np.setdiff1d(all_index, running_index))
-
-#         splits = list(zip(train_indices, test_indices))
-
-#     for train_index, test_index in splits: print("TRAIN:", train_index, "TEST:",
-#         test_index)
-
-# split(df, n_compounds, n_splits, split_type) yield train_index, test_index
-
-# for train_index, test_index in kf.split(df): print("TRAIN:", train_index, "TEST:",
-#     test_index)
-
-# load_dataframe_from_json(data_path) with zopen(data_path, "rb") as f: self.data =
-# pd.DataFrame.read_json(json.load(f))
-
-# with zopen(data_path, "r") as f: expt_df = jsonpickle.decode(f.read())
-
-# with urlopen("test.com/csv?date=2019-07-17") as f: jsonl = f.read().decode('utf-8')
-#     data_home = environ.get("MP_TIME_DATA", path.dirname(path.abspath(__file__)))
-
-# with open(data_path, "r") as f: expt_df = jsonpickle.decode(f.read())
