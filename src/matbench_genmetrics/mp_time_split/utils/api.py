@@ -190,7 +190,7 @@ def fetch_data(
 
             if not one_by_one:
                 # https://github.com/materialsproject/api/issues/613
-                provenance_results = mpr.provenance.search(
+                provenance_results = mpr.materials.provenance.search(
                     fields=["references", "material_id"]
                 )
                 provenance_ids = [fpr.material_id for fpr in provenance_results]
@@ -201,7 +201,8 @@ def fetch_data(
             else:
                 # slow version
                 expt_provenance_results = [
-                    mpr.provenance.get_data_by_id(mid) for mid in tqdm(expt_material_id)
+                    mpr.materials.provenance.get_data_by_id(mid)
+                    for mid in tqdm(expt_material_id)
                 ]
             # CrystalSystem not JSON serializable, see
             # https://github.com/materialsproject/api/issues/615

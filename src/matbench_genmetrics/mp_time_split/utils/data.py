@@ -27,7 +27,7 @@ def get_discovery_dict(references: List[dict]) -> List[dict]:
     ----------
     provenance_results : List[dict]
         List of references results, e.g. taken from from the ``ProvenanceRester`` API
-        results (:func:`mp_api.provenance`)
+        results (:func:`mp_api.materials.provenance`)
 
     Returns
     -------
@@ -38,7 +38,7 @@ def get_discovery_dict(references: List[dict]) -> List[dict]:
     Examples
     --------
     >>> with MPRester(api_key) as mpr:
-    ...     provenance_results = mpr.provenance.search(num_sites=(1, 4), elements=["V"])
+    ...     provenance_results = mpr.materials.provenance.search(num_sites=(1, 4), elements=["V"])
     >>> discovery = get_discovery_dict(provenance_results)
     [{'year': 1963, 'authors': ['Raub, E.', 'Fritzsche, W.'], 'num_authors': 2}, {'year': 1925, 'authors': ['Becker, K.', 'Ebert, F.'], 'num_authors': 2}, {'year': 1965, 'authors': ['Giessen, B.C.', 'Grant, N.J.'], 'num_authors': 2}, {'year': 1957, 'authors': ['Philip, T.V.', 'Beck, P.A.'], 'num_authors': 2}, {'year': 1963, 'authors': ['Darby, J.B.jr.'], 'num_authors': 1}, {'year': 1977, 'authors': ['Aksenova, T.V.', 'Kuprina, V.V.', 'Bernard, V.B.', 'Skolozdra, R.V.'], 'num_authors': 4}, {'year': 1964, 'authors': ['Maldonado, A.', 'Schubert, K.'], 'num_authors': 2}, {'year': 1962, 'authors': ['Darby, J.B.jr.', 'Lam, D.J.', 'Norton, L.J.', 'Downey, J.W.'], 'num_authors': 4}, {'year': 1925, 'authors': ['Becker, K.', 'Ebert, F.'], 'num_authors': 2}, {'year': 1959, 'authors': ['Dwight, A.E.'], 'num_authors': 1}] # noqa: E501
     """
