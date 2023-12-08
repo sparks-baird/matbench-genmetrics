@@ -49,7 +49,7 @@ change this to e.g. `python==3.8.*`. See [Advanced Installation](##Advanced-Inst
 
 ```python
 >>> from mp_time_split.utils.gen import DummyGenerator
->>> from matbench_genmetrics.core import MPTSMetrics10, MPTSMetrics100, MPTSMetrics1000, MPTSMetrics10000
+>>> from matbench_genmetrics.core.metrics import MPTSMetrics10, MPTSMetrics100, MPTSMetrics1000, MPTSMetrics10000
 >>> mptm = MPTSMetrics10(dummy=True)
 >>> for fold in mptm.folds:
 >>>     train_val_inputs = mptm.get_train_and_val_data(fold)
