@@ -61,3 +61,4 @@ src/matbench_genmetrics/mp_time_split/utils/mp_time_summary.json
 src/matbench_genmetrics/mp_time_split/utils/mp_time_summary.json.gz
 mp_time_split/meta.yaml
 mp-time-split/meta.yaml
+.env
