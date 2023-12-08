@@ -582,7 +582,7 @@ class MPTSMetrics(object):
         )
         return self.spg_df, self.modpetti_df
 
-    def get_train_and_val_data(self, fold: int, include_test=False):
+    def get_train_and_val_data(self, fold: int, return_test=False):
         """Get the MPTimeSplit fingerprints, sp.grp numbers, and modPetti info.
 
         Parameters
@@ -635,7 +635,7 @@ class MPTSMetrics(object):
             self.train_struct_fingerprints = None
             self.val_struct_fingerprints = None
 
-        if include_test:
+        if return_test:
             return self.train_and_val_inputs, self.test_inputs
 
         return self.train_and_val_inputs
