@@ -318,7 +318,11 @@ class MPTimeSplit:
         ]
         return train_inputs, val_inputs, train_outputs, val_outputs
 
-    def get_test_data(self):
+    def get_final_test_data(self):
+        """
+        The 'for real life' test split, i.e., what gets touched only once before
+        submitting a manuscript.
+        """
         if self.data is None:
             raise NameError("`fetch_data()` or or `load()` must be run first.")
 

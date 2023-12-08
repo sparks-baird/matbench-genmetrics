@@ -52,10 +52,10 @@ def test_get_train_and_val_data():
 
 
 @pytest.mark.skipif(sys.version_info < (3, 8), reason="requires Python 3.8+")
-def test_get_test_data():
+def test_get_final_test_data():
     mpt = MPTimeSplit(num_sites=num_sites, elements=elements)
     mpt.fetch_data(one_by_one=True)
-    train_inputs, test_inputs, train_outputs, test_outputs = mpt.get_test_data()
+    train_inputs, test_inputs, train_outputs, test_outputs = mpt.get_final_test_data()
     return train_inputs, test_inputs, train_outputs, test_outputs
 
 
@@ -80,5 +80,5 @@ if __name__ == "__main__":
     test_data_snapshot_one_by_one()
     data = test_load()
     train_inputs, val_inputs, train_outputs, val_outputs = test_get_train_and_val_data()
-    train_inputs, test_inputs, train_outputs, test_outputs = test_get_test_data()
+    train_inputs, test_inputs, train_outputs, test_outputs = test_get_final_test_data()
     data

@@ -467,14 +467,6 @@ class MPTSMetrics(object):
     **match_kwargs : Dict[str, Any]
         Keyword arguments passed to GenMetrics.
 
-    Methods
-    -------
-    get_train_and_val_data(fold: int) -> Tuple[List[Structure], List[Structure]]:
-        Get the training and validation data for a given fold.
-    evaluate_and_record(fold: int, gen_structures: List[Structure]) -> None:
-        Evaluate the performance of the model on the generated structures and record the
-        results.
-
     Notes
     -----
     This class assumes that the data is split into training, validation, and test sets
@@ -590,18 +582,16 @@ class MPTSMetrics(object):
         )
         return self.spg_df, self.modpetti_df
 
-    def get_train_and_val_data(self, fold: int, include_val=False):
+    def get_train_and_val_data(self, fold: int, include_test=False):
         """Get the MPTimeSplit fingerprints, sp.grp numbers, and modPetti info.
-
-
 
         Parameters
         ----------
         fold : int
             Which of the 5 folds to use for training and validation (0-4)
-        include_val : bool, optional
-            Whether to return the validation data in addition to the training data, by
-            default False
+        include_test : bool, optional
+            Whether to return the test data in addition to the training and
+            validation data, by default False
 
         Returns
         -------
@@ -619,10 +609,10 @@ class MPTSMetrics(object):
         if self.recorded_metrics == {}:
             self.mpt.load(dummy=self.dummy)
         (
-            self.train_inputs,
-            self.val_inputs,
-            self.train_outputs,
-            self.val_outputs,
+            self.train_and_val_inputs,
+            self.test_inputs,
+            self.train_and_val_inputs,
+            self.test_outputs,
         ) = self.mpt.get_train_and_val_data(fold)
 
         spg_df, modpetti_df = self.load_space_group_and_mod_petti(dummy=self.dummy)
@@ -645,10 +635,10 @@ class MPTSMetrics(object):
             self.train_struct_fingerprints = None
             self.val_struct_fingerprints = None
 
-        if include_val:
-            return self.train_inputs, self.val_inputs
+        if include_test:
+            return self.train_and_val_inputs, self.test_inputs
 
-        return self.train_inputs
+        return self.train_and_val_inputs
 
     def evaluate_and_record(self, fold: int, gen_structures, test_pred_structures=None):
         """Evaluate generated structures and record metrics.
@@ -668,8 +658,8 @@ class MPTSMetrics(object):
                 f"Number of generated structures ({len(gen_structures)}) does not match expected number ({self.num_gen})."  # noqa: E501
             )
         self.gms[fold] = GenMetrics(
-            self.train_inputs.tolist(),
-            self.val_inputs.tolist(),
+            self.train_and_val_inputs.tolist(),
+            self.test_inputs.tolist(),
             gen_structures,
             train_comp_fingerprints=self.train_comp_fingerprints,
             test_comp_fingerprints=self.val_comp_fingerprints,
