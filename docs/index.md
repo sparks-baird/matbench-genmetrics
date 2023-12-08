@@ -2,7 +2,7 @@
 
 > **Mat**erials **bench**marking **gen**erative **metrics**, inspired by [guacamol](https://www.benevolent.com/guacamol) and [CDVAE](https://github.com/txie-93/cdvae).
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/sparks-baird/matbench-genmetrics/blob/main/notebooks/1.0-matbench-genmetrics-basic.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/sparks-baird/matbench-genmetrics/blob/main/notebooks/core/1.0-matbench-genmetrics-basic.ipynb)
 [![ReadTheDocs](https://readthedocs.org/projects/matbench-genmetrics/badge/?version=latest)](https://matbench-genmetrics.readthedocs.io/en/stable/)
 [![PyPI-Server](https://img.shields.io/pypi/v/matbench-genmetrics.svg)](https://pypi.org/project/matbench-genmetrics/)
 ![PyPI - Downloads](https://img.shields.io/pypi/dm/matbench-genmetrics)
