@@ -611,7 +611,7 @@ class MPTSMetrics(object):
         (
             self.train_and_val_inputs,
             self.test_inputs,
-            self.train_and_val_inputs,
+            self.train_and_val_outputs,
             self.test_outputs,
         ) = self.mpt.get_train_and_val_data(fold)
 

@@ -1,4 +1,5 @@
 from itertools import product
+from multiprocessing import freeze_support
 from typing import Callable, List, Tuple
 
 import numpy as np
@@ -115,7 +116,16 @@ dummy_mpts_expected = {
     "uniqueness": 5 / 6,
 }
 
-fixtures = [dummy_gen_matcher(), dummy_gen_metrics(), dummy_mpts_metrics()]
+dummy_gen_matcher_fixture = dummy_gen_matcher()
+dummy_gen_metrics_fixture = dummy_gen_metrics()
+dummy_mpts_metrics_fixture = dummy_mpts_metrics()
+
+fixtures = [
+    dummy_gen_matcher_fixture,
+    dummy_gen_metrics_fixture,
+    dummy_mpts_metrics_fixture,
+]
+
 checkitems: List[List] = [
     list(dummy_matcher_expected.items()),
     list(dummy_metrics_expected.items()),
@@ -200,3 +210,8 @@ def test_cdvae_coverage():
 
 def test_cdvae_cov_struct_fingerprints():
     cdvae_cov_struct_fingerprints(dummy_structures, verbose=True)
+
+
+if __name__ == "__main__":
+    freeze_support()
+    test_mpts_metrics()

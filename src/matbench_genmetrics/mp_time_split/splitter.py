@@ -310,13 +310,13 @@ class MPTimeSplit:
             raise ValueError(f"fold={fold} should be one of {FOLDS}")
 
         # self.y = self.data[]
-        train_inputs, val_inputs = [
+        train_and_val_inputs, test_inputs = [
             self.inputs.iloc[tvs] for tvs in self.trainval_splits[fold]
         ]
-        train_outputs, val_outputs = [
+        train_and_val_outputs, test_outputs = [
             self.outputs.iloc[tvs] for tvs in self.trainval_splits[fold]
         ]
-        return train_inputs, val_inputs, train_outputs, val_outputs
+        return train_and_val_inputs, test_inputs, train_and_val_outputs, test_outputs
 
     def get_final_test_data(self):
         """
