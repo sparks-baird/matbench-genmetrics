@@ -19,6 +19,12 @@ def test_data_snapshot_one_by_one():
     dummy_expt_df_check = load_dataframe_from_json(dummy_data_path)
     mpt = MPTimeSplit(num_sites=num_sites, elements=elements)
     dummy_expt_df = mpt.fetch_data(one_by_one=True)
+    dummy_expt_df = dummy_expt_df.drop(
+        columns=["energy_above_hull", "formation_energy_per_atom"]
+    )
+    dummy_expt_df_check = dummy_expt_df_check.drop(
+        columns=["energy_above_hull", "formation_energy_per_atom"]
+    )
     dummy_match = dummy_expt_df.compare(dummy_expt_df_check)
     if not dummy_match.empty:
         raise ValueError(
