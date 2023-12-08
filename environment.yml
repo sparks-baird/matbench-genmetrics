@@ -2,8 +2,6 @@ name: matbench-genmetrics
 channels:
   - defaults
   - conda-forge
-  - pytorch
-  # - fastai
 dependencies:
   - python>=3.6
   - pip
@@ -19,7 +17,4 @@ dependencies:
   - pytest-cov
   - tox
   - pre_commit
-  - nbdime
-  - nbstripout
   - sphinx
-  - recommonmark
