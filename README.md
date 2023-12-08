@@ -111,7 +111,7 @@ print(mptm.recorded_metrics)
 
 A match is when <code><a href="https://pymatgen.org/pymatgen.analysis.structure_matcher.html#pymatgen.analysis.structure_matcher.StructureMatcher">StructureMatcher</a>(stol=0.5, ltol=0.3, angle_tol=10.0).fit(s1, s2)</code> evaluates to `True`.
 
-Detailed descriptions of the metrics are given in https://self-driving-lab-demo.readthedocs.io/en/latest/metrics.html.
+Detailed descriptions of the metrics are given in https://matbench-genmetrics.readthedocs.io/en/latest/metrics.html.
 
 
 
