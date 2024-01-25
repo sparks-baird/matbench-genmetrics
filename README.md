@@ -35,12 +35,12 @@ Create a conda environment with the `matbench-genmetrics` package installed from
 > conda-forge team. So use `pip install matbench-genmetrics` for now
 
 ```bash
-conda create --name matbench-genmetrics --channel conda-forge python==3.9.* matbench-genmetrics
+conda create --name matbench-genmetrics --channel conda-forge python==3.10.* matbench-genmetrics
 conda activate matbench-genmetrics
 ```
 
-> NOTE: It doesn't have to be Python 3.9; you can remove `python==3.9.*` altogether or
-change this to e.g. `python==3.8.*`. See [Advanced Installation](##Advanced-Installation)
+> NOTE: It doesn't have to be Python 3.10; you can remove `python==3.10.*` altogether or
+change this to e.g. `python==3.9.*`. See [Advanced Installation](##Advanced-Installation)
 
 ### Example
 
