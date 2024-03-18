@@ -76,6 +76,7 @@ extensions = [
     "sphinx_copybutton",
     "nbsphinx",
     "nbsphinx_link",
+    "sphinx-prompt",
 ]
 
 # Add any paths that contain templates here, relative to this directory.
