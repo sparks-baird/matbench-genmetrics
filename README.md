@@ -101,16 +101,18 @@ change this to e.g. `python==3.9.*`. See [Advanced Installation](##Advanced-Inst
 
 | Metric     | Description                                                                                                                                                                                                                                                             |
 | ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Validity   | One minus (Wasserstein distance between distribution of space group numbers for train and generated structures divided by distance of dummy case between train and `space_group_number == 1`). See also <https://github.com/sparks-baird/matbench-genmetrics/issues/44> |
-| Coverage   | Match counts between held-out test structures and generated structures divided by number of test structures ("predict the future").                                                                                                                                     |
-| Novelty    | One minus (match counts between train structures and generated structures divided by number of generated structures).                                                                                                                                                   |
-| Uniqueness | One minus (non-self-comparing match counts within generated structures divided by total possible non-self-comparing matches).                                                                                                                                           |
+| Validity   | A loose measure of how "valid" the set of generated structures are by comparing the space group number distribution of the generated structures with the benchmark data. Formally, this is one minus (Wasserstein distance between distribution of space group numbers for train and generated structures divided by distance of dummy case between train and `space_group_number == 1`). See also <https://github.com/sparks-baird/matbench-genmetrics/issues/44> |
+| Coverage   | A form of "rediscovery", where structures from the future that were held out were "discovered" by the generative model, i.e., when the generative model "predicted the future". Formally, this is the match counts between held-out test structures and generated structures divided by number of test structures.|
+| Novelty    | A measure of how novel the generated structures are relative to the structures that were used to train the generative model. Formally, this is one minus (match counts between train structures and generated structures divided by number of generated structures).|
+| Uniqueness | A measure of whether the generative model is suggesting repeat structures or not. Formally, this is one minus (non-self-comparing match counts within generated structures divided by total possible non-self-comparing matches).|
 
 A match is when <code><a href="https://pymatgen.org/pymatgen.analysis.structure_matcher.html#pymatgen.analysis.structure_matcher.StructureMatcher">StructureMatcher</a>(stol=0.5, ltol=0.3, angle_tol=10.0).fit(s1, s2)</code> evaluates to `True`.
 
-Detailed descriptions of the metrics are given in https://matbench-genmetrics.readthedocs.io/en/latest/metrics.html.
+Detailed descriptions of the metrics are given on the [Metrics](https://matbench-genmetrics.readthedocs.io/en/latest/metrics.html) page.
 
+We performed a "slow march of time" benchmarking study, which uses the `mp-time-split` data from a future fold as the "generated" structures for the previous fold. The results are presented in the charts below. See [the corresponding notebook](https://colab.research.google.com/github/sparks-baird/matbench-genmetrics/blob/main/notebooks/core/2.0-matbench-genmetrics-materials_discovery_progress_benchmark.ipynb) for details.
 
+![Slow March of Time benchmarking](reports/figures/slow-march-of-time.png)
 
 ## Advanced Installation
 
