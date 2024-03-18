@@ -26,7 +26,7 @@ $$
         \right.
         \right)}{n_{\text{test}}}
 $$
-where $n_{\text{test}}$, $n_{\text{gen}}$, $d$, $s_{\text{test},i}$, $s_{\text{gen},j}$, and $\text{tol}$ represent number of structures in the test set, number of structures in the generated set, crystallographic distance according to \texttt{StructureMatcher} from \texttt{pymatgen.analysis.structure\_matcher}, $i$-th structure of the test set, $j$-th structure of the generated set, and a tolerance threshold, respectively.
+where $n_{\text{test}}$, $n_{\text{gen}}$, $d$, $s_{\text{test},i}$, $s_{\text{gen},j}$, and $\text{tol}$ represent number of structures in the test set, number of structures in the generated set, crystallographic distance according to `StructureMatcher` from `pymatgen.analysis.structure_matcher`, $i$-th structure of the test set, $j$-th structure of the generated set, and a tolerance threshold, respectively.
 
 ## Novelty
 
@@ -43,7 +43,7 @@ $$
         \right.
         \right)}{n_{\text{gen}}}
 $$
-where $n_{\text{train}}$, $n_{\text{gen}}$, $d$, $s_{\text{train},i}$, $s_{\text{gen},j}$, and $\text{tol}$ represent number of structures in the training set, number of structures in the generated set, crystallographic distance according to \texttt{StructureMatcher} from \texttt{pymatgen.analysis.structure\_matcher}, $i$-th structure of the training set, $j$-th structure of the generated set, and a tolerance threshold, respectively.
+where $n_{\text{train}}$, $n_{\text{gen}}$, $d$, $s_{\text{train},i}$, $s_{\text{gen},j}$, and $\text{tol}$ represent number of structures in the training set, number of structures in the generated set, crystallographic distance according to `StructureMatcher` from `pymatgen.analysis.structure_matcher`, $i$-th structure of the training set, $j$-th structure of the generated set, and a tolerance threshold, respectively.
 
 ## Uniqueness
 
