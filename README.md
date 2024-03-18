@@ -22,6 +22,8 @@ of best (i.e. metrics) associated with it.
 
 <p align="center"><img src="https://github.com/sparks-baird/matbench-genmetrics/raw/main/reports/figures/matbench-genmetrics.png" width=450></p>
 
+> NOTE: This project is separate from https://matbench-discovery.materialsproject.org/ which provides a slick leaderboard and package for benchmarking ML models on crystal stability prediction from unrelaxed structures. This project instead looks at assessing the quality of generative models for crystal structures.
+
 ## Getting Started
 
 Installation, a dummy example, output metrics for the example, and descriptions of the benchmark metrics.
@@ -57,12 +59,7 @@ change this to e.g. `python==3.9.*`. See [Advanced Installation](##Advanced-Inst
 >>>     dg.fit(train_val_inputs)
 >>>     gen_structures = dg.gen(n=mptm.num_gen)
 >>>     mptm.evaluate_and_record(fold, gen_structures)
-```
-
-### Output
-
-```python
-print(mptm.recorded_metrics)
+>>> print(mptm.recorded_metrics)
 ```
 
 ```python
