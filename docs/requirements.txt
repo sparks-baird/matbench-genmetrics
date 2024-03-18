@@ -14,6 +14,6 @@ pystow
 pyxtal
 scikit-learn
 sphinx>=3.2.1
+sphinx-prompt
 sphinx_copybutton
 sphinx_rtd_theme
-sphinx-prompt
