@@ -9,7 +9,7 @@ def get_random_sio_structure(rng=np.random.default_rng(12345)):
 
     # Generate random positions for the elements
     num_atoms = 10  # Total number of atoms
-    positions = rng.random(num_atoms, 3) * 10  # Scale by lattice parameter
+    positions = rng.random((num_atoms, 3)) * 10  # Scale by lattice parameter
 
     # Create the structure
     return Structure(lattice, elements * (num_atoms // len(elements)), positions)
