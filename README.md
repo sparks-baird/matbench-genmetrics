@@ -30,23 +30,15 @@ Installation, a dummy example, output metrics for the example, and descriptions 
 
 ### Installation
 
-Create a conda environment with the `matbench-genmetrics` package installed from the
-`conda-forge` channel. Then activate the environment.
-
-> **NOTE: not available on conda-forge as of 2022-07-30, recipe under review by
-> conda-forge team. So use `pip install matbench-genmetrics` for now
-
 ```bash
-conda create --name matbench-genmetrics --channel conda-forge python==3.10.* matbench-genmetrics
-conda activate matbench-genmetrics
+pip install matbench-genmetrics
 ```
 
-> NOTE: It doesn't have to be Python 3.10; you can remove `python==3.10.*` altogether or
-change this to e.g. `python==3.9.*`. See [Advanced Installation](##Advanced-Installation)
+See [Advanced Installation](#advanced-installation) for more information.
 
 ### Example
 
-> NOTE: be sure to set `dummy=False` for the real/full benchmark run. MPTSMetrics10 is
+> NOTE: be sure to set `dummy=False` for the real/full benchmark run. `MPTSMetrics10` is
 > intended for fast prototyping and debugging, as it assumes only 10 generated structures.
 
 ```python
@@ -116,7 +108,7 @@ We performed a "slow march of time" benchmarking study, which uses the `mp-time-
 
 ## Advanced Installation
 
-### Anaconda (`conda`) installation (recommended)
+<!-- ### Anaconda (`conda`) installation (recommended)
 
 (2022-07-30, conda-forge installation pending, fallback to `pip install matbench-genmetrics` as separate command)
 
@@ -133,14 +125,14 @@ Alternatively, in an already activated environment:
 conda install -c conda-forge matbench-genmetrics
 ```
 
-If you run into conflicts with packages you are integrating with `matbench-genmetrics`, please try installing all packages in a single line of code (or two if mixing `conda` and `pip` packages in the same environment) and installing with `mamba` ([source](https://stackoverflow.com/a/69137255/13697228)).
+If you run into conflicts with packages you are integrating with `matbench-genmetrics`, please try installing all packages in a single line of code (or two if mixing `conda` and `pip` packages in the same environment) and installing with `mamba` ([source](https://stackoverflow.com/a/69137255/13697228)). -->
 
 ### PyPI (`pip`) installation
 
-Create and activate a new `conda` environment named `matbench-genmetrics` (`-n`) with `python==3.9.*` or your preferred Python version, then install `matbench-genmetrics` via `pip`.
+Create and activate a new `conda` environment named `matbench-genmetrics` (`-n`) with `python==3.11.*` or your preferred Python version, then install `matbench-genmetrics` via `pip`.
 
 ```bash
-conda create -n matbench-genmetrics python==3.9.*
+conda create -n matbench-genmetrics python==3.11.*
 conda activate matbench-genmetrics
 pip install matbench-genmetrics
 ```
@@ -159,7 +151,7 @@ In order to set up the necessary environment:
 2. create and activate a new conda environment (optional, but recommended)
 
    ```bash
-   conda env create --name matbench-genmetrics python==3.9.*
+   conda env create --name matbench-genmetrics python==3.11.*
    conda activate matbench-genmetrics
    ```
 
