@@ -11,7 +11,7 @@ nbsphinx-link
 pymatgen
 pymatviz
 pystow
-pyxtal
+# pyxtal
 scikit-learn
 sphinx>=3.2.1
 sphinx-prompt
