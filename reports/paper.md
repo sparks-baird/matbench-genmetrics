@@ -63,7 +63,7 @@ In this work, we introduce `matbench-genmetrics`, a materials benchmarking platf
 - **Novelty**: generating structures which are close matches to examples in the training set are penalized
 - **Uniqueness**: the number of repeats within the generated structures
 
-`matbench-genmetrics` is comprised of two namespace packages. The first is &nbsp;&nbsp;&nbsp;&nbsp; `matbench_genmetrics.core`, which provides the following features:
+`matbench-genmetrics` is comprised of two namespace packages. The first namespace package is `matbench_genmetrics.core`, which provides the following features:
 
 - `GenMatcher`: A class for calculating matches between two sets of structures
 - `GenMetrics`: A class for calculating validity, coverage, novelty, and uniqueness metrics
