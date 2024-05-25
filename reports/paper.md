@@ -27,11 +27,11 @@ authors:
     equal-contrib: false
     affiliation: "1" # (Multiple affiliations must be quoted)
 affiliations:
- - name: Materials Science & Engineering, University of Utah, USA
+ - name: Materials Science & Engineering, University of Utah, United States of America
    index: 1
- - name: Toyota Research Institute, Los Altos, CA, USA
+ - name: Toyota Research Institute, Los Altos, CA, United States of America
    index: 2
- - name: Acceleration Consortium, University of Toronto. 80 St George St, Toronto, ON M5S 3H6
+ - name: Acceleration Consortium, University of Toronto. 80 St George St, Toronto, ON Canada
    index: 3
 date: 19 March 2024
 bibliography: paper.bib
