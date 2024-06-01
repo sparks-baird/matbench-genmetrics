@@ -249,7 +249,7 @@ Then take a look into the `scripts` and `notebooks` folders.
 
 ## Citing
 
-Baird, S.G.; Sayeed, H.M.; Montoya, J.; Sparks, T.D. (2024). matbench-genmetrics: A Python library for benchmarking crystal structure generative models using time-based splits of Materials Project structures. _Journal of Open Source Software_, 9(97), 5618, https://doi.org/10.21105/joss.05618
+> Baird, S.G.; Sayeed, H.M.; Montoya, J.; Sparks, T.D. (2024). matbench-genmetrics: A Python library for benchmarking crystal structure generative models using time-based splits of Materials Project structures. _Journal of Open Source Software_, 9(97), 5618, https://doi.org/10.21105/joss.05618
 
 ```bibtex
 @article{Baird2024, doi = {10.21105/joss.05618}, url = {https://doi.org/10.21105/joss.05618}, year = {2024}, publisher = {The Open Journal}, volume = {9}, number = {97}, pages = {5618}, author = {Sterling G. Baird and Hasan M. Sayeed and Joseph Montoya and Taylor D. Sparks}, title = {matbench-genmetrics: A Python library for benchmarking crystal structure generative models using time-based splits of Materials Project structures}, journal = {Journal of Open Source Software} }
