@@ -1,0 +1,52 @@
+cff-version: "1.2.0"
+authors:
+- family-names: Baird
+  given-names: Sterling G.
+  orcid: "https://orcid.org/0000-0002-4491-6876"
+- family-names: Sayeed
+  given-names: Hasan M.
+  orcid: "https://orcid.org/0000-0002-6583-7755"
+- family-names: Montoya
+  given-names: Joseph
+  orcid: "https://orcid.org/0000-0001-5760-2860"
+- family-names: Sparks
+  given-names: Taylor D.
+  orcid: "https://orcid.org/0000-0001-8020-7711"
+contact:
+- family-names: Baird
+  given-names: Sterling G.
+  orcid: "https://orcid.org/0000-0002-4491-6876"
+doi: 10.5281/zenodo.10840604
+message: If you use this software, please cite our article in the
+  Journal of Open Source Software.
+preferred-citation:
+  authors:
+  - family-names: Baird
+    given-names: Sterling G.
+    orcid: "https://orcid.org/0000-0002-4491-6876"
+  - family-names: Sayeed
+    given-names: Hasan M.
+    orcid: "https://orcid.org/0000-0002-6583-7755"
+  - family-names: Montoya
+    given-names: Joseph
+    orcid: "https://orcid.org/0000-0001-5760-2860"
+  - family-names: Sparks
+    given-names: Taylor D.
+    orcid: "https://orcid.org/0000-0001-8020-7711"
+  date-published: 2024-05-27
+  doi: 10.21105/joss.05618
+  issn: 2475-9066
+  issue: 97
+  journal: Journal of Open Source Software
+  publisher:
+    name: Open Journals
+  start: 5618
+  title: "matbench-genmetrics: A Python library for benchmarking crystal
+    structure generative models using time-based splits of Materials
+    Project structures"
+  type: article
+  url: "https://joss.theoj.org/papers/10.21105/joss.05618"
+  volume: 9
+title: "matbench-genmetrics: A Python library for benchmarking crystal
+  structure generative models using time-based splits of Materials
+  Project structures"
