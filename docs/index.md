@@ -6,6 +6,7 @@
 [![ReadTheDocs](https://readthedocs.org/projects/matbench-genmetrics/badge/?version=latest)](https://matbench-genmetrics.readthedocs.io/en/stable/)
 [![PyPI-Server](https://img.shields.io/pypi/v/matbench-genmetrics.svg)](https://pypi.org/project/matbench-genmetrics/)
 ![PyPI - Downloads](https://img.shields.io/pypi/dm/matbench-genmetrics)
+[![DOI](https://joss.theoj.org/papers/10.21105/joss.05618/status.svg)](https://doi.org/10.21105/joss.05618)
 <!---
 [![Coveralls](https://img.shields.io/coveralls/github/sparks-baird/matbench-genmetrics/main.svg)](https://coveralls.io/r/sparks-baird/matbench-genmetrics)
 [![Project generated with PyScaffold](https://img.shields.io/badge/-PyScaffold-005CA0?logo=pyscaffold)](https://pyscaffold.org/)
@@ -20,7 +21,7 @@ metrics inspired by [Crystal Diffusion Variational AutoEncoder (CDVAE)](https://
 demonstrated as state-of-the-art in generative crystal structure tasks. We
 provide our own benchmarks using time-series style cross-validation splits from
 Materials Project via our [mp-time-split package](https://mp-time-split.readthedocs.io/en/latest/) and focus on four metrics: validity,
-coverage, novelty, and uniqueness.
+coverage, novelty, and uniqueness. See [our paper published in JOSS](https://joss.theoj.org/papers/10.21105/joss.05618)!
 
 <a class="github-button" href="https://github.com/sparks-baird/matbench-genmetrics"
 data-icon="octicon-star" data-size="large" data-show-count="true" aria-label="Star
