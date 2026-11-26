@@ -178,6 +178,17 @@ def test_mpts_metrics():
     print(mptm.recorded_metrics)
 
 
+def test_duplicity_counts_ignores_actual_diagonal():
+    matcher = GenMatcher(dummy_structures, dummy_structures, match_type="StructureMatcher")
+    matcher._match_matrix = np.array([[0.0, 1.0], [1.0, 0.0]])
+    matcher.num_test = 2
+    matcher.num_gen = 2
+
+    assert_array_equal(matcher.duplicity_counts, np.array([1.0, 1.0]))
+    assert matcher.duplicity_count == 2.0
+    assert matcher.duplicity_rate == 1.0
+
+
 def test_non_verbose():
     mptm = MPTSMetrics(dummy=True, verbose=False, match_type="StructureMatcher")
     fold = mptm.folds[0]

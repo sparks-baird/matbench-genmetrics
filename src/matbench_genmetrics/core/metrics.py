@@ -214,8 +214,8 @@ class GenMatcher(object):
             raise ValueError("Test and gen sets should be identical.")
             # TODO: assert that test and gen sets are identical
 
-        # minus one is subtraction of the diagonal that got summed
-        return np.clip(self.match_counts - 1, 0, None)
+        diagonal = np.diag(self.match_matrix)
+        return np.clip(self.match_counts - diagonal, 0, None)
 
     @property
     def duplicity_count(self):
